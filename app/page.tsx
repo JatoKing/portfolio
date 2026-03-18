@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
   Github, Linkedin, Mail, ExternalLink, Code2, Zap,
   ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap,
@@ -78,11 +79,7 @@ const CSS = `
   .techpill:hover { border-color:rgba(79,70,229,.35)!important; background:rgba(79,70,229,.07)!important; color:#4f46e5!important; }
   .projcard:hover .projarrow { color:#4f46e5 !important; }
   .projarrow { transition:color .2s; }
-
-  /* ── Experience cards: hidden before Anime.js fires ── */
-  .exp-card {
-    opacity: 0;
-  }
+  .exp-card { opacity: 0; }
 `;
 
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
@@ -317,7 +314,6 @@ function GlobeCanvas() {
   return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
 }
 
-// ─── Floating Code Tokens Background ────────────────────────────────────────
 const TOKENS = [
   "const", "let", "=>", "{}", "[]", "return",
   "async", "await", "useState", "useEffect",
@@ -545,45 +541,154 @@ function About() {
 }
 
 function Skills() {
-  const r1: MarqueeItem[] = [
-    { i: "", n: "Next.js",      img: "https://cdn.simpleicons.org/nextdotjs/111111" },
-    { i: "", n: "React",        img: "https://cdn.simpleicons.org/react" },
-    { i: "", n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript" },
-    { i: "", n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss" },
-    { i: "", n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111" },
-    { i: "", n: "Laravel",      img: "https://cdn.simpleicons.org/laravel" },
-    { i: "", n: "Strapi",       img: "https://cdn.simpleicons.org/strapi" },
-    { i: "", n: "MySQL",        img: "https://cdn.simpleicons.org/mysql" },
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cRef  = useRef<HTMLDivElement>(null);
+
+  const l1Ref = useRef<HTMLDivElement>(null);
+  const l2Ref = useRef<HTMLDivElement>(null);
+  const l3Ref = useRef<HTMLDivElement>(null);
+  const l4Ref = useRef<HTMLDivElement>(null);
+  const l5Ref = useRef<HTMLDivElement>(null);
+  const l6Ref = useRef<HTMLDivElement>(null);
+  const l7Ref = useRef<HTMLDivElement>(null);
+  const l8Ref = useRef<HTMLDivElement>(null);
+
+  const r1Ref = useRef<HTMLDivElement>(null);
+  const r2Ref = useRef<HTMLDivElement>(null);
+  const r3Ref = useRef<HTMLDivElement>(null);
+  const r4Ref = useRef<HTMLDivElement>(null);
+  const r5Ref = useRef<HTMLDivElement>(null);
+  const r6Ref = useRef<HTMLDivElement>(null);
+  const r7Ref = useRef<HTMLDivElement>(null);
+  const r8Ref = useRef<HTMLDivElement>(null);
+
+  const [beams, setBeams] = useState<{ d: string; delay: number }[]>([]);
+
+  useEffect(() => {
+    const build = () => {
+      if (!containerRef.current || !cRef.current) return;
+      const box = containerRef.current.getBoundingClientRect();
+      const mid = (r: React.RefObject<HTMLDivElement | null>) => {
+        if (!r.current) return null;
+        const b = r.current.getBoundingClientRect();
+        return { x: b.left - box.left + b.width / 2, y: b.top - box.top + b.height / 2 };
+      };
+      const c = mid(cRef);
+      if (!c) return;
+      const lRefs = [l1Ref, l2Ref, l3Ref, l4Ref, l5Ref, l6Ref, l7Ref, l8Ref];
+      const rRefs = [r1Ref, r2Ref, r3Ref, r4Ref, r5Ref, r6Ref, r7Ref, r8Ref];
+      const result: { d: string; delay: number }[] = [];
+      lRefs.forEach((ref, i) => {
+        const p = mid(ref);
+        if (!p) return;
+        const cx = (p.x + c.x) / 2;
+        result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38) });
+      });
+      rRefs.forEach((ref, i) => {
+        const p = mid(ref);
+        if (!p) return;
+        const cx = (c.x + p.x) / 2;
+        result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38 + 0.19) });
+      });
+      setBeams(result);
+    };
+    const id = requestAnimationFrame(build);
+    window.addEventListener('resize', build);
+    return () => { cancelAnimationFrame(id); window.removeEventListener('resize', build); };
+  }, []);
+
+  const LTECH = [
+    { n: 'Next.js 15',   img: 'https://cdn.simpleicons.org/nextdotjs/111111', ref: l1Ref },
+    { n: 'TypeScript',   img: 'https://cdn.simpleicons.org/typescript',        ref: l2Ref },
+    { n: 'Laravel',      img: 'https://cdn.simpleicons.org/laravel',           ref: l3Ref },
+    { n: 'PHP',          img: 'https://cdn.simpleicons.org/php',               ref: l4Ref },
+    { n: 'Git',          img: 'https://cdn.simpleicons.org/git',               ref: l5Ref },
+    { n: 'JavaScript',   img: 'https://cdn.simpleicons.org/javascript',        ref: l6Ref },
+    { n: 'HeroUI',       img: 'https://cdn.simpleicons.org/heroui/111111',     ref: l7Ref },
+    { n: 'Figma',        img: 'https://cdn.simpleicons.org/figma',             ref: l8Ref },
   ];
-  const r2: MarqueeItem[] = [
-    { i: "", n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript" },
-    { i: "", n: "PHP",          img: "https://cdn.simpleicons.org/php" },
-    { i: "", n: "Figma",        img: "https://cdn.simpleicons.org/figma" },
-    { i: "", n: "Git",          img: "https://cdn.simpleicons.org/git" },
-    { i: "", n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud" },
-    { i: "", n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles" },
-    { i: "", n: "Google OAuth", img: "https://cdn.simpleicons.org/google" },
-    { i: "", n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet" },
+
+  const RTECH = [
+    { n: 'React',        img: 'https://cdn.simpleicons.org/react',             ref: r1Ref },
+    { n: 'Tailwind CSS', img: 'https://cdn.simpleicons.org/tailwindcss',       ref: r2Ref },
+    { n: 'Strapi',       img: 'https://cdn.simpleicons.org/strapi',            ref: r3Ref },
+    { n: 'Vertex AI',    img: 'https://cdn.simpleicons.org/googlecloud',       ref: r4Ref },
+    { n: 'MySQL',        img: 'https://cdn.simpleicons.org/mysql',             ref: r5Ref },
+    { n: 'Google OAuth', img: 'https://cdn.simpleicons.org/google',            ref: r6Ref },
+    { n: 'LottieFiles',  img: 'https://cdn.simpleicons.org/lottiefiles',       ref: r7Ref },
+    { n: 'ASP.NET',      img: 'https://cdn.simpleicons.org/dotnet',            ref: r8Ref },
   ];
+
+  const circleStyle: React.CSSProperties = {
+    width: 46, height: 46, borderRadius: '50%',
+    background: T.card, border: `1px solid ${T.border2}`,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    boxShadow: '0 2px 12px rgba(0,0,0,.07)', flexShrink: 0,
+  };
+
   return (
-    <section id="skills" style={{ background: T.bg2, padding: "96px 0", overflow: "hidden" }}>
-      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", paddingLeft: 24, paddingRight: 24, textAlign: "center", marginBottom: 52 }}>
+    <section id="skills" style={{ background: T.bg2, padding: '96px 0 96px', overflow: 'hidden' }}>
+      <div style={{ maxWidth: 900, marginLeft: 'auto', marginRight: 'auto', paddingLeft: 24, paddingRight: 24, textAlign: 'center', marginBottom: 52 }}>
         <SBadge>Technologies</SBadge>
-        <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
-        <p style={{ fontSize: 14, color: T.text3, marginTop: 12, maxWidth: 380, marginLeft: "auto", marginRight: "auto" }}>Tools &amp; technologies I use to build impactful digital products</p>
+        <h2 style={{ fontSize: 'clamp(26px,4.5vw,38px)', fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
+        <p style={{ fontSize: 14, color: T.text3, marginTop: 12, maxWidth: 380, marginLeft: 'auto', marginRight: 'auto' }}>Tools &amp; technologies I use to build impactful digital products</p>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <Marquee items={r1} /><Marquee items={r2} rev />
+      <div style={{ maxWidth: 900, marginLeft: 'auto', marginRight: 'auto', padding: '0 48px' }}>
+        <div ref={containerRef} style={{ position: 'relative', height: 500 }}>
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', pointerEvents: 'none', zIndex: 0 }}>
+            {beams.map((b, i) => {
+              const dur    = (0.8 + (i * 0.37) % 1.4).toFixed(2);
+              const dash   = (0.06 + (i * 0.07) % 0.14).toFixed(2);
+              const gap    = (1 - parseFloat(dash)).toFixed(2);
+              return (
+                <g key={i}>
+                  <path d={b.d} fill="none" stroke="rgba(79,70,229,0.07)" strokeWidth={0.8} />
+                  <path d={b.d} fill="none" stroke={T.indigo2} strokeWidth={3} strokeOpacity={0.12}
+                    strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
+                    style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
+                  <path d={b.d} fill="none" stroke={T.indigo} strokeWidth={1}
+                    strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
+                    style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
+                </g>
+              );
+            })}
+          </svg>
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', zIndex: 1 }}>
+            {LTECH.map(t => (
+              <div key={t.n} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                <div ref={t.ref} style={circleStyle}>
+                  <img src={t.img} alt={t.n} width={22} height={22} style={{ objectFit: 'contain' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                </div>
+                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: 'nowrap', position: 'absolute', right: 'calc(100% + 10px)' }}>{t.n}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%) translateY(-11px)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9 }}>
+            <div ref={cRef} style={{ width: 66, height: 66, borderRadius: '50%', border: `2px solid ${T.border2}`, boxShadow: `0 0 0 7px rgba(79,70,229,0.1), 0 4px 20px rgba(0,0,0,0.15)` }}>
+              <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', background: T.bg2 }}>
+                <img src="ht47" alt="Izzat Imran" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+                  onError={e => { const el = e.target as HTMLImageElement; el.style.display = 'none'; const p = el.parentElement!; p.style.display = 'flex'; p.style.alignItems = 'center'; p.style.justifyContent = 'center'; p.innerHTML = `<span style="font-size:28px">👤</span>`; }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', zIndex: 1 }}>
+            {RTECH.map(t => (
+              <div key={t.n} style={{ display: 'flex', alignItems: 'center', flexDirection: 'row-reverse', position: 'relative' }}>
+                <div ref={t.ref} style={circleStyle}>
+                  <img src={t.img} alt={t.n} width={22} height={22} style={{ objectFit: 'contain' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                </div>
+                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: 'nowrap', position: 'absolute', left: 'calc(100% + 10px)' }}>{t.n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-// ─── Experience dengan Anime.js stagger ──────────────────────────────────────
+// ─── Experience ───────────────────────────────────────────────────────────────
 function Experience() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const triggered  = useRef(false);
-
   const jobs = [
     {
       role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi",
@@ -621,36 +726,28 @@ function Experience() {
   ];
 
   useEffect(() => {
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        // Fire once when the section enters the viewport
-        if (entry.isIntersecting && !triggered.current) {
-          triggered.current = true;
-
-          // Dynamic import — safe for SSR / Next.js
-          import("animejs").then(({ animate, stagger }) => {
-            // Anime.js hanya handle entrance — translateX + opacity
-            // Posisi kiri/tengah/kanan diset via alignSelf dalam JSX
-            animate(".exp-card", {
-              translateX: [-50, 0],
-              opacity:    [0, 1],
-              duration:   750,
-              delay:      stagger(180),
-              easing:     "easeOutExpo",
+    const cards = document.querySelectorAll<HTMLElement>(".exp-card");
+    const observers: IntersectionObserver[] = [];
+    cards.forEach((card) => {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            import("animejs").then(({ animate }) => {
+              animate(card, { translateX: [-60, 0], opacity: [0, 1], duration: 700, easing: "easeOutExpo" });
             });
-          });
-        }
-      },
-      { threshold: 0.15 },
-    );
-
-    if (sectionRef.current) io.observe(sectionRef.current);
-    return () => io.disconnect();
+            io.disconnect();
+          }
+        },
+        { threshold: 0.25 },
+      );
+      io.observe(card);
+      observers.push(io);
+    });
+    return () => observers.forEach(io => io.disconnect());
   }, []);
 
   return (
-    <section id="exp" ref={sectionRef} style={{ background: T.bg, padding: "96px 0" }}>
-      {/* ── Heading — tetap centered ── */}
+    <section id="exp" style={{ background: T.bg, padding: "96px 0" }}>
       <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", paddingLeft: 24, paddingRight: 24 }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <SBadge>Experience</SBadge>
@@ -660,44 +757,97 @@ function Experience() {
         </div>
       </div>
 
-      {/* ── Cards — full viewport width supaya flex-start betul-betul rapat kiri ── */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
-          {jobs.map((j, i) => (
-            <MCard key={i} className="exp-card" style={{ padding: 26, width: "72%", alignSelf: (["flex-start","center","flex-end"] as const)[i] }} glow={`rgba(${j.accentRaw},.05)`}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-                  <div style={{ borderRadius: 12, background: `rgba(${j.accentRaw},.1)`, border: `1.5px solid rgba(${j.accentRaw},.2)`, padding: 10, flexShrink: 0 }}>
-                    <Briefcase size={18} color={j.accent} />
+      {/* ── Cards wrapper — position: relative supaya kedua Lottie boleh absolute ── */}
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
+
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            LOTTIE #1 — working.json (kanan, atas kotak pertama)
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            • top   → naik/turun dari top wrapper
+            • right → jarak dari tepi kanan section
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        <div
+          style={{
+            position: "absolute",
+            top: -10,       // ← TUKAR: naik/turun
+            right: 175,     // ← TUKAR: jarak dari tepi kanan
+            width: 330,     // ← TUKAR: lebar
+            height: 330,    // ← TUKAR: tinggi
+            zIndex: 10,
+            pointerEvents: "none",
+          }}
+        >
+          <DotLottieReact
+            src="/animation/working.json"
+            autoplay
+            loop
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            LOTTIE #2 — Cat playing animation.json (kiri, belakang kotak bawah)
+            zIndex: 0 → DI BELAKANG kotak (MCard ada zIndex lebih tinggi)
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            • bottom → jarak dari bawah wrapper (negatif = terkeluar ke bawah)
+            • left   → jarak dari tepi kiri section
+            • width / height → saiz animation
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -120,    // ← TUKAR: naik/turun (negatif = turun keluar bawah kotak)
+            left: 126,       // ← TUKAR: jarak dari tepi kiri
+            width: 350,     // ← TUKAR: lebar
+            height: 350,    // ← TUKAR: tinggi
+            zIndex: 0,      // ← KEKAL 0 supaya berada DI BELAKANG kotak
+            pointerEvents: "none",
+            transform: "scaleX(-1)", // ← flip horizontal supaya kucing hadap ke kanan (ke arah kotak)
+          }}
+        >
+          <DotLottieReact
+            src="/animation/Cat playing animation.json"
+            autoplay
+            loop
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+
+        {jobs.map((j, i) => (
+          <MCard key={i} className="exp-card" style={{ padding: 26, width: "72%", alignSelf: (["flex-start","center","flex-end"] as const)[i], position: "relative", zIndex: 1 }} glow={`rgba(${j.accentRaw},.05)`}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+                <div style={{ borderRadius: 12, background: `rgba(${j.accentRaw},.1)`, border: `1.5px solid rgba(${j.accentRaw},.2)`, padding: 10, flexShrink: 0 }}>
+                  <Briefcase size={18} color={j.accent} />
+                </div>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontWeight: 700, color: T.text, fontSize: 15 }}>{j.role}</span>
+                    {j.current && (
+                      <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `rgba(${j.accentRaw},.1)`, border: `1px solid rgba(${j.accentRaw},.25)`, color: j.accent, fontWeight: 600 }}>Current</span>
+                    )}
                   </div>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontWeight: 700, color: T.text, fontSize: 15 }}>{j.role}</span>
-                      {j.current && (
-                        <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `rgba(${j.accentRaw},.1)`, border: `1px solid rgba(${j.accentRaw},.25)`, color: j.accent, fontWeight: 600 }}>
-                          Current
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: 13, color: j.accent, fontWeight: 500, marginTop: 2 }}>{j.company}</div>
-                    <div style={{ fontSize: 12, color: T.text3, marginTop: 1 }}>{j.loc} · {j.period}</div>
-                  </div>
+                  <div style={{ fontSize: 13, color: j.accent, fontWeight: 500, marginTop: 2 }}>{j.company}</div>
+                  <div style={{ fontSize: 12, color: T.text3, marginTop: 1 }}>{j.loc} · {j.period}</div>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 6 }}>
-                {j.points.map((p, pi) => (
-                  <div key={pi} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    <div style={{ width: 5, height: 5, borderRadius: "50%", background: j.accent, flexShrink: 0, marginTop: 6 }} />
-                    <span style={{ fontSize: 13, color: T.text2, lineHeight: 1.65 }}>{p}</span>
-                  </div>
-                ))}
-              </div>
-            </MCard>
-          ))}
-        </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 6 }}>
+              {j.points.map((p, pi) => (
+                <div key={pi} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: j.accent, flexShrink: 0, marginTop: 6 }} />
+                  <span style={{ fontSize: 13, color: T.text2, lineHeight: 1.65 }}>{p}</span>
+                </div>
+              ))}
+            </div>
+          </MCard>
+        ))}
+      </div>
     </section>
   );
 }
-// ─────────────────────────────────────────────────────────────────────────────
 
 function Projects() {
   const projs = [
@@ -759,16 +909,13 @@ function Contact() {
       import("animejs"),
     ]).then(([THREE, { engine, createTimeline, utils }]) => {
       if (dead) return;
-
       engine.useDefaultMainLoop = false;
-
       const { width, height } = container.getBoundingClientRect();
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       const scene    = new THREE.Scene();
       const camera   = new THREE.PerspectiveCamera(65, width / height, 0.1, 20);
       const geometry = new THREE.BoxGeometry(1, 1, 1);
       const material = new THREE.MeshBasicMaterial({ color: 0xa5b4fc, wireframe: true });
-
       renderer.setSize(width, height);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.domElement.style.position = "absolute";
@@ -776,7 +923,6 @@ function Contact() {
       container.appendChild(renderer.domElement);
       rendererRef = renderer;
       camera.position.z = 5;
-
       function spawnCube() {
         const cube     = new THREE.Mesh(geometry, material);
         const x        = utils.random(-10, 10, 2);
@@ -784,22 +930,14 @@ function Contact() {
         const z        = [-10, 7] as [number, number];
         const r        = () => utils.random(-Math.PI * 2, Math.PI * 2, 3);
         const duration = 4000;
-        createTimeline({
-          delay:    utils.random(0, duration),
-          defaults: { loop: true, duration, ease: "inSine" },
-        })
-        .add(cube.position, { x, y, z }, 0)
-        .add(cube.rotation, { x: r, y: r, z: r }, 0)
-        .init();
+        createTimeline({ delay: utils.random(0, duration), defaults: { loop: true, duration, ease: "inSine" } })
+          .add(cube.position, { x, y, z }, 0)
+          .add(cube.rotation, { x: r, y: r, z: r }, 0)
+          .init();
         scene.add(cube);
       }
-
       for (let i = 0; i < 40; i++) spawnCube();
-
-      function render() {
-        engine.update();
-        renderer.render(scene, camera);
-      }
+      function render() { engine.update(); renderer.render(scene, camera); }
       renderer.setAnimationLoop(render);
     });
 
@@ -808,23 +946,15 @@ function Contact() {
       if (rendererRef) {
         rendererRef.setAnimationLoop(null);
         rendererRef.dispose();
-        if (rendererRef.domElement?.parentNode === container) {
-          container.removeChild(rendererRef.domElement);
-        }
+        if (rendererRef.domElement?.parentNode === container) container.removeChild(rendererRef.domElement);
       }
     };
   }, []);
 
   return (
     <section id="contact" style={{ position: "relative", background: "#0d0d0f", padding: "96px 24px 160px", overflow: "hidden" }}>
-
-      {/* ── Three.js wireframe cube BG ── */}
       <div ref={canvasWrapRef} style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.65, pointerEvents: "none" }} />
-
-      {/* Radial vignette */}
       <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)" }} />
-
-      {/* ── content ── */}
       <div style={{ position: "relative", zIndex: 2, maxWidth: 800, marginLeft: "auto", marginRight: "auto" }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>Contact</div>
@@ -847,10 +977,10 @@ function Contact() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
             {[
-              { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran",   glow: "rgba(99,102,241,.12)" },
-              { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran",             glow: "rgba(8,145,178,.12)" },
-              { Icon: Globe2,   lbl: "University", hdl: "UiTM · CS Graduate 2025", glow: "rgba(124,58,237,.12)" },
-            ].map(({ Icon, lbl, hdl, glow }) => (
+              { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran" },
+              { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran" },
+              { Icon: Globe2,   lbl: "University", hdl: "UiTM · CS Graduate 2025" },
+            ].map(({ Icon, lbl, hdl }) => (
               <div key={lbl} style={{ padding: "18px 16px", borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", cursor: "pointer" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                   <div style={{ borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", padding: 9 }}><Icon size={17} color="rgba(255,255,255,0.6)" /></div>
