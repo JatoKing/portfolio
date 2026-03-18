@@ -769,8 +769,8 @@ function Experience() {
         <div
           style={{
             position: "absolute",
-            top: -10,       // ← TUKAR: naik/turun
-            right: 175,     // ← TUKAR: jarak dari tepi kanan
+            top: 80,       // ← TUKAR: naik/turun
+            right: 78,     // ← TUKAR: jarak dari tepi kanan
             width: 330,     // ← TUKAR: lebar
             height: 330,    // ← TUKAR: tinggi
             zIndex: 10,
@@ -797,10 +797,10 @@ function Experience() {
         <div
           style={{
             position: "absolute",
-            bottom: -120,    // ← TUKAR: naik/turun (negatif = turun keluar bawah kotak)
-            left: 126,       // ← TUKAR: jarak dari tepi kiri
-            width: 350,     // ← TUKAR: lebar
-            height: 350,    // ← TUKAR: tinggi
+            bottom: -80,    // ← TUKAR: naik/turun (negatif = turun keluar bawah kotak)
+            left: 135,       // ← TUKAR: jarak dari tepi kiri
+            width: 250,     // ← TUKAR: lebar
+            height: 250,    // ← TUKAR: tinggi
             zIndex: 0,      // ← KEKAL 0 supaya berada DI BELAKANG kotak
             pointerEvents: "none",
             transform: "scaleX(-1)", // ← flip horizontal supaya kucing hadap ke kanan (ke arah kotak)
