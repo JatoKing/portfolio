@@ -11,7 +11,6 @@ interface SBtnProps { children: React.ReactNode; onClick?: () => void; outline?:
 interface TickerProps { to: number; sfx?: string; }
 interface MarqueeItem { i: string; n: string; img?: string; }
 interface MarqueeProps { items: MarqueeItem[]; rev?: boolean; }
-interface OrbitRingProps { icons: MarqueeItem[]; r?: number; dur?: number; }
 interface SBadgeProps { children: React.ReactNode; }
 interface DockProps { active: string; goto: (id: string) => void; }
 interface GlobePoint { x: number; y: number; z: number; i: number; j: number; front: boolean; }
@@ -79,6 +78,11 @@ const CSS = `
   .techpill:hover { border-color:rgba(79,70,229,.35)!important; background:rgba(79,70,229,.07)!important; color:#4f46e5!important; }
   .projcard:hover .projarrow { color:#4f46e5 !important; }
   .projarrow { transition:color .2s; }
+
+  /* ── Experience cards: hidden before Anime.js fires ── */
+  .exp-card {
+    opacity: 0;
+  }
 `;
 
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
@@ -313,7 +317,7 @@ function GlobeCanvas() {
   return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
 }
 
-// ─── Floating Code Tokens Background (DOM-based) ────────────────────────────
+// ─── Floating Code Tokens Background ────────────────────────────────────────
 const TOKENS = [
   "const", "let", "=>", "{}", "[]", "return",
   "async", "await", "useState", "useEffect",
@@ -326,25 +330,14 @@ const TOKENS = [
 ];
 
 const COLORS = [
-  "#a5b4fc", // indigo-300
-  "#c4b5fd", // violet-300
-  "#67e8f9", // cyan-300
-  "#ffffff",  // white
-  "#86efac", // green-300
-  "#fde047", // yellow-300
-  "#f9a8d4", // pink-300
-  "#93c5fd", // blue-300
+  "#a5b4fc", "#c4b5fd", "#67e8f9", "#ffffff",
+  "#86efac", "#fde047", "#f9a8d4", "#93c5fd",
 ];
 
 interface TokenItem {
-  id: number;
-  token: string;
-  color: string;
-  x: number;       // percent
-  y: number;       // percent
-  fontSize: number;
-  duration: number; // total cycle ms
-  delay: number;
+  id: number; token: string; color: string;
+  x: number; y: number; fontSize: number;
+  duration: number; delay: number;
 }
 
 let _tid = 0;
@@ -352,20 +345,16 @@ const makeToken = (): TokenItem => ({
   id: _tid++,
   token: TOKENS[Math.floor(Math.random() * TOKENS.length)],
   color: COLORS[Math.floor(Math.random() * COLORS.length)],
-  x: Math.random() * 96,
-  y: Math.random() * 90,
+  x: Math.random() * 96, y: Math.random() * 90,
   fontSize: Math.floor(Math.random() * 6 + 11),
   duration: Math.random() * 3000 + 3000,
   delay: Math.random() * 4000,
 });
 
 function FloatingCodeBg() {
-  const [tokens, setTokens] = useState<TokenItem[]>(() =>
-    Array.from({ length: 36 }, makeToken)
-  );
-
-  // Periodically swap out a random token so they keep refreshing
+  const [tokens, setTokens] = useState<TokenItem[]>([]);
   useEffect(() => {
+    setTokens(Array.from({ length: 36 }, makeToken));
     const iv = setInterval(() => {
       setTokens(prev => {
         const next = [...prev];
@@ -376,32 +365,10 @@ function FloatingCodeBg() {
     }, 800);
     return () => clearInterval(iv);
   }, []);
-
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
       {tokens.map(t => (
-        <span
-          key={t.id}
-          style={{
-            position: "absolute",
-            left: `${t.x}%`,
-            top: `${t.y}%`,
-            fontSize: t.fontSize,
-            fontFamily: "'JetBrains Mono','Fira Code','Courier New',monospace",
-            fontWeight: 600,
-            color: t.color,
-            whiteSpace: "nowrap",
-            padding: "10px 14px",
-            borderRadius: 14,
-            border: `1px solid ${t.color}55`,
-            background: `linear-gradient(135deg, ${t.color}18 0%, ${t.color}08 100%)`,
-            boxShadow: `0 0 12px 2px ${t.color}22, inset 0 1px 0 ${t.color}33, 0 4px 24px rgba(0,0,0,0.4)`,
-            backdropFilter: "blur(8px)",
-            animation: `tokenFloat ${t.duration}ms ease-in-out ${t.delay}ms infinite`,
-            willChange: "opacity, transform",
-            letterSpacing: "0.02em",
-          }}
-        >
+        <span key={t.id} style={{ position: "absolute", left: `${t.x}%`, top: `${t.y}%`, fontSize: t.fontSize, fontFamily: "'JetBrains Mono','Fira Code','Courier New',monospace", fontWeight: 600, color: t.color, whiteSpace: "nowrap", padding: "10px 14px", borderRadius: 14, border: `1px solid ${t.color}55`, background: `linear-gradient(135deg, ${t.color}18 0%, ${t.color}08 100%)`, boxShadow: `0 0 12px 2px ${t.color}22, inset 0 1px 0 ${t.color}33, 0 4px 24px rgba(0,0,0,0.4)`, backdropFilter: "blur(8px)", animation: `tokenFloat ${t.duration}ms ease-in-out ${t.delay}ms infinite`, willChange: "opacity, transform", letterSpacing: "0.02em" }}>
           {t.token}
         </span>
       ))}
@@ -417,7 +384,6 @@ function FloatingCodeBg() {
     </div>
   );
 }
-// ─────────────────────────────────────────────────────────────────────────────
 
 function Hero() {
   const roles = ["Web & Frontend Developer", "Full Stack Developer"];
@@ -505,23 +471,13 @@ function About() {
   ];
   return (
     <section id="about" style={{ position: "relative", background: "#0d0d0f", padding: "48px 24px 96px", overflow: "hidden" }}>
-
-      {/* ── Floating Code Tokens BG ── */}
       <FloatingCodeBg />
-
-      {/* Subtle radial vignette to keep edges dark & focus centre */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-        background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)",
-      }} />
-
-      {/* content */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)" }} />
       <div style={{ position: "relative", zIndex: 2, maxWidth: 900, marginLeft: "auto", marginRight: "auto" }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>About</div>
           <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Crafting <span className="gtext">Digital Experiences</span></h2>
         </div>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
           <div style={{ gridColumn: "span 2", padding: 30, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 18 }}>
@@ -538,12 +494,10 @@ function About() {
               I also develop AI-powered chatbots using <strong style={{ color: "#818cf8" }}>Vertex AI Conversational Agents</strong>, integrate headless CMS with Strapi, and implement secure authentication via Google OAuth 2.0.
             </p>
           </div>
-
           <div style={{ padding: 20, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textTransform: "uppercase" as const, letterSpacing: "0.1em", marginBottom: 2 }}>Tech Stack</div>
             <OrbitRing icons={stack} r={60} dur={26} dark={true} />
           </div>
-
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
               <div style={{ borderRadius: 10, background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)", padding: 8 }}><GraduationCap size={15} color="#818cf8" /></div>
@@ -560,7 +514,6 @@ function About() {
               </div>
             ))}
           </div>
-
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(8,145,178,0.15)", border: "1px solid rgba(8,145,178,0.3)", padding: 8 }}><MapPin size={15} color={T.cyan} /></div>
@@ -570,7 +523,6 @@ function About() {
             <div style={{ fontWeight: 700, color: "#ffffff", fontSize: 17 }}>Kajang, Selangor</div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>Working @ Putrajaya</div>
           </div>
-
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(22,163,74,0.15)", border: "1px solid rgba(22,163,74,0.3)", padding: 8 }}><Briefcase size={15} color="#4ade80" /></div>
@@ -627,29 +579,104 @@ function Skills() {
   );
 }
 
+// ─── Experience dengan Anime.js stagger ──────────────────────────────────────
 function Experience() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const triggered  = useRef(false);
+
   const jobs = [
-    { role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi", loc: "Putrajaya", period: "2025 – Present", accent: T.indigo, accentRaw: "79,70,229", current: true, points: ["Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS", "Integrated Strapi headless CMS with RESTful APIs for dynamic content", "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI", "Implemented Google OAuth 2.0 for secure authentication", "Managed source code via Git (OSDEC)"] },
-    { role: "IT Development Intern", company: "SB Tape Group Sdn Bhd", loc: "Seri Kembangan, Selangor", period: "2025", accent: T.violet, accentRaw: "124,58,237", current: false, points: ["Developed IOSS, ICAR & SCAR modules using VB.Net & ASP.NET", "Built weblogin, CRUD operations & report generation", "Designed system flowcharts using Draw.io", "Participated in user requirement meetings"] },
-    { role: "IT Development Intern", company: "MAP2U Sdn Bhd", loc: "Nilai, Negeri Sembilan", period: "2023", accent: T.cyan, accentRaw: "8,145,178", current: false, points: ["Customised template-based websites & built system components", "Developed data tables & filters for E-idaman project", "Supported UI/UX design for Jabatan Pengaliran Saliran (JPS)"] },
+    {
+      role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi",
+      loc: "Putrajaya", period: "2025 – Present",
+      accent: T.indigo, accentRaw: "79,70,229", current: true,
+      points: [
+        "Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS",
+        "Integrated Strapi headless CMS with RESTful APIs for dynamic content",
+        "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI",
+        "Implemented Google OAuth 2.0 for secure authentication",
+        "Managed source code via Git (OSDEC)",
+      ],
+    },
+    {
+      role: "IT Development Intern", company: "SB Tape Group Sdn Bhd",
+      loc: "Seri Kembangan, Selangor", period: "2025",
+      accent: T.violet, accentRaw: "124,58,237", current: false,
+      points: [
+        "Developed IOSS, ICAR & SCAR modules using VB.Net & ASP.NET",
+        "Built weblogin, CRUD operations & report generation",
+        "Designed system flowcharts using Draw.io",
+        "Participated in user requirement meetings",
+      ],
+    },
+    {
+      role: "IT Development Intern", company: "MAP2U Sdn Bhd",
+      loc: "Nilai, Negeri Sembilan", period: "2023",
+      accent: T.cyan, accentRaw: "8,145,178", current: false,
+      points: [
+        "Customised template-based websites & built system components",
+        "Developed data tables & filters for E-idaman project",
+        "Supported UI/UX design for Jabatan Pengaliran Saliran (JPS)",
+      ],
+    },
   ];
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        // Fire once when the section enters the viewport
+        if (entry.isIntersecting && !triggered.current) {
+          triggered.current = true;
+
+          // Dynamic import — safe for SSR / Next.js
+          import("animejs").then(({ animate, stagger }) => {
+            // Anime.js hanya handle entrance — translateX + opacity
+            // Posisi kiri/tengah/kanan diset via alignSelf dalam JSX
+            animate(".exp-card", {
+              translateX: [-50, 0],
+              opacity:    [0, 1],
+              duration:   750,
+              delay:      stagger(180),
+              easing:     "easeOutExpo",
+            });
+          });
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    if (sectionRef.current) io.observe(sectionRef.current);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="exp" style={{ background: T.bg, padding: "96px 24px" }}>
-      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto" }}>
+    <section id="exp" ref={sectionRef} style={{ background: T.bg, padding: "96px 0" }}>
+      {/* ── Heading — tetap centered ── */}
+      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", paddingLeft: 24, paddingRight: 24 }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <SBadge>Experience</SBadge>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>Work <span className="gtext">Experience</span></h2>
+          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>
+            Work <span className="gtext">Experience</span>
+          </h2>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      </div>
+
+      {/* ── Cards — full viewport width supaya flex-start betul-betul rapat kiri ── */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
           {jobs.map((j, i) => (
-            <MCard key={i} style={{ padding: 26 }} glow={`rgba(${j.accentRaw},.05)`}>
+            <MCard key={i} className="exp-card" style={{ padding: 26, width: "72%", alignSelf: (["flex-start","center","flex-end"] as const)[i] }} glow={`rgba(${j.accentRaw},.05)`}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-                  <div style={{ borderRadius: 12, background: `rgba(${j.accentRaw},.1)`, border: `1.5px solid rgba(${j.accentRaw},.2)`, padding: 10, flexShrink: 0 }}><Briefcase size={18} color={j.accent} /></div>
+                  <div style={{ borderRadius: 12, background: `rgba(${j.accentRaw},.1)`, border: `1.5px solid rgba(${j.accentRaw},.2)`, padding: 10, flexShrink: 0 }}>
+                    <Briefcase size={18} color={j.accent} />
+                  </div>
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ fontWeight: 700, color: T.text, fontSize: 15 }}>{j.role}</span>
-                      {j.current && <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `rgba(${j.accentRaw},.1)`, border: `1px solid rgba(${j.accentRaw},.25)`, color: j.accent, fontWeight: 600 }}>Current</span>}
+                      {j.current && (
+                        <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `rgba(${j.accentRaw},.1)`, border: `1px solid rgba(${j.accentRaw},.25)`, color: j.accent, fontWeight: 600 }}>
+                          Current
+                        </span>
+                      )}
                     </div>
                     <div style={{ fontSize: 13, color: j.accent, fontWeight: 500, marginTop: 2 }}>{j.company}</div>
                     <div style={{ fontSize: 12, color: T.text3, marginTop: 1 }}>{j.loc} · {j.period}</div>
@@ -667,10 +694,10 @@ function Experience() {
             </MCard>
           ))}
         </div>
-      </div>
     </section>
   );
 }
+// ─────────────────────────────────────────────────────────────────────────────
 
 function Projects() {
   const projs = [
@@ -717,25 +744,102 @@ function Projects() {
 
 function Contact() {
   const [copied, setCopied] = useState(false);
+  const canvasWrapRef = useRef<HTMLDivElement>(null);
   const email = "izzatzamri01@gmail.com";
   const copy = () => { navigator.clipboard?.writeText(email); setCopied(true); setTimeout(() => setCopied(false), 2500); };
+
+  useEffect(() => {
+    const container = canvasWrapRef.current;
+    if (!container) return;
+    let rendererRef: any = null;
+    let dead = false;
+
+    Promise.all([
+      import("three"),
+      import("animejs"),
+    ]).then(([THREE, { engine, createTimeline, utils }]) => {
+      if (dead) return;
+
+      engine.useDefaultMainLoop = false;
+
+      const { width, height } = container.getBoundingClientRect();
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      const scene    = new THREE.Scene();
+      const camera   = new THREE.PerspectiveCamera(65, width / height, 0.1, 20);
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0xa5b4fc, wireframe: true });
+
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.domElement.style.position = "absolute";
+      renderer.domElement.style.inset    = "0";
+      container.appendChild(renderer.domElement);
+      rendererRef = renderer;
+      camera.position.z = 5;
+
+      function spawnCube() {
+        const cube     = new THREE.Mesh(geometry, material);
+        const x        = utils.random(-10, 10, 2);
+        const y        = utils.random(-5,   5, 2);
+        const z        = [-10, 7] as [number, number];
+        const r        = () => utils.random(-Math.PI * 2, Math.PI * 2, 3);
+        const duration = 4000;
+        createTimeline({
+          delay:    utils.random(0, duration),
+          defaults: { loop: true, duration, ease: "inSine" },
+        })
+        .add(cube.position, { x, y, z }, 0)
+        .add(cube.rotation, { x: r, y: r, z: r }, 0)
+        .init();
+        scene.add(cube);
+      }
+
+      for (let i = 0; i < 40; i++) spawnCube();
+
+      function render() {
+        engine.update();
+        renderer.render(scene, camera);
+      }
+      renderer.setAnimationLoop(render);
+    });
+
+    return () => {
+      dead = true;
+      if (rendererRef) {
+        rendererRef.setAnimationLoop(null);
+        rendererRef.dispose();
+        if (rendererRef.domElement?.parentNode === container) {
+          container.removeChild(rendererRef.domElement);
+        }
+      }
+    };
+  }, []);
+
   return (
-    <section id="contact" style={{ background: T.bg, padding: "96px 24px 160px" }}>
-      <div style={{ maxWidth: 800, marginLeft: "auto", marginRight: "auto" }}>
+    <section id="contact" style={{ position: "relative", background: "#0d0d0f", padding: "96px 24px 160px", overflow: "hidden" }}>
+
+      {/* ── Three.js wireframe cube BG ── */}
+      <div ref={canvasWrapRef} style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.65, pointerEvents: "none" }} />
+
+      {/* Radial vignette */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)" }} />
+
+      {/* ── content ── */}
+      <div style={{ position: "relative", zIndex: 2, maxWidth: 800, marginLeft: "auto", marginRight: "auto" }}>
         <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <SBadge>Contact</SBadge>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>Let&apos;s <span className="gtext">Connect</span></h2>
-          <p style={{ fontSize: 14, color: T.text3, marginTop: 12 }}>Interested in working together? Let&apos;s build something impactful.</p>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>Contact</div>
+          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Let&apos;s <span className="gtext">Connect</span></h2>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", marginTop: 12 }}>Interested in working together? Let&apos;s build something impactful.</p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div className="bbeam">
-            <div style={{ borderRadius: 15, background: T.card, padding: "26px 30px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
+            <div style={{ borderRadius: 15, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", padding: "26px 30px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-                <div style={{ borderRadius: 14, background: "rgba(79,70,229,.08)", border: "1.5px solid rgba(79,70,229,.2)", padding: 13, flexShrink: 0 }}><Mail size={24} color={T.indigo} /></div>
+                <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 13, flexShrink: 0 }}><Mail size={24} color="#818cf8" /></div>
                 <div>
-                  <div style={{ fontWeight: 600, color: T.text, fontSize: 15, marginBottom: 3 }}>Drop me an email</div>
-                  <div style={{ fontSize: 13, color: T.text3 }}>+6012-296 7752 · Kajang, Selangor</div>
-                  <code style={{ fontSize: 13, color: T.indigo, marginTop: 6, display: "block" }}>{email}</code>
+                  <div style={{ fontWeight: 600, color: "#ffffff", fontSize: 15, marginBottom: 3 }}>Drop me an email</div>
+                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>+6012-296 7752 · Kajang, Selangor</div>
+                  <code style={{ fontSize: 13, color: "#818cf8", marginTop: 6, display: "block" }}>{email}</code>
                 </div>
               </div>
               <SBtn onClick={copy}>{copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}</SBtn>
@@ -743,20 +847,20 @@ function Contact() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
             {[
-              { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran",   glow: "rgba(79,70,229,.05)" },
-              { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran",             glow: "rgba(8,145,178,.05)" },
-              { Icon: Globe2,   lbl: "University", hdl: "UiTM · CS Graduate 2025", glow: "rgba(124,58,237,.05)" },
+              { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran",   glow: "rgba(99,102,241,.12)" },
+              { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran",             glow: "rgba(8,145,178,.12)" },
+              { Icon: Globe2,   lbl: "University", hdl: "UiTM · CS Graduate 2025", glow: "rgba(124,58,237,.12)" },
             ].map(({ Icon, lbl, hdl, glow }) => (
-              <MCard key={lbl} style={{ padding: "18px 16px", cursor: "pointer" }} glow={glow}>
+              <div key={lbl} style={{ padding: "18px 16px", borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", cursor: "pointer" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                  <div style={{ borderRadius: 10, background: T.bg, border: `1px solid ${T.border2}`, padding: 9 }}><Icon size={17} color={T.text2} /></div>
+                  <div style={{ borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", padding: 9 }}><Icon size={17} color="rgba(255,255,255,0.6)" /></div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: T.text }}>{lbl}</div>
-                    <div style={{ fontSize: 12, color: T.text3, marginTop: 1 }}>{hdl}</div>
+                    <div style={{ fontSize: 13, fontWeight: 500, color: "#ffffff" }}>{lbl}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 1 }}>{hdl}</div>
                   </div>
-                  <ExternalLink size={12} color={T.text3} />
+                  <ExternalLink size={12} color="rgba(255,255,255,0.3)" />
                 </div>
-              </MCard>
+              </div>
             ))}
           </div>
         </div>
