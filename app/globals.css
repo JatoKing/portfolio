@@ -127,3 +127,231 @@
     @apply font-sans;
   }
 }
+
+/* ============================================================
+   PORTFOLIO — global.css
+   Salin semua ini ke dalam globals.css anda (gantikan yang sedia ada)
+   ============================================================ */
+
+
+
+/* ────────────────────────────────────────────────────────────
+   1. CSS CUSTOM PROPERTY — untuk animasi border spin (Contact section)
+   ──────────────────────────────────────────────────────────── */
+@property --ba {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   2. RESET ASAS
+   ──────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f8f7f4;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   3. SCROLLBAR CUSTOM
+   ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f7f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 2px;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   4. KEYFRAME ANIMATIONS
+   ──────────────────────────────────────────────────────────── */
+
+/* Gradient text shift — untuk .gtext */
+@keyframes gshift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+/* Marquee kiri — Tech Stack marquee */
+@keyframes mqleft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Marquee kanan — Tech Stack marquee (reverse) */
+@keyframes mqright {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* Spin ikut jam — orbit rings */
+@keyframes spincw {
+  to { transform: rotate(360deg); }
+}
+
+/* Spin lawan jam — orbit icons counter-rotate */
+@keyframes spinccw {
+  to { transform: rotate(-360deg); }
+}
+
+/* Shimmer button — SBtn highlight effect */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Fade up — Hero section entrance */
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Cursor blink — TypingAnim */
+@keyframes cblink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Pulse ring — status indicator (green dot) */
+@keyframes pulsering {
+  0%   { transform: scale(1); opacity: .9; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Border spin — Contact section .bbeam */
+@keyframes bspin {
+  to { --ba: 360deg; }
+}
+
+/* Breathe — Hero background blobs */
+@keyframes breathe {
+  0%, 100% { opacity: .18; }
+  50%       { opacity: .38; }
+}
+
+/* Beam move — SVG animated beam (Skills & Hero SVG) */
+@keyframes beammove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -1; }
+}
+
+/* Float up — FloatingCodeBg tokens (About section) */
+@keyframes tokenFloat {
+  0%   { opacity: 0;    transform: translateY(0px); }
+  15%  { opacity: 0.75; }
+  50%  { opacity: 0.55; transform: translateY(-18px); }
+  85%  { opacity: 0.75; }
+  100% { opacity: 0;    transform: translateY(-32px); }
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   5. GRADIENT TEXT — digunakan pada tajuk section
+   ──────────────────────────────────────────────────────────── */
+.gtext {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #0891b2, #4f46e5);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gshift 5s ease infinite;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   6. MAGIC CARD — hover lift effect (MCard component)
+   ──────────────────────────────────────────────────────────── */
+.magic-card {
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.magic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .08);
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   7. BORDER BEAM — Contact section card border spin
+   ──────────────────────────────────────────────────────────── */
+.bbeam {
+  --ba: 0deg;
+  background: conic-gradient(
+    from var(--ba) at 50% 50%,
+    transparent 0%,
+    #4f46e5 5%,
+    #7c3aed 10%,
+    #0891b2 15%,
+    transparent 22%
+  );
+  animation: bspin 4s linear infinite;
+  padding: 1.5px;
+  border-radius: 16px;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   8. DOCK — bottom navigation bar
+   ──────────────────────────────────────────────────────────── */
+.dock-btn {
+  transition: transform .25s cubic-bezier(.34, 1.56, .64, 1), background .2s;
+}
+
+.dock-btn:hover {
+  transform: scale(1.35) translateY(-7px);
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   9. TECH PILL — marquee items hover (Skills/About section)
+   ──────────────────────────────────────────────────────────── */
+.techpill {
+  transition: border-color .2s, background .2s, color .2s;
+  cursor: default;
+}
+
+.techpill:hover {
+  border-color: rgba(79, 70, 229, .35) !important;
+  background: rgba(79, 70, 229, .07) !important;
+  color: #4f46e5 !important;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   10. PROJECT CARD — arrow colour on hover (Projects section)
+   ──────────────────────────────────────────────────────────── */
+.projcard:hover .projarrow {
+  color: #4f46e5 !important;
+}
+
+.projarrow {
+  transition: color .2s;
+}
+
+
+/* ────────────────────────────────────────────────────────────
+   11. EXPERIENCE CARD — initial state untuk scroll animation
+       (opacity 0 → animate masuk bila scroll via animejs)
+   ──────────────────────────────────────────────────────────── */
+.exp-card {
+  opacity: 0;
+}

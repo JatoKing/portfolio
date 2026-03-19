@@ -36,50 +36,13 @@ const T = {
   pillTxt: "#4f46e5",
 };
 
-const CSS = `
-  @property --ba { syntax:'<angle>'; initial-value:0deg; inherits:false; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html { scroll-behavior:smooth; }
-  body { background:${T.bg}; }
-  ::-webkit-scrollbar { width:3px; }
-  ::-webkit-scrollbar-track { background:${T.bg}; }
-  ::-webkit-scrollbar-thumb { background:${T.indigo2}; border-radius:2px; }
-  @keyframes gshift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-  @keyframes mqleft  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-  @keyframes mqright { from{transform:translateX(-50%)} to{transform:translateX(0)} }
-  @keyframes spincw  { to{transform:rotate(360deg)} }
-  @keyframes spinccw { to{transform:rotate(-360deg)} }
-  @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-  @keyframes fadeup  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes cblink  { 0%,100%{opacity:1} 50%{opacity:0} }
-  @keyframes pulsering { 0%{transform:scale(1);opacity:.9} 70%{transform:scale(2.2);opacity:0} 100%{opacity:0} }
-  @keyframes bspin   { to{--ba:360deg;} }
-  @keyframes breathe { 0%,100%{opacity:.18} 50%{opacity:.38} }
+
+
+/* ── CSS khusus untuk Skills / Tech section ── */
+const TECH_CSS = `
   @keyframes beammove { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
-  .gtext {
-    background: linear-gradient(135deg,#4f46e5,#7c3aed,#0891b2,#4f46e5);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gshift 5s ease infinite;
-  }
-  .magic-card { transition: transform .22s ease, box-shadow .22s ease; }
-  .magic-card:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,0,0,.08); }
-  .bbeam {
-    --ba:0deg;
-    background: conic-gradient(from var(--ba) at 50% 50%,
-      transparent 0%, #4f46e5 5%, #7c3aed 10%, #0891b2 15%, transparent 22%);
-    animation: bspin 4s linear infinite;
-    padding:1.5px; border-radius:16px;
-  }
-  .dock-btn { transition:transform .25s cubic-bezier(.34,1.56,.64,1), background .2s; }
-  .dock-btn:hover { transform:scale(1.35) translateY(-7px); }
-  .techpill { transition:border-color .2s, background .2s, color .2s; cursor:default; }
-  .techpill:hover { border-color:rgba(79,70,229,.35)!important; background:rgba(79,70,229,.07)!important; color:#4f46e5!important; }
-  .projcard:hover .projarrow { color:#4f46e5 !important; }
-  .projarrow { transition:color .2s; }
-  .exp-card { opacity: 0; }
+  .techpill { transition: border-color .2s, background .2s, color .2s; cursor: default; }
+  .techpill:hover { border-color: rgba(79,70,229,.35) !important; background: rgba(79,70,229,.07) !important; color: #4f46e5 !important; }
 `;
 
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
@@ -540,9 +503,10 @@ function About() {
   );
 }
 
+// ─── Skills ───────────────────────────────────────────────────────────────────
 function Skills() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cRef  = useRef<HTMLDivElement>(null);
+  const cRef = useRef<HTMLDivElement>(null);
 
   const l1Ref = useRef<HTMLDivElement>(null);
   const l2Ref = useRef<HTMLDivElement>(null);
@@ -593,53 +557,68 @@ function Skills() {
       setBeams(result);
     };
     const id = requestAnimationFrame(build);
-    window.addEventListener('resize', build);
-    return () => { cancelAnimationFrame(id); window.removeEventListener('resize', build); };
+    window.addEventListener("resize", build);
+    return () => { cancelAnimationFrame(id); window.removeEventListener("resize", build); };
   }, []);
 
   const LTECH = [
-    { n: 'Next.js 15',   img: 'https://cdn.simpleicons.org/nextdotjs/111111', ref: l1Ref },
-    { n: 'TypeScript',   img: 'https://cdn.simpleicons.org/typescript',        ref: l2Ref },
-    { n: 'Laravel',      img: 'https://cdn.simpleicons.org/laravel',           ref: l3Ref },
-    { n: 'PHP',          img: 'https://cdn.simpleicons.org/php',               ref: l4Ref },
-    { n: 'Git',          img: 'https://cdn.simpleicons.org/git',               ref: l5Ref },
-    { n: 'JavaScript',   img: 'https://cdn.simpleicons.org/javascript',        ref: l6Ref },
-    { n: 'HeroUI',       img: 'https://cdn.simpleicons.org/heroui/111111',     ref: l7Ref },
-    { n: 'Figma',        img: 'https://cdn.simpleicons.org/figma',             ref: l8Ref },
+    { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111", ref: l1Ref },
+    { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript",        ref: l2Ref },
+    { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel",           ref: l3Ref },
+    { n: "PHP",          img: "https://cdn.simpleicons.org/php",               ref: l4Ref },
+    { n: "Git",          img: "https://cdn.simpleicons.org/git",               ref: l5Ref },
+    { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript",        ref: l6Ref },
+    { n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111",     ref: l7Ref },
+    { n: "Figma",        img: "https://cdn.simpleicons.org/figma",             ref: l8Ref },
   ];
 
   const RTECH = [
-    { n: 'React',        img: 'https://cdn.simpleicons.org/react',             ref: r1Ref },
-    { n: 'Tailwind CSS', img: 'https://cdn.simpleicons.org/tailwindcss',       ref: r2Ref },
-    { n: 'Strapi',       img: 'https://cdn.simpleicons.org/strapi',            ref: r3Ref },
-    { n: 'Vertex AI',    img: 'https://cdn.simpleicons.org/googlecloud',       ref: r4Ref },
-    { n: 'MySQL',        img: 'https://cdn.simpleicons.org/mysql',             ref: r5Ref },
-    { n: 'Google OAuth', img: 'https://cdn.simpleicons.org/google',            ref: r6Ref },
-    { n: 'LottieFiles',  img: 'https://cdn.simpleicons.org/lottiefiles',       ref: r7Ref },
-    { n: 'ASP.NET',      img: 'https://cdn.simpleicons.org/dotnet',            ref: r8Ref },
+    { n: "React",        img: "https://cdn.simpleicons.org/react",             ref: r1Ref },
+    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss",       ref: r2Ref },
+    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi",            ref: r3Ref },
+    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud",       ref: r4Ref },
+    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql",             ref: r5Ref },
+    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google",            ref: r6Ref },
+    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles",       ref: r7Ref },
+    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet",            ref: r8Ref },
   ];
 
   const circleStyle: React.CSSProperties = {
-    width: 46, height: 46, borderRadius: '50%',
+    width: 46, height: 46, borderRadius: "50%",
     background: T.card, border: `1px solid ${T.border2}`,
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    boxShadow: '0 2px 12px rgba(0,0,0,.07)', flexShrink: 0,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    boxShadow: "0 2px 12px rgba(0,0,0,.07)", flexShrink: 0,
+    position: "relative", overflow: "hidden",
+  };
+
+  const TechIcon = ({ img, name }: { img: string; name: string }) => {
+    const [failed, setFailed] = useState(false);
+    const initials = name.slice(0, 2).toUpperCase();
+    return failed ? (
+      <span style={{ fontSize: 11, fontWeight: 700, color: T.indigo, letterSpacing: "-0.03em" }}>{initials}</span>
+    ) : (
+      <img
+        src={img} alt={name} width={22} height={22}
+        style={{ objectFit: "contain" }}
+        onError={() => setFailed(true)}
+      />
+    );
   };
 
   return (
-    <section id="skills" style={{ background: T.bg2, padding: '96px 0 96px', overflow: 'hidden' }}>
-      <div style={{ maxWidth: 900, marginLeft: 'auto', marginRight: 'auto', paddingLeft: 24, paddingRight: 24, textAlign: 'center', marginBottom: 52 }}>
+    <section id="skills" style={{ background: T.bg2, padding: "96px 0 96px", overflow: "hidden" }}>
+      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", paddingLeft: 24, paddingRight: 24, textAlign: "center", marginBottom: 52 }}>
         <SBadge>Technologies</SBadge>
-        <h2 style={{ fontSize: 'clamp(26px,4.5vw,38px)', fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
-        <p style={{ fontSize: 14, color: T.text3, marginTop: 12, maxWidth: 380, marginLeft: 'auto', marginRight: 'auto' }}>Tools &amp; technologies I use to build impactful digital products</p>
+        <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
+        <p style={{ fontSize: 14, color: T.text3, marginTop: 12, maxWidth: 380, marginLeft: "auto", marginRight: "auto" }}>Tools &amp; technologies I use to build impactful digital products</p>
       </div>
-      <div style={{ maxWidth: 900, marginLeft: 'auto', marginRight: 'auto', padding: '0 48px' }}>
-        <div ref={containerRef} style={{ position: 'relative', height: 500 }}>
-          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", padding: "0 48px" }}>
+        <div ref={containerRef} style={{ position: "relative", height: 500 }}>
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible", pointerEvents: "none", zIndex: 0 }}>
             {beams.map((b, i) => {
-              const dur    = (0.8 + (i * 0.37) % 1.4).toFixed(2);
-              const dash   = (0.06 + (i * 0.07) % 0.14).toFixed(2);
-              const gap    = (1 - parseFloat(dash)).toFixed(2);
+              const dur  = (0.8 + (i * 0.37) % 1.4).toFixed(2);
+              const dash = (0.06 + (i * 0.07) % 0.14).toFixed(2);
+              const gap  = (1 - parseFloat(dash)).toFixed(2);
               return (
                 <g key={i}>
                   <path d={b.d} fill="none" stroke="rgba(79,70,229,0.07)" strokeWidth={0.8} />
@@ -653,31 +632,46 @@ function Skills() {
               );
             })}
           </svg>
-          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', zIndex: 1 }}>
+
+          {/* Left tech icons */}
+          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-around", zIndex: 1 }}>
             {LTECH.map(t => (
-              <div key={t.n} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+              <div key={t.n} style={{ display: "flex", alignItems: "center", position: "relative" }}>
                 <div ref={t.ref} style={circleStyle}>
-                  <img src={t.img} alt={t.n} width={22} height={22} style={{ objectFit: 'contain' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  <TechIcon img={t.img} name={t.n} />
                 </div>
-                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: 'nowrap', position: 'absolute', right: 'calc(100% + 10px)' }}>{t.n}</span>
+                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: "nowrap", position: "absolute", right: "calc(100% + 10px)" }}>{t.n}</span>
               </div>
             ))}
           </div>
-          <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%) translateY(-11px)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9 }}>
-            <div ref={cRef} style={{ width: 66, height: 66, borderRadius: '50%', border: `2px solid ${T.border2}`, boxShadow: `0 0 0 7px rgba(79,70,229,0.1), 0 4px 20px rgba(0,0,0,0.15)` }}>
-              <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', background: T.bg2 }}>
-                <img src="ht47" alt="Izzat Imran" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
-                  onError={e => { const el = e.target as HTMLImageElement; el.style.display = 'none'; const p = el.parentElement!; p.style.display = 'flex'; p.style.alignItems = 'center'; p.style.justifyContent = 'center'; p.innerHTML = `<span style="font-size:28px">👤</span>`; }} />
-              </div>
+
+          {/* ── Center: icon sahaja ── */}
+          <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%) translateY(-11px)", zIndex: 2 }}>
+            <div
+              ref={cRef}
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: "50%",
+                background: T.card,
+                border: `1px solid ${T.border2}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <User size={24} color={T.indigo} />
             </div>
           </div>
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', zIndex: 1 }}>
+
+          {/* Right tech icons */}
+          <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-around", zIndex: 1 }}>
             {RTECH.map(t => (
-              <div key={t.n} style={{ display: 'flex', alignItems: 'center', flexDirection: 'row-reverse', position: 'relative' }}>
+              <div key={t.n} style={{ display: "flex", alignItems: "center", flexDirection: "row-reverse", position: "relative" }}>
                 <div ref={t.ref} style={circleStyle}>
-                  <img src={t.img} alt={t.n} width={22} height={22} style={{ objectFit: 'contain' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  <TechIcon img={t.img} name={t.n} />
                 </div>
-                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: 'nowrap', position: 'absolute', left: 'calc(100% + 10px)' }}>{t.n}</span>
+                <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: "nowrap", position: "absolute", left: "calc(100% + 10px)" }}>{t.n}</span>
               </div>
             ))}
           </div>
@@ -725,15 +719,26 @@ function Experience() {
     },
   ];
 
+  // ── Refs untuk kedua-dua Lottie wrapper ──────────────────────────────────
+  const lottieWorkingRef = useRef<HTMLDivElement>(null);
+  const lottieCatRef     = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    // ── Animate exp-cards (slide dari kiri) ──────────────────────────────
     const cards = document.querySelectorAll<HTMLElement>(".exp-card");
     const observers: IntersectionObserver[] = [];
+
     cards.forEach((card) => {
       const io = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             import("animejs").then(({ animate }) => {
-              animate(card, { translateX: [-60, 0], opacity: [0, 1], duration: 700, easing: "easeOutExpo" });
+              animate(card, {
+                translateX: [-60, 0],
+                opacity: [0, 1],
+                duration: 700,
+                easing: "easeOutExpo",
+              });
             });
             io.disconnect();
           }
@@ -743,7 +748,62 @@ function Experience() {
       io.observe(card);
       observers.push(io);
     });
-    return () => observers.forEach(io => io.disconnect());
+
+    // ── Animate Lottie working.json (slide dari kanan + fade in) ─────────
+    const workingEl = lottieWorkingRef.current;
+    if (workingEl) {
+      workingEl.style.opacity = "0";
+      workingEl.style.transform = "translateX(80px)";
+
+      const ioWorking = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            import("animejs").then(({ animate }) => {
+              animate(workingEl, {
+                translateX: [80, 0],
+                opacity: [0, 1],
+                duration: 900,
+                delay: 200,
+                easing: "easeOutExpo",
+              });
+            });
+            ioWorking.disconnect();
+          }
+        },
+        { threshold: 0.15 },
+      );
+      ioWorking.observe(workingEl);
+      observers.push(ioWorking);
+    }
+
+    // ── Animate Lottie cat (slide + fade in) ─────────────────────────────
+    const catEl = lottieCatRef.current;
+    if (catEl) {
+      catEl.style.opacity = "0";
+      catEl.style.transform = "scaleX(-1) translateX(80px)";
+
+      const ioCat = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            import("animejs").then(({ animate }) => {
+              animate(catEl, {
+                translateX: [80, 0],
+                opacity: [0, 1],
+                duration: 900,
+                delay: 400,
+                easing: "easeOutExpo",
+              });
+            });
+            ioCat.disconnect();
+          }
+        },
+        { threshold: 0.1 },
+      );
+      ioCat.observe(catEl);
+      observers.push(ioCat);
+    }
+
+    return () => observers.forEach((io) => io.disconnect());
   }, []);
 
   return (
@@ -757,22 +817,17 @@ function Experience() {
         </div>
       </div>
 
-      {/* ── Cards wrapper — position: relative supaya kedua Lottie boleh absolute ── */}
       <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
 
-        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            LOTTIE #1 — working.json (kanan, atas kotak pertama)
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            • top   → naik/turun dari top wrapper
-            • right → jarak dari tepi kanan section
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        {/* ── Lottie #1 — working.json ──────────────────────────────────────── */}
         <div
+          ref={lottieWorkingRef}
           style={{
             position: "absolute",
-            top: 80,       // ← TUKAR: naik/turun
-            right: 78,     // ← TUKAR: jarak dari tepi kanan
-            width: 330,     // ← TUKAR: lebar
-            height: 330,    // ← TUKAR: tinggi
+            top: 80,
+            right: 78,
+            width: 330,
+            height: 330,
             zIndex: 10,
             pointerEvents: "none",
           }}
@@ -784,26 +839,19 @@ function Experience() {
             style={{ width: "100%", height: "100%" }}
           />
         </div>
-        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
 
-        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            LOTTIE #2 — Cat playing animation.json (kiri, belakang kotak bawah)
-            zIndex: 0 → DI BELAKANG kotak (MCard ada zIndex lebih tinggi)
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            • bottom → jarak dari bawah wrapper (negatif = terkeluar ke bawah)
-            • left   → jarak dari tepi kiri section
-            • width / height → saiz animation
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        {/* ── Lottie #2 — Cat playing animation.json ───────────────────────── */}
         <div
+          ref={lottieCatRef}
           style={{
             position: "absolute",
-            bottom: -80,    // ← TUKAR: naik/turun (negatif = turun keluar bawah kotak)
-            left: 135,       // ← TUKAR: jarak dari tepi kiri
-            width: 250,     // ← TUKAR: lebar
-            height: 250,    // ← TUKAR: tinggi
-            zIndex: 0,      // ← KEKAL 0 supaya berada DI BELAKANG kotak
+            bottom: -80,
+            left: 135,
+            width: 250,
+            height: 250,
+            zIndex: 0,
             pointerEvents: "none",
-            transform: "scaleX(-1)", // ← flip horizontal supaya kucing hadap ke kanan (ke arah kotak)
+            transform: "scaleX(-1)",
           }}
         >
           <DotLottieReact
@@ -813,10 +861,21 @@ function Experience() {
             style={{ width: "100%", height: "100%" }}
           />
         </div>
-        {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
 
+        {/* ── Experience cards ──────────────────────────────────────────────── */}
         {jobs.map((j, i) => (
-          <MCard key={i} className="exp-card" style={{ padding: 26, width: "72%", alignSelf: (["flex-start","center","flex-end"] as const)[i], position: "relative", zIndex: 1 }} glow={`rgba(${j.accentRaw},.05)`}>
+          <MCard
+            key={i}
+            className="exp-card"
+            style={{
+              padding: 26,
+              width: "72%",
+              alignSelf: (["flex-start", "center", "flex-end"] as const)[i],
+              position: "relative",
+              zIndex: 1,
+            }}
+            glow={`rgba(${j.accentRaw},.05)`}
+          >
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
                 <div style={{ borderRadius: 12, background: `rgba(${j.accentRaw},.1)`, border: `1.5px solid rgba(${j.accentRaw},.2)`, padding: 10, flexShrink: 0 }}>
@@ -849,6 +908,7 @@ function Experience() {
   );
 }
 
+// ─── Projects ─────────────────────────────────────────────────────────────────
 function Projects() {
   const projs = [
     { title: "Portal PADU", sub: "Kementerian Ekonomi Malaysia · 2025–Present", desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ pages with animated infographics, 3D carousels, AI chatbot (Vertex AI), and Strapi CMS integration.", tags: ["Next.js", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"], icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229", stat: { v: "100k+", l: "Daily Users" }, span2: true,  href: "/projects/padu" },
@@ -892,6 +952,7 @@ function Projects() {
   );
 }
 
+// ─── Contact ──────────────────────────────────────────────────────────────────
 function Contact() {
   const [copied, setCopied] = useState(false);
   const canvasWrapRef = useRef<HTMLDivElement>(null);
@@ -999,6 +1060,7 @@ function Contact() {
   );
 }
 
+// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function Portfolio() {
   const [active, setActive] = useState("hero");
   const goto = useCallback((id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setActive(id); }, []);
@@ -1014,7 +1076,7 @@ export default function Portfolio() {
   }, []);
   return (
     <>
-      <style>{CSS}</style>
+      <style>{TECH_CSS}</style>
       <div style={{ fontFamily: "'Inter',system-ui,-apple-system,sans-serif", background: T.bg, minHeight: "100vh" }}>
         <Hero /><About /><Skills /><Experience /><Projects /><Contact />
         <Dock active={active} goto={goto} />
