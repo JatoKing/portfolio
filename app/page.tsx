@@ -824,8 +824,8 @@ function Experience() {
           ref={lottieWorkingRef}
           style={{
             position: "absolute",
-            top: 80,
-            right: 78,
+            top: 55,
+            right: 135,
             width: 330,
             height: 330,
             zIndex: 10,
@@ -846,7 +846,7 @@ function Experience() {
           style={{
             position: "absolute",
             bottom: -80,
-            left: 135,
+            left: 185,
             width: 250,
             height: 250,
             zIndex: 0,
