@@ -5,6 +5,7 @@ import {
   Github, Linkedin, Mail, ExternalLink, Code2, Zap,
   ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap,
 } from "lucide-react";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 
 interface TypingAnimProps { words: string[]; spd?: number; del?: number; pause?: number; }
 interface MCardProps { children: React.ReactNode; style?: React.CSSProperties; glow?: string; className?: string; }
@@ -1060,25 +1061,51 @@ function Contact() {
   );
 }
 
-// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function Portfolio() {
+  const [loaded, setLoaded] = useState(false); // ← tambah baris ni
   const [active, setActive] = useState("hero");
-  const goto = useCallback((id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setActive(id); }, []);
+
+  const goto = useCallback((id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setActive(id);
+  }, []);
+
   useEffect(() => {
     const fn = () => {
       for (const id of ["hero", "about", "skills", "exp", "proj", "contact"]) {
         const el = document.getElementById(id);
-        if (el) { const r = el.getBoundingClientRect(); if (r.top <= 180 && r.bottom >= 180) { setActive(id); break; } }
+        if (el) {
+          const r = el.getBoundingClientRect();
+          if (r.top <= 180 && r.bottom >= 180) { setActive(id); break; }
+        }
       }
     };
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
   return (
     <>
-      <style>{TECH_CSS}</style>
-      <div style={{ fontFamily: "'Inter',system-ui,-apple-system,sans-serif", background: T.bg, minHeight: "100vh" }}>
-        <Hero /><About /><Skills /><Experience /><Projects /><Contact />
+      {/* ← tambah LoadingScreen ni */}
+      {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
+
+      {/* Tukar <div style={{ ... }}> yang sedia ada — tambah opacity & transition */}
+      <div
+        style={{
+          fontFamily: "'Inter',system-ui,-apple-system,sans-serif",
+          background: "#f8f7f4",
+          minHeight: "100vh",
+          opacity:    loaded ? 1 : 0,       // ← tambah ni
+          transition: "opacity .5s ease",   // ← tambah ni
+        }}
+      >
+        <style>{TECH_CSS}</style>
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Contact />
         <Dock active={active} goto={goto} />
       </div>
     </>
