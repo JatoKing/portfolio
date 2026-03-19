@@ -392,7 +392,7 @@ function Hero() {
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a", animation: "pulsering 1.5s ease-out infinite" }} />
           </span>
-          Freelance
+          Open for Work
         </div>
         <div style={{ animation: "fadeup .7s ease .1s both" }}>
           <h1 style={{ fontSize: "clamp(38px,5.8vw,70px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.06, color: T.text }}>
