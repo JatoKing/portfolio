@@ -37,8 +37,6 @@ const T = {
   pillTxt: "#4f46e5",
 };
 
-
-
 /* ── CSS khusus untuk Skills / Tech section ── */
 const TECH_CSS = `
   @keyframes beammove { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
@@ -622,11 +620,14 @@ function Skills() {
               const gap  = (1 - parseFloat(dash)).toFixed(2);
               return (
                 <g key={i}>
-                  <path d={b.d} fill="none" stroke="rgba(79,70,229,0.07)" strokeWidth={0.8} />
-                  <path d={b.d} fill="none" stroke={T.indigo2} strokeWidth={3} strokeOpacity={0.12}
+                  {/* ── Track line — lebih gelap & jelas ── */}
+                  <path d={b.d} fill="none" stroke="rgba(79,70,229,0.28)" strokeWidth={1} />
+                  {/* ── Animated glow beam ── */}
+                  <path d={b.d} fill="none" stroke={T.indigo2} strokeWidth={3} strokeOpacity={0.50}
                     strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
                     style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
-                  <path d={b.d} fill="none" stroke={T.indigo} strokeWidth={1}
+                  {/* ── Core beam line ── */}
+                  <path d={b.d} fill="none" stroke={T.indigo} strokeWidth={1.5}
                     strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
                     style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
                 </g>
@@ -646,7 +647,7 @@ function Skills() {
             ))}
           </div>
 
-          {/* ── Center: icon sahaja ── */}
+          {/* ── Center icon ── */}
           <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%) translateY(-11px)", zIndex: 2 }}>
             <div
               ref={cRef}
@@ -720,12 +721,10 @@ function Experience() {
     },
   ];
 
-  // ── Refs untuk kedua-dua Lottie wrapper ──────────────────────────────────
   const lottieWorkingRef = useRef<HTMLDivElement>(null);
   const lottieCatRef     = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // ── Animate exp-cards (slide dari kiri) ──────────────────────────────
     const cards = document.querySelectorAll<HTMLElement>(".exp-card");
     const observers: IntersectionObserver[] = [];
 
@@ -750,7 +749,6 @@ function Experience() {
       observers.push(io);
     });
 
-    // ── Animate Lottie working.json (slide dari kanan + fade in) ─────────
     const workingEl = lottieWorkingRef.current;
     if (workingEl) {
       workingEl.style.opacity = "0";
@@ -777,7 +775,6 @@ function Experience() {
       observers.push(ioWorking);
     }
 
-    // ── Animate Lottie cat (slide + fade in) ─────────────────────────────
     const catEl = lottieCatRef.current;
     if (catEl) {
       catEl.style.opacity = "0";
@@ -820,7 +817,6 @@ function Experience() {
 
       <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
 
-        {/* ── Lottie #1 — working.json ──────────────────────────────────────── */}
         <div
           ref={lottieWorkingRef}
           style={{
@@ -841,7 +837,6 @@ function Experience() {
           />
         </div>
 
-        {/* ── Lottie #2 — Cat playing animation.json ───────────────────────── */}
         <div
           ref={lottieCatRef}
           style={{
@@ -863,7 +858,6 @@ function Experience() {
           />
         </div>
 
-        {/* ── Experience cards ──────────────────────────────────────────────── */}
         {jobs.map((j, i) => (
           <MCard
             key={i}
@@ -910,49 +904,455 @@ function Experience() {
 }
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// VARIASI O — "Zebra Stripe + Accent Border" dengan Creative Description Panel
+// Klik row → expand panel dengan animated description, highlight chips & CTA
+// ══════════════════════════════════════════════════════════════════════════════
+
 function Projects() {
   const projs = [
-    { title: "Portal PADU", sub: "Kementerian Ekonomi Malaysia · 2025–Present", desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ pages with animated infographics, 3D carousels, AI chatbot (Vertex AI), and Strapi CMS integration.", tags: ["Next.js", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"], icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229", stat: { v: "100k+", l: "Daily Users" }, span2: true,  href: "/projects/padu" },
-    { title: "Portal Analitik",         sub: "Kementerian Ekonomi · 2025",     desc: "Analytics portal for government data insights with interactive charts, advanced filtering, and real-time KPI dashboards for policy analysts.",                                          tags: ["Next.js", "React", "Tailwind CSS", "REST API"],          icon: "📊", accent: T.violet,   accentRaw: "124,58,237", stat: undefined, span2: false, href: "/projects/analitik" },
-    { title: "Portal Panduan Pengguna", sub: "Kementerian Ekonomi · 2025",     desc: "User guide portal with Strapi headless CMS for dynamic content management and Google OAuth 2.0 for secure government staff authentication.",                                          tags: ["Next.js", "Strapi CMS", "Google OAuth", "REST API"],     icon: "📖", accent: T.cyan,     accentRaw: "8,145,178",  stat: undefined, span2: false, href: "/projects/panduan" },
-    { title: "Smart Ticket System",     sub: "Final Year Project · UiTM 2025", desc: "National Football Ticket booking system with real-time seat allocation algorithm for Bukit Jalil Stadium. Deployed on InfinityFree hosting.",                                        tags: ["Laravel", "MySQL", "PHP", "InfinityFree"],                icon: "🏟️", accent: "#d97706", accentRaw: "217,119,6",  stat: undefined, span2: true,  href: "/projects/ticket" },
+    {
+      title: "Portal PADU",
+      org: "Kementerian Ekonomi Malaysia",
+      period: "2025 – Present",
+      role: "Lead Frontend Dev",
+      desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, AI-powered chatbot via Vertex AI, and full Strapi CMS integration with Google OAuth 2.0.",
+      highlights: ["20+ animated pages", "Vertex AI chatbot", "3D carousel timeline", "Strapi CMS"],
+      tags: ["Next.js 15", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"],
+      icon: "🇲🇾",
+      accent: T.indigo,
+      accentRaw: "79,70,229",
+      stat: "100k+",
+      statLabel: "Daily Users",
+      status: "Live",
+      statusColor: "#16a34a",
+      href: "/projects/padu",
+    },
+    {
+      title: "Portal Analitik",
+      org: "Kementerian Ekonomi",
+      period: "2025",
+      role: "Frontend Developer",
+      desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.",
+      highlights: ["Interactive charts", "KPI dashboards", "Advanced filtering", "REST API"],
+      tags: ["Next.js", "React", "Tailwind CSS", "REST API"],
+      icon: "📊",
+      accent: T.violet,
+      accentRaw: "124,58,237",
+      stat: "Gov",
+      statLabel: "Analytics",
+      status: "Live",
+      statusColor: "#16a34a",
+      href: "/projects/analitik",
+    },
+    {
+      title: "Portal Panduan Pengguna",
+      org: "Kementerian Ekonomi",
+      period: "2025",
+      role: "Frontend Developer",
+      desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.",
+      highlights: ["Strapi headless CMS", "Google OAuth 2.0", "Dynamic content", "Staff access control"],
+      tags: ["Next.js", "Strapi CMS", "Google OAuth", "REST API"],
+      icon: "📖",
+      accent: T.cyan,
+      accentRaw: "8,145,178",
+      stat: "OAuth",
+      statLabel: "Secured",
+      status: "Live",
+      statusColor: "#16a34a",
+      href: "/projects/panduan",
+    },
+    {
+      title: "Smart Ticket System",
+      org: "Final Year Project · UiTM",
+      period: "2025",
+      role: "Full-Stack Developer",
+      desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.",
+      highlights: ["Real-time seat allocation", "Bukit Jalil map UI", "Full-stack Laravel", "InfinityFree deploy"],
+      tags: ["Laravel", "MySQL", "PHP", "InfinityFree"],
+      icon: "🏟️",
+      accent: "#d97706",
+      accentRaw: "217,119,6",
+      stat: "FYP",
+      statLabel: "Grade A",
+      status: "Completed",
+      statusColor: "#0891b2",
+      href: "/projects/ticket",
+    },
   ];
+
+  const rowRefs    = useRef<(HTMLTableRowElement | null)[]>([]);
+  const panelRefs  = useRef<(HTMLDivElement | null)[]>([]);
+  const [expandIdx, setExpandIdx] = useState<number | null>(null);
+  const [hovIdx,    setHovIdx]    = useState<number | null>(null);
+
+  // Scroll-triggered row reveal
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    rowRefs.current.forEach((row, i) => {
+      if (!row) return;
+      const io = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        import("animejs").then(({ animate }) => {
+          animate(row, {
+            opacity:    [0, 1],
+            translateY: [20, 0],
+            duration:   480,
+            delay:      i * 90,
+            easing:     "easeOutExpo",
+          });
+        });
+        io.disconnect();
+      }, { threshold: 0.25 });
+      io.observe(row);
+      observers.push(io);
+    });
+    return () => observers.forEach(io => io.disconnect());
+  }, []);
+
+  // Toggle expand with animation
+  const toggle = useCallback((i: number) => {
+    if (expandIdx === i) {
+      // Collapse
+      const panel = panelRefs.current[i];
+      if (panel) {
+        import("animejs").then(({ animate }) => {
+          animate(panel, {
+            opacity:    [1, 0],
+            translateY: [0, -8],
+            duration:   240,
+            easing:     "easeInQuad",
+            complete:   () => setExpandIdx(null),
+          });
+        });
+      } else {
+        setExpandIdx(null);
+      }
+      return;
+    }
+    setExpandIdx(i);
+    // Animate open after render
+    setTimeout(() => {
+      const panel = panelRefs.current[i];
+      if (!panel) return;
+      import("animejs").then(({ animate }) => {
+        animate(panel, {
+          opacity:    [0, 1],
+          translateY: [-12, 0],
+          duration:   380,
+          easing:     "easeOutExpo",
+        });
+        // Stagger highlight pills
+        const pills = panel.querySelectorAll<HTMLElement>(".hl-pill");
+        if (pills.length) {
+          animate(pills, {
+            opacity:    [0, 1],
+            translateX: [-10, 0],
+            duration:   300,
+            delay:      (_el: any, idx: number) => idx * 55 + 120,
+            easing:     "easeOutExpo",
+          });
+        }
+        // Stagger desc words
+        const descEl = panel.querySelector<HTMLElement>(".desc-text");
+        if (descEl) {
+          animate(descEl, {
+            opacity:    [0, 1],
+            translateY: [8, 0],
+            duration:   400,
+            delay:      80,
+            easing:     "easeOutExpo",
+          });
+        }
+      });
+    }, 10);
+  }, [expandIdx]);
+
   return (
     <section id="proj" style={{ background: T.bg2, padding: "96px 24px" }}>
-      <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <SBadge>Work</SBadge>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>Featured <span className="gtext">Projects</span></h2>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 10 }}>
-          {projs.map((p, i) => (
-            <MCard key={i} className="projcard" style={{ gridColumn: p.span2 ? "span 2" : "span 1", padding: 26 }} glow={`rgba(${p.accentRaw},.06)`}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
-                  <div style={{ fontSize: 26, borderRadius: 14, background: `rgba(${p.accentRaw},.07)`, border: `1.5px solid rgba(${p.accentRaw},.15)`, padding: 11, lineHeight: 1, flexShrink: 0 }}>{p.icon}</div>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                      <span style={{ fontWeight: 600, color: T.text, fontSize: 15 }}>{p.title}</span>
-                      {p.span2 && <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 999, background: `rgba(${p.accentRaw},.1)`, border: `1px solid rgba(${p.accentRaw},.25)`, color: p.accent, fontWeight: 600 }}>Featured</span>}
-                    </div>
-                    <div style={{ fontSize: 12, color: T.text3, marginTop: 2 }}>{p.sub}</div>
-                  </div>
+      <style>{`
+        .o-row {
+          opacity: 0;
+          transition: background .18s ease;
+          cursor: pointer;
+        }
+        .o-row:hover td { background: #ffffff !important; }
+        .o-row.open-row td { background: #ffffff !important; }
+        .o-row:hover .o-title { color: #4f46e5 !important; }
+        .o-row.open-row .o-title { color: #4f46e5 !important; }
+        .o-row:hover .o-chevron { opacity: 1 !important; }
+        .o-row.open-row .o-chevron { opacity: 1 !important; }
+        .o-chevron { transition: transform .32s ease, opacity .2s ease; }
+        .o-tag { transition: background .15s, color .15s, border-color .15s; }
+        .o-tag:hover { background: rgba(79,70,229,.1) !important; color: #4f46e5 !important; border-color: rgba(79,70,229,.3) !important; }
+        .hl-pill { opacity: 0; transition: background .2s, transform .2s; }
+        .hl-pill:hover { transform: translateY(-2px) !important; }
+        .desc-text { opacity: 0; }
+        .expand-panel { overflow: hidden; }
+        .proj-cta-o { transition: all .22s ease; }
+        .proj-cta-o:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15) !important; }
+      `}</style>
+
+      <div style={{ maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
+
+        {/* ── Header ── */}
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 14 }}>
+          <div>
+            <SBadge><Layers size={11} />Work</SBadge>
+            <h2 style={{ fontSize: "clamp(26px,4.5vw,42px)", fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>
+              Featured <span className="gtext">Projects</span>
+            </h2>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <p style={{ fontSize: 12.5, color: T.text3 }}>Click any row to read more ↓</p>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[
+                { color: T.indigo,  label: "Gov Portal" },
+                { color: "#d97706", label: "Academic"   },
+              ].map(l => (
+                <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
+                  <div style={{ width: 9, height: 9, borderRadius: 3, background: l.color }} />
+                  {l.label}
                 </div>
-                {p.stat && <div style={{ textAlign: "right", borderRadius: 12, background: `rgba(${p.accentRaw},.07)`, border: `1.5px solid rgba(${p.accentRaw},.18)`, padding: "10px 15px", flexShrink: 0 }}><div style={{ fontWeight: 700, fontSize: 19, color: p.accent }}>{p.stat.v}</div><div style={{ fontSize: 11, color: T.text3, marginTop: 1 }}>{p.stat.l}</div></div>}
-              </div>
-              <p style={{ fontSize: 13, color: T.text2, lineHeight: 1.78, marginBottom: 14 }}>{p.desc}</p>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{p.tags.map(t => <span key={t} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg, color: T.text2 }}>{t}</span>)}</div>
-                <button className="projarrow" onClick={() => window.location.href = p.href} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: T.text3, background: "none", border: "none", cursor: "pointer" }}>View <ExternalLink size={11} /></button>
-              </div>
-            </MCard>
-          ))}
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Table wrapper ── */}
+        <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${T.border2}`, boxShadow: "0 6px 32px rgba(0,0,0,.07)" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <colgroup>
+              <col style={{ width: 5 }} />
+              <col style={{ width: 46 }} />
+              <col />
+              <col style={{ width: "13%" }} />
+              <col style={{ width: "11%" }} />
+              <col style={{ width: "22%" }} />
+              <col style={{ width: "8%" }} />
+              <col style={{ width: "9%" }} />
+              <col style={{ width: 44 }} />
+            </colgroup>
+
+            {/* ── Table Head ── */}
+            <thead>
+              <tr style={{ background: T.bg3 }}>
+                <th style={{ padding: 0, borderBottom: `1px solid ${T.border2}` }} />
+                <th style={{ padding: "12px 0 12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left" as const, fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>#</th>
+                {["Project", "Role", "Period", "Stack", "Metric", "Status", ""].map((h, ci) => (
+                  <th key={ci} style={{
+                    padding: ci === 7 ? "12px 16px 12px 0" : "12px 14px",
+                    borderBottom: `1px solid ${T.border2}`,
+                    textAlign: "left" as const,
+                    fontSize: 10.5,
+                    fontWeight: 600,
+                    color: T.text3,
+                    textTransform: "uppercase" as const,
+                    letterSpacing: "0.08em",
+                  }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+
+            {/* ── Table Body ── */}
+            <tbody>
+              {projs.map((p, i) => {
+                const isOpen = expandIdx === i;
+                const rowBg  = i % 2 === 0 ? T.card : "#fafaf8";
+                const bdClr  = i < projs.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
+
+                return (
+                  <>
+                    {/* ── Main row ── */}
+                    <tr
+                      key={`row-${i}`}
+                      ref={el => { rowRefs.current[i] = el; }}
+                      className={`o-row ${isOpen ? "open-row" : ""}`}
+                      onMouseEnter={() => setHovIdx(i)}
+                      onMouseLeave={() => setHovIdx(null)}
+                      onClick={() => toggle(i)}
+                    >
+                      {/* Accent left strip */}
+                      <td style={{
+                        padding: 0,
+                        background: isOpen || hovIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`,
+                        transition: "background .2s",
+                        borderBottom: bdClr,
+                      }} />
+
+                      {/* Row number */}
+                      <td style={{ padding: "18px 0 18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: `rgba(${p.accentRaw},.08)`, border: `1px solid rgba(${p.accentRaw},.18)` }}>
+                          <span style={{ fontFamily: "monospace", fontSize: 10.5, fontWeight: 700, color: p.accent }}>{i + 1}</span>
+                        </div>
+                      </td>
+
+                      {/* Project name */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ fontSize: 20, flexShrink: 0 }}>{p.icon}</span>
+                          <div>
+                            <div className="o-title" style={{ fontSize: 13.5, fontWeight: 700, color: T.text, transition: "color .2s", letterSpacing: "-0.01em" }}>{p.title}</div>
+                            <div style={{ fontSize: 11, color: T.text3, marginTop: 1 }}>{p.org}</div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Role */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <span style={{ fontSize: 12, color: T.text2, fontWeight: 500 }}>{p.role}</span>
+                      </td>
+
+                      {/* Period */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <span style={{ fontSize: 12, color: T.text3 }}>{p.period}</span>
+                      </td>
+
+                      {/* Stack pills */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                          {p.tags.slice(0, 3).map(t => (
+                            <span key={t} className="o-tag" style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2, whiteSpace: "nowrap" as const }}>{t}</span>
+                          ))}
+                          {p.tags.length > 3 && (
+                            <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg3, color: T.text3 }}>+{p.tags.length - 3}</span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Metric */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <div style={{ fontSize: 13.5, fontWeight: 800, color: p.accent, letterSpacing: "-0.02em", lineHeight: 1 }}>{p.stat}</div>
+                        {p.statLabel && <div style={{ fontSize: 10, color: T.text3, marginTop: 2 }}>{p.statLabel}</div>}
+                      </td>
+
+                      {/* Status */}
+                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 10.5, padding: "3px 9px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600, whiteSpace: "nowrap" as const }}>
+                          <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.statusColor, flexShrink: 0 }} />
+                          {p.status}
+                        </span>
+                      </td>
+
+                      {/* Chevron toggle */}
+                      <td style={{ padding: "18px 16px 18px 0", background: rowBg, borderBottom: bdClr, textAlign: "right" as const }}>
+                        <div className="o-chevron" style={{ opacity: isOpen ? 1 : 0, display: "inline-flex", width: 28, height: 28, borderRadius: "50%", border: `1px solid rgba(${p.accentRaw},.25)`, background: isOpen ? `rgba(${p.accentRaw},.12)` : `rgba(${p.accentRaw},.06)`, alignItems: "center", justifyContent: "center" }}>
+                          <ArrowRight size={12} color={p.accent} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .32s ease" }} />
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* ── Expand description panel ── */}
+                    {isOpen && (
+                      <tr key={`expand-${i}`}>
+                        <td style={{ padding: 0, background: p.accent, borderBottom: `1px solid ${T.border}` }} />
+                        <td colSpan={8} style={{ padding: "0 20px 24px 14px", background: "#ffffff", borderBottom: `1px solid ${T.border}` }}>
+
+                          <div
+                            ref={el => { panelRefs.current[i] = el; }}
+                            className="expand-panel"
+                            style={{ opacity: 0 }}
+                          >
+                            {/* Gradient divider */}
+                            <div style={{ height: 2, background: `linear-gradient(90deg, rgba(${p.accentRaw},1) 0%, rgba(${p.accentRaw},.15) 60%, transparent 100%)`, borderRadius: 99, marginBottom: 20, marginTop: 4 }} />
+
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 28, alignItems: "start" }}>
+
+                              {/* Left — description + highlights */}
+                              <div>
+                                {/* Description */}
+                                <p className="desc-text" style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.85, marginBottom: 18, maxWidth: 560 }}>
+                                  {p.desc}
+                                </p>
+
+                                {/* Highlight pills */}
+                                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                                  {p.highlights.map((hl, hi) => (
+                                    <div
+                                      key={hi}
+                                      className="hl-pill"
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 7,
+                                        padding: "7px 14px",
+                                        borderRadius: 999,
+                                        background: `rgba(${p.accentRaw},.07)`,
+                                        border: `1px solid rgba(${p.accentRaw},.2)`,
+                                        fontSize: 12,
+                                        color: p.accent,
+                                        fontWeight: 600,
+                                        cursor: "default",
+                                      }}
+                                    >
+                                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
+                                      {hl}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Right — full tag list + CTA */}
+                              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 16, flexShrink: 0 }}>
+                                {/* Full stack tags */}
+                                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
+                                  {p.tags.map(t => (
+                                    <span key={t} className="o-tag" style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${p.accentRaw},.2)`, background: `rgba(${p.accentRaw},.06)`, color: p.accent, fontWeight: 500 }}>{t}</span>
+                                  ))}
+                                </div>
+
+                                {/* CTA */}
+                                <button
+                                  className="proj-cta-o"
+                                  onClick={e => { e.stopPropagation(); window.location.href = p.href; }}
+                                  style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    padding: "10px 22px",
+                                    borderRadius: 999,
+                                    background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.75))`,
+                                    color: "#ffffff",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    fontWeight: 700,
+                                    fontSize: 13,
+                                    boxShadow: `0 4px 16px rgba(${p.accentRaw},.28)`,
+                                    whiteSpace: "nowrap" as const,
+                                  }}
+                                >
+                                  View Project <ExternalLink size={13} />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* ── Table footer ── */}
+          <div style={{ padding: "11px 18px", background: T.bg3, borderTop: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 11, color: T.text3 }}>4 projects · 2025</span>
+            <div style={{ display: "flex", gap: 5 }}>
+              {projs.map((p, i) => (
+                <div
+                  key={i}
+                  onClick={() => toggle(i)}
+                  style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
 // ─── Contact ──────────────────────────────────────────────────────────────────
 function Contact() {
   const [copied, setCopied] = useState(false);
@@ -1062,7 +1462,7 @@ function Contact() {
 }
 
 export default function Portfolio() {
-  const [loaded, setLoaded] = useState(false); // ← tambah baris ni
+  const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState("hero");
 
   const goto = useCallback((id: string) => {
@@ -1086,17 +1486,14 @@ export default function Portfolio() {
 
   return (
     <>
-      {/* ← tambah LoadingScreen ni */}
       {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
-
-      {/* Tukar <div style={{ ... }}> yang sedia ada — tambah opacity & transition */}
       <div
         style={{
           fontFamily: "'Inter',system-ui,-apple-system,sans-serif",
           background: "#f8f7f4",
           minHeight: "100vh",
-          opacity:    loaded ? 1 : 0,       // ← tambah ni
-          transition: "opacity .5s ease",   // ← tambah ni
+          opacity:    loaded ? 1 : 0,
+          transition: "opacity .5s ease",
         }}
       >
         <style>{TECH_CSS}</style>
