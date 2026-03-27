@@ -43,19 +43,13 @@ const TECH_CSS = `
   .techpill:hover { border-color: rgba(79,70,229,.35) !important; background: rgba(79,70,229,.07) !important; color: #4f46e5 !important; }
 `;
 
-/* ─── Responsive CSS ─────────────────────────────────────────────────────── */
 const RESPONSIVE_CSS = `
-  /* Tablet (640–1023px) */
   @media (max-width: 1023px) {
     .exp-card { width: 90% !important; }
     .exp-card:nth-child(even) { align-self: flex-end !important; }
   }
-
-  /* Phone (< 640px) */
   @media (max-width: 639px) {
     .exp-card { width: 100% !important; align-self: flex-start !important; }
-
-    /* Dock */
     .dock-wrap {
       gap: 3px !important;
       padding: 8px 10px !important;
@@ -64,13 +58,10 @@ const RESPONSIVE_CSS = `
     }
     .dock-btn { width: 36px !important; height: 36px !important; border-radius: 10px !important; }
     .dock-sep { display: none !important; }
-
-    /* Project table rows */
     .o-row td { padding-top: 14px !important; padding-bottom: 14px !important; }
   }
 `;
 
-/* ─── Breakpoint Hook ────────────────────────────────────────────────────── */
 function useBreakpoint() {
   const [bp, setBp] = useState<"mobile" | "tablet" | "desktop">("desktop");
   useEffect(() => {
@@ -84,8 +75,6 @@ function useBreakpoint() {
   }, []);
   return bp;
 }
-
-/* ─── Shared components (unchanged) ─────────────────────────────────────── */
 
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
   const [txt, setTxt] = useState("");
@@ -255,7 +244,6 @@ function SBadge({ children }: SBadgeProps) {
   );
 }
 
-/* ─── Dock ── responsive ─────────────────────────────────────────────────── */
 function Dock({ active, goto }: DockProps) {
   const nav = [
     { id: "hero",    Icon: Home,   lbl: "Home" },
@@ -283,7 +271,6 @@ function Dock({ active, goto }: DockProps) {
   );
 }
 
-/* ─── Globe Canvas (unchanged) ───────────────────────────────────────────── */
 function GlobeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef   = useRef(0);
@@ -321,7 +308,6 @@ function GlobeCanvas() {
   return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
 }
 
-/* ─── FloatingCodeBg (unchanged) ─────────────────────────────────────────── */
 const TOKENS = [
   "const", "let", "=>", "{}", "[]", "return",
   "async", "await", "useState", "useEffect",
@@ -361,39 +347,28 @@ function FloatingCodeBg() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   HERO  — responsive (mobile / tablet / desktop)
-══════════════════════════════════════════════════════════════════════════ */
 function Hero() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
   const isTablet = bp === "tablet";
   const roles    = ["Web & Frontend Developer", "Full Stack Developer"];
 
-  /* ── MOBILE ── */
   if (isMobile) {
     return (
       <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: T.bg, overflow: "hidden", padding: "80px 28px 120px" }}>
-        {/* Background */}
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.08) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
         <div style={{ position: "absolute", width: 320, height: 320, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.07)", filter: "blur(80px)", zIndex: 0 }} />
         <div style={{ position: "absolute", width: 240, height: 240, bottom: "10%", right: "-10%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(70px)", zIndex: 0 }} />
-
-        {/* Avatar */}
         <div style={{ position: "relative", zIndex: 2, width: 148, height: 148, borderRadius: "50%", padding: 3, background: `linear-gradient(135deg,rgba(79,70,229,.7),rgba(124,58,237,.6),rgba(8,145,178,.5))`, marginBottom: 28, flexShrink: 0, animation: "fadeup .6s ease .05s both" }}>
           <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", backgroundColor: T.bg2 }}>
             <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
               onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:55px">👤</span>`; }} />
           </div>
-          {/* Small orbit ring decoration */}
           <div style={{ position: "absolute", inset: -12, borderRadius: "50%", border: "1px solid rgba(79,70,229,.2)", animation: "spincw 10s linear infinite" }}>
             <div style={{ position: "absolute", top: -4, left: "50%", marginLeft: -4, width: 8, height: 8, borderRadius: "50%", background: T.indigo, boxShadow: `0 0 8px 3px ${T.indigo}66` }} />
           </div>
         </div>
-
-        {/* Content */}
         <div style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-          {/* Status */}
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(12px)", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .1s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
             <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
               <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
@@ -401,39 +376,27 @@ function Hero() {
             </span>
             Open for Work
           </div>
-
-          {/* Name */}
           <div style={{ animation: "fadeup .7s ease .15s both" }}>
             <h1 style={{ fontSize: "clamp(30px,8.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: T.text }}>
               Muhammad Izzat<br /><span className="gtext">Imran</span>
             </h1>
           </div>
-
-          {/* Typing */}
           <div style={{ fontFamily: "monospace", fontSize: 13, color: T.text2, animation: "fadeup .7s ease .2s both" }}>
             <TypingAnim words={roles} />
           </div>
-
-          {/* Description */}
           <p style={{ fontSize: 13, color: T.text3, lineHeight: 1.8, maxWidth: 310, animation: "fadeup .7s ease .25s both" }}>
             At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span> — building gov-tech portals with Next.js &amp; Tailwind CSS.
           </p>
-
-          {/* Buttons */}
           <div style={{ display: "flex", gap: 10, animation: "fadeup .7s ease .3s both" }}>
             <SBtn onClick={() => window.location.href = "/projects/padu"} style={{ padding: "10px 18px", fontSize: 13 }}><Layers size={13} />Projects<ArrowRight size={13} /></SBtn>
             <SBtn outline onClick={() => window.location.href = "mailto:izzatzamri01@gmail.com"} style={{ padding: "10px 18px", fontSize: 13 }}><Mail size={13} />Contact</SBtn>
           </div>
-
-          {/* Tags */}
           <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", animation: "fadeup .7s ease .35s both" }}>
             {["Next.js", "React", "TypeScript", "Tailwind", "Laravel"].map(t => (
               <span key={t} style={{ padding: "3px 9px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", color: T.text2, fontSize: 11 }}>{t}</span>
             ))}
           </div>
         </div>
-
-        {/* Wave */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
           <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 56, overflow: "visible" }}>
             <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
@@ -444,7 +407,6 @@ function Hero() {
     );
   }
 
-  /* ── TABLET ── (keep split but scaled down) */
   const imgSize = isTablet ? 320 : 480;
   const rightW  = isTablet ? "46%" : "52%";
 
@@ -454,8 +416,6 @@ function Hero() {
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 80% at 0% 50%, rgba(248,247,244,.0) 0%, rgba(248,247,244,.85) 55%, rgba(248,247,244,1) 100%)", pointerEvents: "none", zIndex: 1 }} />
       <div style={{ position: "absolute", width: 500, height: 500, left: "-6%", top: "5%", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(100px)", zIndex: 0, animation: "breathe 7s ease-in-out infinite" }} />
       <div style={{ position: "absolute", width: 360, height: 360, left: "38%", bottom: "0%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(80px)", zIndex: 0 }} />
-
-      {/* Right panel */}
       <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: rightW, zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
         <div style={{ position: "relative", width: imgSize, height: imgSize, flexShrink: 0 }}>
           <div style={{ position: "absolute", inset: -18, borderRadius: "50%", backgroundImage: `radial-gradient(circle, rgba(79,70,229,.1) 0%, transparent 70%)` }} />
@@ -468,7 +428,6 @@ function Hero() {
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", overflow: "hidden", zIndex: 3, opacity: 0.28 }}><GlobeCanvas /></div>
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", boxShadow: "inset 0 0 40px 14px rgba(248,247,244,.55)", zIndex: 4 }} />
         </div>
-        {/* Orbit rings */}
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 5 }}>
           {[
             { w: isTablet ? 300 : 440, h: isTablet ? 74 : 106, dur: "14s", clr: "rgba(79,70,229,.2)",  rev: false, dotClr: T.indigo },
@@ -482,8 +441,6 @@ function Hero() {
           ))}
         </div>
       </div>
-
-      {/* Wave */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
         <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 88, overflow: "visible" }}>
           <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
@@ -492,8 +449,6 @@ function Hero() {
         </svg>
       </div>
       <div style={{ position: "absolute", left: "47%", top: "10%", height: "80%", width: 1, background: `linear-gradient(to bottom, transparent, rgba(79,70,229,.15) 30%, rgba(79,70,229,.15) 70%, transparent)`, zIndex: 4, pointerEvents: "none" }} />
-
-      {/* Left content */}
       <div style={{ position: "relative", zIndex: 10, width: isTablet ? "54%" : "50%", paddingLeft: `clamp(24px,${isTablet ? 4 : 6}vw,88px)`, paddingRight: 32, display: "flex", flexDirection: "column", gap: isTablet ? 18 : 24 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.8)", backdropFilter: "blur(12px)", width: "fit-content", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .05s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
           <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
@@ -527,9 +482,6 @@ function Hero() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   ABOUT  — responsive
-══════════════════════════════════════════════════════════════════════════ */
 function About() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
@@ -544,7 +496,6 @@ function About() {
     { i: "", n: "MySQL",      img: "https://cdn.simpleicons.org/mysql" },
   ];
 
-  /* Grid layout per breakpoint */
   const gridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(3,1fr)";
   const bioSpan  = isMobile ? "span 1" : "span 2";
 
@@ -557,10 +508,7 @@ function About() {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>About</div>
           <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,38px)`, fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Crafting <span className="gtext">Digital Experiences</span></h2>
         </div>
-
         <div style={{ display: "grid", gridTemplateColumns: gridCols, gap: 10 }}>
-
-          {/* Bio card */}
           <div style={{ gridColumn: bioSpan, padding: isMobile ? 22 : 30, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 18 }}>
               <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 11, flexShrink: 0 }}><User size={21} color="#818cf8" /></div>
@@ -576,16 +524,12 @@ function About() {
               I also develop AI-powered chatbots using <strong style={{ color: "#818cf8" }}>Vertex AI Conversational Agents</strong>, integrate headless CMS with Strapi, and implement secure authentication via Google OAuth 2.0.
             </p>
           </div>
-
-          {/* Orbit ring card — hidden on mobile (saves space), shown tablet+ */}
           {!isMobile && (
             <div style={{ padding: 20, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
               <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textTransform: "uppercase" as const, letterSpacing: "0.1em", marginBottom: 2 }}>Tech Stack</div>
               <OrbitRing icons={stack} r={isTablet ? 52 : 60} dur={26} dark={true} />
             </div>
           )}
-
-          {/* Education */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
               <div style={{ borderRadius: 10, background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)", padding: 8 }}><GraduationCap size={15} color="#818cf8" /></div>
@@ -602,8 +546,6 @@ function About() {
               </div>
             ))}
           </div>
-
-          {/* Location */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(8,145,178,0.15)", border: "1px solid rgba(8,145,178,0.3)", padding: 8 }}><MapPin size={15} color={T.cyan} /></div>
@@ -613,8 +555,6 @@ function About() {
             <div style={{ fontWeight: 700, color: "#ffffff", fontSize: 17 }}>Kajang, Selangor</div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>Working @ Putrajaya</div>
           </div>
-
-          {/* Status */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(22,163,74,0.15)", border: "1px solid rgba(22,163,74,0.3)", padding: 8 }}><Briefcase size={15} color="#4ade80" /></div>
@@ -630,73 +570,35 @@ function About() {
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>Open to opportunities</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>izzatzamri01@gmail.com</div>
           </div>
-
         </div>
       </div>
     </section>
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   SKILLS  — beam on desktop/tablet, icon grid on mobile
-══════════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────
+   FIX: TechIconCard extracted as proper component (no hook inside .map())
+───────────────────────────────────────────────────────────────────────── */
+function TechIconCard({ t }: { t: { n: string; img: string } }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className="techpill" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "14px 6px 12px", borderRadius: 14, border: `1px solid ${T.border2}`, background: T.card, boxShadow: "0 2px 8px rgba(0,0,0,.04)" }}>
+      {!failed ? (
+        <img src={t.img} alt={t.n} width={24} height={24} style={{ objectFit: "contain" }}
+          onError={() => setFailed(true)} />
+      ) : (
+        <span style={{ fontSize: 10, fontWeight: 700, color: T.indigo }}>{t.n.slice(0, 2).toUpperCase()}</span>
+      )}
+      <span style={{ fontSize: 9.5, color: T.text2, textAlign: "center", lineHeight: 1.3, fontWeight: 500 }}>{t.n}</span>
+    </div>
+  );
+}
+
 function Skills() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
 
-  /* All tech items combined for mobile grid view */
-  const ALL_TECH = [
-    { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111" },
-    { n: "React",        img: "https://cdn.simpleicons.org/react" },
-    { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript" },
-    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss" },
-    { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript" },
-    { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel" },
-    { n: "PHP",          img: "https://cdn.simpleicons.org/php" },
-    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql" },
-    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi" },
-    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud" },
-    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google" },
-    { n: "Git",          img: "https://cdn.simpleicons.org/git" },
-    { n: "Figma",        img: "https://cdn.simpleicons.org/figma" },
-    { n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111" },
-    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles" },
-    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet" },
-  ];
-
-  /* ── MOBILE: simple icon grid ── */
-  if (isMobile) {
-    return (
-      <section id="skills" style={{ background: T.bg2, padding: "72px 24px 80px", overflow: "hidden" }}>
-        <div style={{ maxWidth: 480, marginLeft: "auto", marginRight: "auto", textAlign: "center", marginBottom: 36 }}>
-          <SBadge>Technologies</SBadge>
-          <h2 style={{ fontSize: "clamp(22px,6vw,30px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
-          <p style={{ fontSize: 13, color: T.text3, marginTop: 10 }}>Tools &amp; technologies I use to build digital products</p>
-        </div>
-
-        <div style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
-            {ALL_TECH.map(t => {
-              const [failed, setFailed] = useState(false);
-              return (
-                <div key={t.n} className="techpill" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "14px 6px 12px", borderRadius: 14, border: `1px solid ${T.border2}`, background: T.card, boxShadow: "0 2px 8px rgba(0,0,0,.04)" }}>
-                  {!failed ? (
-                    <img src={t.img} alt={t.n} width={24} height={24} style={{ objectFit: "contain" }}
-                      onError={() => setFailed(true)} />
-                  ) : (
-                    <span style={{ fontSize: 10, fontWeight: 700, color: T.indigo }}>{t.n.slice(0, 2).toUpperCase()}</span>
-                  )}
-                  <span style={{ fontSize: 9.5, color: T.text2, textAlign: "center", lineHeight: 1.3, fontWeight: 500 }}>{t.n}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  /* ── DESKTOP + TABLET: existing beam diagram ── */
+  /* ── Semua hooks mesti di sini, sebelum sebarang early return ── */
   const containerRef = useRef<HTMLDivElement>(null);
   const cRef = useRef<HTMLDivElement>(null);
   const l1Ref = useRef<HTMLDivElement>(null), l2Ref = useRef<HTMLDivElement>(null), l3Ref = useRef<HTMLDivElement>(null), l4Ref = useRef<HTMLDivElement>(null);
@@ -706,6 +608,7 @@ function Skills() {
   const [beams, setBeams] = useState<{ d: string; delay: number }[]>([]);
 
   useEffect(() => {
+    if (isMobile) return; // skip beam building on mobile
     const build = () => {
       if (!containerRef.current || !cRef.current) return;
       const box = containerRef.current.getBoundingClientRect();
@@ -725,8 +628,48 @@ function Skills() {
     const id = requestAnimationFrame(build);
     window.addEventListener("resize", build);
     return () => { cancelAnimationFrame(id); window.removeEventListener("resize", build); };
-  }, []);
+  }, [isMobile]);
 
+  const ALL_TECH = [
+    { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111" },
+    { n: "React",        img: "https://cdn.simpleicons.org/react" },
+    { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript" },
+    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss" },
+    { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript" },
+    { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel" },
+    { n: "PHP",          img: "https://cdn.simpleicons.org/php" },
+    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql" },
+    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi" },
+    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud" },
+    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google" },
+    { n: "Git",          img: "https://cdn.simpleicons.org/git" },
+    { n: "Figma",        img: "https://cdn.simpleicons.org/figma" },
+    { n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111" },
+    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles" },
+    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet" },
+  ];
+
+  /* ── MOBILE: icon grid ── */
+  if (isMobile) {
+    return (
+      <section id="skills" style={{ background: T.bg2, padding: "72px 24px 80px", overflow: "hidden" }}>
+        <div style={{ maxWidth: 480, marginLeft: "auto", marginRight: "auto", textAlign: "center", marginBottom: 36 }}>
+          <SBadge>Technologies</SBadge>
+          <h2 style={{ fontSize: "clamp(22px,6vw,30px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
+          <p style={{ fontSize: 13, color: T.text3, marginTop: 10 }}>Tools &amp; technologies I use to build digital products</p>
+        </div>
+        <div style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+            {ALL_TECH.map(t => (
+              <TechIconCard key={t.n} t={t} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── DESKTOP + TABLET: beam diagram ── */
   const LTECH = [
     { n: "Next.js 15",  img: "https://cdn.simpleicons.org/nextdotjs/111111", ref: l1Ref },
     { n: "TypeScript",  img: "https://cdn.simpleicons.org/typescript",        ref: l2Ref },
@@ -805,9 +748,6 @@ function Skills() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   EXPERIENCE  — responsive
-══════════════════════════════════════════════════════════════════════════ */
 function Experience() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
@@ -896,7 +836,6 @@ function Experience() {
     return () => observers.forEach(io => io.disconnect());
   }, [isMobile]);
 
-  /* Lottie dimensions by breakpoint */
   const lottieW = isTablet ? 240 : 330;
   const lottieR = isTablet ? 60 : 135;
   const catW    = isTablet ? 180 : 250;
@@ -912,23 +851,17 @@ function Experience() {
           </h2>
         </div>
       </div>
-
       <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: isMobile ? 16 : 24, paddingRight: isMobile ? 16 : 24 }}>
-
-        {/* Lottie: Working — hidden on mobile */}
         {!isMobile && (
           <div ref={lottieWorkingRef} style={{ position: "absolute", top: 55, right: lottieR, width: lottieW, height: lottieW, zIndex: 10, pointerEvents: "none" }}>
             <DotLottieReact src="/animation/working.json" autoplay loop style={{ width: "100%", height: "100%" }} />
           </div>
         )}
-
-        {/* Lottie: Cat — hidden on mobile */}
         {!isMobile && (
           <div ref={lottieCatRef} style={{ position: "absolute", bottom: -80, left: catL, width: catW, height: catW, zIndex: 0, pointerEvents: "none", transform: "scaleX(-1)" }}>
             <DotLottieReact src="/animation/Cat playing animation.json" autoplay loop style={{ width: "100%", height: "100%" }} />
           </div>
         )}
-
         {jobs.map((j, i) => (
           <MCard
             key={i}
@@ -974,9 +907,6 @@ function Experience() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   PROJECTS  — table on desktop, card layout on mobile/tablet
-══════════════════════════════════════════════════════════════════════════ */
 const PROJECTS_DATA = [
   {
     title: "Portal PADU", org: "Kementerian Ekonomi Malaysia", period: "2025 – Present", role: "Lead Frontend Dev",
@@ -1008,7 +938,6 @@ const PROJECTS_DATA = [
   },
 ];
 
-/* ── Mobile/Tablet card layout ── */
 function ProjectsCards() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
@@ -1035,17 +964,10 @@ function ProjectsCards() {
       {PROJECTS_DATA.map((p, i) => {
         const isOpen = expandIdx === i;
         return (
-          <MCard key={i} glow={`rgba(${p.accentRaw},.05)`}
-            style={{ opacity: 0 }}
-            className=""
-          >
-            <div ref={el => { cardRefs.current[i] = el; }}
-              style={{ position: "relative", overflow: "hidden" }}>
-              {/* Accent top strip */}
+          <MCard key={i} glow={`rgba(${p.accentRaw},.05)`} style={{ opacity: 0 }} className="">
+            <div ref={el => { cardRefs.current[i] = el; }} style={{ position: "relative", overflow: "hidden" }}>
               <div style={{ height: 3, background: `linear-gradient(90deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.3))` }} />
-
               <div style={{ padding: "18px 18px 16px" }}>
-                {/* Header row */}
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
                   <div style={{ fontSize: 28, flexShrink: 0, lineHeight: 1 }}>{p.icon}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -1058,24 +980,17 @@ function ProjectsCards() {
                     </div>
                     <div style={{ fontSize: 11.5, color: T.text3, marginTop: 2 }}>{p.org} · {p.period}</div>
                   </div>
-                  {/* Metric badge */}
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontSize: 14, fontWeight: 800, color: p.accent, letterSpacing: "-0.02em" }}>{p.stat}</div>
                     <div style={{ fontSize: 10, color: T.text3 }}>{p.statLabel}</div>
                   </div>
                 </div>
-
-                {/* Role */}
                 <div style={{ fontSize: 11.5, color: p.accent, fontWeight: 600, marginBottom: 10, padding: "3px 10px", borderRadius: 999, background: `rgba(${p.accentRaw},.07)`, border: `1px solid rgba(${p.accentRaw},.15)`, width: "fit-content" }}>{p.role}</div>
-
-                {/* Tags */}
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
                   {p.tags.map(t => (
                     <span key={t} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2 }}>{t}</span>
                   ))}
                 </div>
-
-                {/* Expand toggle */}
                 <button
                   onClick={() => setExpandIdx(isOpen ? null : i)}
                   style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.text3, background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: isOpen ? 12 : 0 }}
@@ -1083,8 +998,6 @@ function ProjectsCards() {
                   <ArrowRight size={12} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .3s ease", color: p.accent }} />
                   <span style={{ color: isOpen ? p.accent : T.text3 }}>{isOpen ? "Hide details" : "Read more"}</span>
                 </button>
-
-                {/* Expanded content */}
                 {isOpen && (
                   <div style={{ borderTop: `1px solid rgba(${p.accentRaw},.12)`, paddingTop: 14, animation: "fadeup .3s ease" }}>
                     <p style={{ fontSize: 12.5, color: T.text2, lineHeight: 1.8, marginBottom: 12 }}>{p.desc}</p>
@@ -1113,7 +1026,6 @@ function ProjectsCards() {
   );
 }
 
-/* ── Desktop table layout (existing) ── */
 function ProjectsTable() {
   const rowRefs   = useRef<(HTMLTableRowElement | null)[]>([]);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1178,7 +1090,6 @@ function ProjectsTable() {
         .proj-cta-o { transition:all .22s ease; }
         .proj-cta-o:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15) !important; }
       `}</style>
-
       <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${T.border2}`, boxShadow: "0 6px 32px rgba(0,0,0,.07)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <colgroup>
@@ -1302,7 +1213,6 @@ function Projects() {
   return (
     <section id="proj" style={{ background: T.bg2, padding: `${isMobile ? 64 : 96}px ${isMobile ? 16 : 24}px` }}>
       <div style={{ maxWidth: isMobile || isTablet ? 760 : 1040, marginLeft: "auto", marginRight: "auto" }}>
-        {/* Header */}
         <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", marginBottom: isMobile ? 24 : 32, gap: 14 }}>
           <div>
             <SBadge><Layers size={11} />Work</SBadge>
@@ -1325,17 +1235,12 @@ function Projects() {
             </div>
           )}
         </div>
-
-        {/* Render card layout on mobile/tablet, table on desktop */}
         {isMobile || isTablet ? <ProjectsCards /> : <ProjectsTable />}
       </div>
     </section>
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   CONTACT  — responsive
-══════════════════════════════════════════════════════════════════════════ */
 function Contact() {
   const [copied, setCopied] = useState(false);
   const canvasWrapRef = useRef<HTMLDivElement>(null);
@@ -1383,7 +1288,6 @@ function Contact() {
     };
   }, []);
 
-  /* Links grid: 1-col mobile, 3-col tablet/desktop */
   const linksGrid = isMobile ? "1fr" : "repeat(3,1fr)";
 
   return (
@@ -1396,9 +1300,7 @@ function Contact() {
           <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,38px)`, fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Let&apos;s <span className="gtext">Connect</span></h2>
           <p style={{ fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.45)", marginTop: 12 }}>Interested in working together? Let&apos;s build something impactful.</p>
         </div>
-
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {/* Email card */}
           <div style={{ borderRadius: 15, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", padding: isMobile ? "20px 20px" : "26px 30px", display: "flex", alignItems: isMobile ? "flex-start" : "center", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", gap: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
               <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 13, flexShrink: 0 }}><Mail size={isMobile ? 20 : 24} color="#818cf8" /></div>
@@ -1412,8 +1314,6 @@ function Contact() {
               {copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}
             </SBtn>
           </div>
-
-          {/* Links grid */}
           <div style={{ display: "grid", gridTemplateColumns: linksGrid, gap: 10 }}>
             {[
               { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran" },
@@ -1438,9 +1338,6 @@ function Contact() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   ROOT
-══════════════════════════════════════════════════════════════════════════ */
 export default function Portfolio() {
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState("hero");
