@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
   Github, Linkedin, Mail, ExternalLink, Code2, Zap,
@@ -37,12 +37,55 @@ const T = {
   pillTxt: "#4f46e5",
 };
 
-/* ── CSS khusus untuk Skills / Tech section ── */
 const TECH_CSS = `
   @keyframes beammove { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
   .techpill { transition: border-color .2s, background .2s, color .2s; cursor: default; }
   .techpill:hover { border-color: rgba(79,70,229,.35) !important; background: rgba(79,70,229,.07) !important; color: #4f46e5 !important; }
 `;
+
+/* ─── Responsive CSS ─────────────────────────────────────────────────────── */
+const RESPONSIVE_CSS = `
+  /* Tablet (640–1023px) */
+  @media (max-width: 1023px) {
+    .exp-card { width: 90% !important; }
+    .exp-card:nth-child(even) { align-self: flex-end !important; }
+  }
+
+  /* Phone (< 640px) */
+  @media (max-width: 639px) {
+    .exp-card { width: 100% !important; align-self: flex-start !important; }
+
+    /* Dock */
+    .dock-wrap {
+      gap: 3px !important;
+      padding: 8px 10px !important;
+      border-radius: 16px !important;
+      bottom: 14px !important;
+    }
+    .dock-btn { width: 36px !important; height: 36px !important; border-radius: 10px !important; }
+    .dock-sep { display: none !important; }
+
+    /* Project table rows */
+    .o-row td { padding-top: 14px !important; padding-bottom: 14px !important; }
+  }
+`;
+
+/* ─── Breakpoint Hook ────────────────────────────────────────────────────── */
+function useBreakpoint() {
+  const [bp, setBp] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  useEffect(() => {
+    const check = () => {
+      const w = window.innerWidth;
+      setBp(w < 640 ? "mobile" : w < 1024 ? "tablet" : "desktop");
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return bp;
+}
+
+/* ─── Shared components (unchanged) ─────────────────────────────────────── */
 
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
   const [txt, setTxt] = useState("");
@@ -212,6 +255,7 @@ function SBadge({ children }: SBadgeProps) {
   );
 }
 
+/* ─── Dock ── responsive ─────────────────────────────────────────────────── */
 function Dock({ active, goto }: DockProps) {
   const nav = [
     { id: "hero",    Icon: Home,   lbl: "Home" },
@@ -221,14 +265,14 @@ function Dock({ active, goto }: DockProps) {
     { id: "contact", Icon: Mail,   lbl: "Contact" },
   ];
   return (
-    <div style={{ position: "fixed", bottom: 22, left: "50%", transform: "translateX(-50%)", zIndex: 50, display: "flex", alignItems: "center", gap: 5, padding: "10px 13px", borderRadius: 20, background: "rgba(255,255,255,.82)", backdropFilter: "blur(20px)", border: `1px solid ${T.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.1)" }}>
+    <div className="dock-wrap" style={{ position: "fixed", bottom: 22, left: "50%", transform: "translateX(-50%)", zIndex: 50, display: "flex", alignItems: "center", gap: 5, padding: "10px 13px", borderRadius: 20, background: "rgba(255,255,255,.82)", backdropFilter: "blur(20px)", border: `1px solid ${T.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.1)" }}>
       {nav.map(({ id, Icon, lbl }) => (
         <button key={id} onClick={() => goto(id)} title={lbl} className="dock-btn"
           style={{ width: 42, height: 42, borderRadius: 12, border: active === id ? `1.5px solid rgba(79,70,229,.35)` : `1px solid ${T.border}`, background: active === id ? "rgba(79,70,229,.1)" : "rgba(0,0,0,.02)", color: active === id ? T.indigo : T.text3, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Icon size={17} />
         </button>
       ))}
-      <div style={{ width: 1, height: 26, background: T.border2, margin: "0 3px" }} />
+      <div className="dock-sep" style={{ width: 1, height: 26, background: T.border2, margin: "0 3px" }} />
       {[{ href: "https://github.com", Icon: Github, lbl: "GitHub" }, { href: "https://linkedin.com", Icon: Linkedin, lbl: "LinkedIn" }].map(({ href, Icon, lbl }) => (
         <a key={lbl} href={href} target="_blank" rel="noreferrer" title={lbl} className="dock-btn"
           style={{ width: 42, height: 42, borderRadius: 12, border: `1px solid ${T.border}`, background: "rgba(0,0,0,.02)", color: T.text3, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
@@ -239,6 +283,7 @@ function Dock({ active, goto }: DockProps) {
   );
 }
 
+/* ─── Globe Canvas (unchanged) ───────────────────────────────────────────── */
 function GlobeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef   = useRef(0);
@@ -276,6 +321,7 @@ function GlobeCanvas() {
   return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
 }
 
+/* ─── FloatingCodeBg (unchanged) ─────────────────────────────────────────── */
 const TOKENS = [
   "const", "let", "=>", "{}", "[]", "return",
   "async", "await", "useState", "useEffect",
@@ -286,40 +332,20 @@ const TOKENS = [
   "class", "extends", "React", "Next.js",
   "0xFF", "01010", "API", "fetch()", "props",
 ];
-
-const COLORS = [
-  "#a5b4fc", "#c4b5fd", "#67e8f9", "#ffffff",
-  "#86efac", "#fde047", "#f9a8d4", "#93c5fd",
-];
-
-interface TokenItem {
-  id: number; token: string; color: string;
-  x: number; y: number; fontSize: number;
-  duration: number; delay: number;
-}
-
+const COLORS = ["#a5b4fc", "#c4b5fd", "#67e8f9", "#ffffff", "#86efac", "#fde047", "#f9a8d4", "#93c5fd"];
+interface TokenItem { id: number; token: string; color: string; x: number; y: number; fontSize: number; duration: number; delay: number; }
 let _tid = 0;
 const makeToken = (): TokenItem => ({
-  id: _tid++,
-  token: TOKENS[Math.floor(Math.random() * TOKENS.length)],
-  color: COLORS[Math.floor(Math.random() * COLORS.length)],
-  x: Math.random() * 96, y: Math.random() * 90,
-  fontSize: Math.floor(Math.random() * 6 + 11),
-  duration: Math.random() * 3000 + 3000,
-  delay: Math.random() * 4000,
+  id: _tid++, token: TOKENS[Math.floor(Math.random() * TOKENS.length)], color: COLORS[Math.floor(Math.random() * COLORS.length)],
+  x: Math.random() * 96, y: Math.random() * 90, fontSize: Math.floor(Math.random() * 6 + 11),
+  duration: Math.random() * 3000 + 3000, delay: Math.random() * 4000,
 });
-
 function FloatingCodeBg() {
   const [tokens, setTokens] = useState<TokenItem[]>([]);
   useEffect(() => {
     setTokens(Array.from({ length: 36 }, makeToken));
     const iv = setInterval(() => {
-      setTokens(prev => {
-        const next = [...prev];
-        const idx = Math.floor(Math.random() * next.length);
-        next[idx] = makeToken();
-        return next;
-      });
+      setTokens(prev => { const next = [...prev]; next[Math.floor(Math.random() * next.length)] = makeToken(); return next; });
     }, 800);
     return () => clearInterval(iv);
   }, []);
@@ -330,45 +356,125 @@ function FloatingCodeBg() {
           {t.token}
         </span>
       ))}
-      <style>{`
-        @keyframes tokenFloat {
-          0%   { opacity: 0;    transform: translateY(0px); }
-          15%  { opacity: 0.75; }
-          50%  { opacity: 0.55; transform: translateY(-18px); }
-          85%  { opacity: 0.75; }
-          100% { opacity: 0;    transform: translateY(-32px); }
-        }
-      `}</style>
+      <style>{`@keyframes tokenFloat { 0%{opacity:0;transform:translateY(0)} 15%{opacity:.75} 50%{opacity:.55;transform:translateY(-18px)} 85%{opacity:.75} 100%{opacity:0;transform:translateY(-32px)} }`}</style>
     </div>
   );
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO  — responsive (mobile / tablet / desktop)
+══════════════════════════════════════════════════════════════════════════ */
 function Hero() {
-  const roles = ["Web & Frontend Developer", "Full Stack Developer"];
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const isTablet = bp === "tablet";
+  const roles    = ["Web & Frontend Developer", "Full Stack Developer"];
+
+  /* ── MOBILE ── */
+  if (isMobile) {
+    return (
+      <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: T.bg, overflow: "hidden", padding: "80px 28px 120px" }}>
+        {/* Background */}
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.08) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
+        <div style={{ position: "absolute", width: 320, height: 320, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.07)", filter: "blur(80px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", width: 240, height: 240, bottom: "10%", right: "-10%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(70px)", zIndex: 0 }} />
+
+        {/* Avatar */}
+        <div style={{ position: "relative", zIndex: 2, width: 148, height: 148, borderRadius: "50%", padding: 3, background: `linear-gradient(135deg,rgba(79,70,229,.7),rgba(124,58,237,.6),rgba(8,145,178,.5))`, marginBottom: 28, flexShrink: 0, animation: "fadeup .6s ease .05s both" }}>
+          <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", backgroundColor: T.bg2 }}>
+            <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:55px">👤</span>`; }} />
+          </div>
+          {/* Small orbit ring decoration */}
+          <div style={{ position: "absolute", inset: -12, borderRadius: "50%", border: "1px solid rgba(79,70,229,.2)", animation: "spincw 10s linear infinite" }}>
+            <div style={{ position: "absolute", top: -4, left: "50%", marginLeft: -4, width: 8, height: 8, borderRadius: "50%", background: T.indigo, boxShadow: `0 0 8px 3px ${T.indigo}66` }} />
+          </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+          {/* Status */}
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(12px)", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .1s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
+            <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
+              <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
+              <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a", animation: "pulsering 1.5s ease-out infinite" }} />
+            </span>
+            Open for Work
+          </div>
+
+          {/* Name */}
+          <div style={{ animation: "fadeup .7s ease .15s both" }}>
+            <h1 style={{ fontSize: "clamp(30px,8.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: T.text }}>
+              Muhammad Izzat<br /><span className="gtext">Imran</span>
+            </h1>
+          </div>
+
+          {/* Typing */}
+          <div style={{ fontFamily: "monospace", fontSize: 13, color: T.text2, animation: "fadeup .7s ease .2s both" }}>
+            <TypingAnim words={roles} />
+          </div>
+
+          {/* Description */}
+          <p style={{ fontSize: 13, color: T.text3, lineHeight: 1.8, maxWidth: 310, animation: "fadeup .7s ease .25s both" }}>
+            At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span> — building gov-tech portals with Next.js &amp; Tailwind CSS.
+          </p>
+
+          {/* Buttons */}
+          <div style={{ display: "flex", gap: 10, animation: "fadeup .7s ease .3s both" }}>
+            <SBtn onClick={() => window.location.href = "/projects/padu"} style={{ padding: "10px 18px", fontSize: 13 }}><Layers size={13} />Projects<ArrowRight size={13} /></SBtn>
+            <SBtn outline onClick={() => window.location.href = "mailto:izzatzamri01@gmail.com"} style={{ padding: "10px 18px", fontSize: 13 }}><Mail size={13} />Contact</SBtn>
+          </div>
+
+          {/* Tags */}
+          <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", animation: "fadeup .7s ease .35s both" }}>
+            {["Next.js", "React", "TypeScript", "Tailwind", "Laravel"].map(t => (
+              <span key={t} style={{ padding: "3px 9px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", color: T.text2, fontSize: 11 }}>{t}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Wave */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
+          <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 56, overflow: "visible" }}>
+            <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
+            <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" />
+          </svg>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── TABLET ── (keep split but scaled down) */
+  const imgSize = isTablet ? 320 : 480;
+  const rightW  = isTablet ? "46%" : "52%";
+
   return (
     <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: T.bg, overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.08) 1px, transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none", zIndex: 0 }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 80% at 0% 50%, rgba(248,247,244,.0) 0%, rgba(248,247,244,.85) 55%, rgba(248,247,244,1) 100%)", pointerEvents: "none", zIndex: 1 }} />
       <div style={{ position: "absolute", width: 500, height: 500, left: "-6%", top: "5%", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(100px)", zIndex: 0, animation: "breathe 7s ease-in-out infinite" }} />
-      <div style={{ position: "absolute", width: 360, height: 360, left: "38%", bottom: "0%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(80px)", zIndex: 0, animation: "breathe 8s ease-in-out 2s infinite" }} />
-      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "52%", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-        <div style={{ position: "relative", width: 480, height: 480, flexShrink: 0 }}>
-          <div style={{ position: "absolute", inset: -18, borderRadius: "50%", backgroundImage: `radial-gradient(circle, rgba(79,70,229,.1) 0%, transparent 70%)`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat" }} />
-          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", padding: 3, backgroundImage: `linear-gradient(135deg,rgba(79,70,229,.6),rgba(124,58,237,.5),rgba(8,145,178,.4))`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat" }}>
+      <div style={{ position: "absolute", width: 360, height: 360, left: "38%", bottom: "0%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(80px)", zIndex: 0 }} />
+
+      {/* Right panel */}
+      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: rightW, zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+        <div style={{ position: "relative", width: imgSize, height: imgSize, flexShrink: 0 }}>
+          <div style={{ position: "absolute", inset: -18, borderRadius: "50%", backgroundImage: `radial-gradient(circle, rgba(79,70,229,.1) 0%, transparent 70%)` }} />
+          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", padding: 3, backgroundImage: `linear-gradient(135deg,rgba(79,70,229,.6),rgba(124,58,237,.5),rgba(8,145,178,.4))` }}>
             <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", backgroundColor: T.bg2 }}>
-              <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
-                onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:80px">👤</span>`; }} />
+              <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+                onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:${isTablet ? 60 : 80}px">👤</span>`; }} />
             </div>
           </div>
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", overflow: "hidden", zIndex: 3, opacity: 0.28 }}><GlobeCanvas /></div>
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", boxShadow: "inset 0 0 40px 14px rgba(248,247,244,.55)", zIndex: 4 }} />
         </div>
+        {/* Orbit rings */}
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 5 }}>
           {[
-            { w: 440, h: 106, dur: "14s", clr: "rgba(79,70,229,.2)",  rev: false, dotClr: T.indigo },
-            { w: 385, h:  86, dur: "20s", clr: "rgba(124,58,237,.15)", rev: true,  dotClr: T.violet },
-            { w: 520, h: 135, dur: "28s", clr: "rgba(8,145,178,.1)",  rev: false, dotClr: T.cyan },
-            { w: 326, h:  68, dur: "10s", clr: "rgba(79,70,229,.12)", rev: true,  dotClr: "#818cf8" },
+            { w: isTablet ? 300 : 440, h: isTablet ? 74 : 106, dur: "14s", clr: "rgba(79,70,229,.2)",  rev: false, dotClr: T.indigo },
+            { w: isTablet ? 260 : 385, h: isTablet ? 60 : 86,  dur: "20s", clr: "rgba(124,58,237,.15)", rev: true,  dotClr: T.violet },
+            { w: isTablet ? 360 : 520, h: isTablet ? 90 : 135, dur: "28s", clr: "rgba(8,145,178,.1)",   rev: false, dotClr: T.cyan },
+            { w: isTablet ? 220 : 326, h: isTablet ? 48 : 68,  dur: "10s", clr: "rgba(79,70,229,.12)",  rev: true,  dotClr: "#818cf8" },
           ].map((o, i) => (
             <div key={i} style={{ position: "absolute", width: o.w, height: o.h, borderRadius: "50%", border: `1px solid ${o.clr}`, animation: `${o.rev ? "spinccw" : "spincw"} ${o.dur} linear infinite` }}>
               <div style={{ position: "absolute", top: -4, left: "50%", marginLeft: -4, width: 8, height: 8, borderRadius: "50%", background: o.dotClr, boxShadow: `0 0 8px 3px ${o.dotClr}66` }} />
@@ -376,15 +482,19 @@ function Hero() {
           ))}
         </div>
       </div>
+
+      {/* Wave */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
         <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 88, overflow: "visible" }}>
-          <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f"/>
-          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.12)" strokeWidth="1.5"/>
-          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.85)" strokeWidth="2.5" strokeLinecap="round" pathLength="1" strokeDasharray="0.12 0.88" style={{ animation: "beammove 6s linear infinite" }}/>
+          <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
+          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.12)" strokeWidth="1.5" />
+          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.85)" strokeWidth="2.5" strokeLinecap="round" pathLength="1" strokeDasharray="0.12 0.88" style={{ animation: "beammove 6s linear infinite" }} />
         </svg>
       </div>
       <div style={{ position: "absolute", left: "47%", top: "10%", height: "80%", width: 1, background: `linear-gradient(to bottom, transparent, rgba(79,70,229,.15) 30%, rgba(79,70,229,.15) 70%, transparent)`, zIndex: 4, pointerEvents: "none" }} />
-      <div style={{ position: "relative", zIndex: 10, width: "50%", paddingLeft: "clamp(24px,6vw,88px)", paddingRight: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+
+      {/* Left content */}
+      <div style={{ position: "relative", zIndex: 10, width: isTablet ? "54%" : "50%", paddingLeft: `clamp(24px,${isTablet ? 4 : 6}vw,88px)`, paddingRight: 32, display: "flex", flexDirection: "column", gap: isTablet ? 18 : 24 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.8)", backdropFilter: "blur(12px)", width: "fit-content", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .05s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
           <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
@@ -393,23 +503,22 @@ function Hero() {
           Open for Work
         </div>
         <div style={{ animation: "fadeup .7s ease .1s both" }}>
-          <h1 style={{ fontSize: "clamp(38px,5.8vw,70px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.06, color: T.text }}>
+          <h1 style={{ fontSize: `clamp(${isTablet ? 26 : 38}px,${isTablet ? 3.8 : 5.8}vw,${isTablet ? 48 : 70}px)`, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.06, color: T.text }}>
             Muhammad Izzat<br /><span className="gtext">Imran</span>
           </h1>
         </div>
-        <div style={{ fontFamily: "monospace", fontSize: "clamp(13px,1.5vw,16px)", color: T.text2, fontWeight: 400, animation: "fadeup .7s ease .2s both" }}>
+        <div style={{ fontFamily: "monospace", fontSize: `clamp(12px,1.4vw,16px)`, color: T.text2, animation: "fadeup .7s ease .2s both" }}>
           <TypingAnim words={roles} />
         </div>
-        <p style={{ fontSize: "clamp(13px,1.3vw,14.5px)", color: T.text3, lineHeight: 1.85, maxWidth: 420, animation: "fadeup .7s ease .3s both" }}>
-          At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span>, I build gov-tech portals with Next.js, React &amp; Tailwind CSS.
-          CS graduate from <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> specialising in Netcentric Computing.
+        <p style={{ fontSize: "clamp(12px,1.2vw,14.5px)", color: T.text3, lineHeight: 1.85, maxWidth: 400, animation: "fadeup .7s ease .3s both" }}>
+          At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span>, I build gov-tech portals with Next.js, React &amp; Tailwind CSS. CS grad from <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> in Netcentric Computing.
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", animation: "fadeup .7s ease .4s both" }}>
           <SBtn onClick={() => window.location.href = "/projects/padu"}><Layers size={14} />View Projects<ArrowRight size={14} /></SBtn>
           <SBtn outline onClick={() => window.location.href = "mailto:izzatzamri01@gmail.com"}><Mail size={14} />Get In Touch</SBtn>
         </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", animation: "fadeup .7s ease .5s both" }}>
-          {["Next.js", "React", "TypeScript", "Tailwind", "Laravel", "Strapi", "Vertex AI", "MySQL"].map(t => (
+          {(isTablet ? ["Next.js", "React", "TypeScript", "Tailwind"] : ["Next.js", "React", "TypeScript", "Tailwind", "Laravel", "Strapi", "Vertex AI", "MySQL"]).map(t => (
             <span key={t} style={{ padding: "3px 10px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(6px)", color: T.text2, fontSize: 11.5 }}>{t}</span>
           ))}
         </div>
@@ -418,7 +527,14 @@ function Hero() {
   );
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   ABOUT  — responsive
+══════════════════════════════════════════════════════════════════════════ */
 function About() {
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const isTablet = bp === "tablet";
+
   const stack: MarqueeItem[] = [
     { i: "", n: "Next.js",    img: "https://cdn.simpleicons.org/nextdotjs/ffffff" },
     { i: "", n: "React",      img: "https://cdn.simpleicons.org/react" },
@@ -427,35 +543,49 @@ function About() {
     { i: "", n: "Laravel",    img: "https://cdn.simpleicons.org/laravel" },
     { i: "", n: "MySQL",      img: "https://cdn.simpleicons.org/mysql" },
   ];
+
+  /* Grid layout per breakpoint */
+  const gridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(3,1fr)";
+  const bioSpan  = isMobile ? "span 1" : "span 2";
+
   return (
-    <section id="about" style={{ position: "relative", background: "#0d0d0f", padding: "48px 24px 96px", overflow: "hidden" }}>
+    <section id="about" style={{ position: "relative", background: "#0d0d0f", padding: `${isMobile ? 40 : 48}px 24px 96px`, overflow: "hidden" }}>
       <FloatingCodeBg />
       <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)" }} />
       <div style={{ position: "relative", zIndex: 2, maxWidth: 900, marginLeft: "auto", marginRight: "auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
+        <div style={{ textAlign: "center", marginBottom: isMobile ? 36 : 52 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>About</div>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Crafting <span className="gtext">Digital Experiences</span></h2>
+          <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,38px)`, fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Crafting <span className="gtext">Digital Experiences</span></h2>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
-          <div style={{ gridColumn: "span 2", padding: 30, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
+
+        <div style={{ display: "grid", gridTemplateColumns: gridCols, gap: 10 }}>
+
+          {/* Bio card */}
+          <div style={{ gridColumn: bioSpan, padding: isMobile ? 22 : 30, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 18 }}>
               <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 11, flexShrink: 0 }}><User size={21} color="#818cf8" /></div>
               <div>
-                <div style={{ fontWeight: 600, color: "#ffffff", fontSize: 15 }}>Web &amp; Frontend Developer</div>
+                <div style={{ fontWeight: 600, color: "#ffffff", fontSize: isMobile ? 13 : 15 }}>Web &amp; Frontend Developer</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>Unit PADU, Kementerian Ekonomi · Putrajaya</div>
               </div>
             </div>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.82, marginBottom: 14 }}>
-              I&apos;m Muhammad Izzat Imran — a CS graduate from <strong style={{ color: "#818cf8" }}>Universiti Teknologi MARA (UiTM)</strong> specialising in Netcentric Computing. I design and build frontend interfaces for government portals including Portal Analitik, Portal PADU, and Portal Panduan Pengguna.
+            <p style={{ fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.82, marginBottom: 14 }}>
+              I&apos;m Muhammad Izzat Imran — CS graduate from <strong style={{ color: "#818cf8" }}>Universiti Teknologi MARA (UiTM)</strong> specialising in Netcentric Computing. I design &amp; build frontend interfaces for government portals including Portal Analitik, Portal PADU, and Portal Panduan Pengguna.
             </p>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.82 }}>
+            <p style={{ fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.82 }}>
               I also develop AI-powered chatbots using <strong style={{ color: "#818cf8" }}>Vertex AI Conversational Agents</strong>, integrate headless CMS with Strapi, and implement secure authentication via Google OAuth 2.0.
             </p>
           </div>
-          <div style={{ padding: 20, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textTransform: "uppercase" as const, letterSpacing: "0.1em", marginBottom: 2 }}>Tech Stack</div>
-            <OrbitRing icons={stack} r={60} dur={26} dark={true} />
-          </div>
+
+          {/* Orbit ring card — hidden on mobile (saves space), shown tablet+ */}
+          {!isMobile && (
+            <div style={{ padding: 20, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
+              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textTransform: "uppercase" as const, letterSpacing: "0.1em", marginBottom: 2 }}>Tech Stack</div>
+              <OrbitRing icons={stack} r={isTablet ? 52 : 60} dur={26} dark={true} />
+            </div>
+          )}
+
+          {/* Education */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
               <div style={{ borderRadius: 10, background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)", padding: 8 }}><GraduationCap size={15} color="#818cf8" /></div>
@@ -472,6 +602,8 @@ function About() {
               </div>
             ))}
           </div>
+
+          {/* Location */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(8,145,178,0.15)", border: "1px solid rgba(8,145,178,0.3)", padding: 8 }}><MapPin size={15} color={T.cyan} /></div>
@@ -481,6 +613,8 @@ function About() {
             <div style={{ fontWeight: 700, color: "#ffffff", fontSize: 17 }}>Kajang, Selangor</div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>Working @ Putrajaya</div>
           </div>
+
+          {/* Status */}
           <div style={{ padding: 22, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
               <div style={{ borderRadius: 10, background: "rgba(22,163,74,0.15)", border: "1px solid rgba(22,163,74,0.3)", padding: 8 }}><Briefcase size={15} color="#4ade80" /></div>
@@ -496,35 +630,79 @@ function About() {
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>Open to opportunities</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>izzatzamri01@gmail.com</div>
           </div>
+
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Skills ───────────────────────────────────────────────────────────────────
+/* ══════════════════════════════════════════════════════════════════════════
+   SKILLS  — beam on desktop/tablet, icon grid on mobile
+══════════════════════════════════════════════════════════════════════════ */
 function Skills() {
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+
+  /* All tech items combined for mobile grid view */
+  const ALL_TECH = [
+    { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111" },
+    { n: "React",        img: "https://cdn.simpleicons.org/react" },
+    { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript" },
+    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss" },
+    { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript" },
+    { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel" },
+    { n: "PHP",          img: "https://cdn.simpleicons.org/php" },
+    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql" },
+    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi" },
+    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud" },
+    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google" },
+    { n: "Git",          img: "https://cdn.simpleicons.org/git" },
+    { n: "Figma",        img: "https://cdn.simpleicons.org/figma" },
+    { n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111" },
+    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles" },
+    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet" },
+  ];
+
+  /* ── MOBILE: simple icon grid ── */
+  if (isMobile) {
+    return (
+      <section id="skills" style={{ background: T.bg2, padding: "72px 24px 80px", overflow: "hidden" }}>
+        <div style={{ maxWidth: 480, marginLeft: "auto", marginRight: "auto", textAlign: "center", marginBottom: 36 }}>
+          <SBadge>Technologies</SBadge>
+          <h2 style={{ fontSize: "clamp(22px,6vw,30px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
+          <p style={{ fontSize: 13, color: T.text3, marginTop: 10 }}>Tools &amp; technologies I use to build digital products</p>
+        </div>
+
+        <div style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+            {ALL_TECH.map(t => {
+              const [failed, setFailed] = useState(false);
+              return (
+                <div key={t.n} className="techpill" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "14px 6px 12px", borderRadius: 14, border: `1px solid ${T.border2}`, background: T.card, boxShadow: "0 2px 8px rgba(0,0,0,.04)" }}>
+                  {!failed ? (
+                    <img src={t.img} alt={t.n} width={24} height={24} style={{ objectFit: "contain" }}
+                      onError={() => setFailed(true)} />
+                  ) : (
+                    <span style={{ fontSize: 10, fontWeight: 700, color: T.indigo }}>{t.n.slice(0, 2).toUpperCase()}</span>
+                  )}
+                  <span style={{ fontSize: 9.5, color: T.text2, textAlign: "center", lineHeight: 1.3, fontWeight: 500 }}>{t.n}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── DESKTOP + TABLET: existing beam diagram ── */
   const containerRef = useRef<HTMLDivElement>(null);
   const cRef = useRef<HTMLDivElement>(null);
-
-  const l1Ref = useRef<HTMLDivElement>(null);
-  const l2Ref = useRef<HTMLDivElement>(null);
-  const l3Ref = useRef<HTMLDivElement>(null);
-  const l4Ref = useRef<HTMLDivElement>(null);
-  const l5Ref = useRef<HTMLDivElement>(null);
-  const l6Ref = useRef<HTMLDivElement>(null);
-  const l7Ref = useRef<HTMLDivElement>(null);
-  const l8Ref = useRef<HTMLDivElement>(null);
-
-  const r1Ref = useRef<HTMLDivElement>(null);
-  const r2Ref = useRef<HTMLDivElement>(null);
-  const r3Ref = useRef<HTMLDivElement>(null);
-  const r4Ref = useRef<HTMLDivElement>(null);
-  const r5Ref = useRef<HTMLDivElement>(null);
-  const r6Ref = useRef<HTMLDivElement>(null);
-  const r7Ref = useRef<HTMLDivElement>(null);
-  const r8Ref = useRef<HTMLDivElement>(null);
-
+  const l1Ref = useRef<HTMLDivElement>(null), l2Ref = useRef<HTMLDivElement>(null), l3Ref = useRef<HTMLDivElement>(null), l4Ref = useRef<HTMLDivElement>(null);
+  const l5Ref = useRef<HTMLDivElement>(null), l6Ref = useRef<HTMLDivElement>(null), l7Ref = useRef<HTMLDivElement>(null), l8Ref = useRef<HTMLDivElement>(null);
+  const r1Ref = useRef<HTMLDivElement>(null), r2Ref = useRef<HTMLDivElement>(null), r3Ref = useRef<HTMLDivElement>(null), r4Ref = useRef<HTMLDivElement>(null);
+  const r5Ref = useRef<HTMLDivElement>(null), r6Ref = useRef<HTMLDivElement>(null), r7Ref = useRef<HTMLDivElement>(null), r8Ref = useRef<HTMLDivElement>(null);
   const [beams, setBeams] = useState<{ d: string; delay: number }[]>([]);
 
   useEffect(() => {
@@ -536,23 +714,12 @@ function Skills() {
         const b = r.current.getBoundingClientRect();
         return { x: b.left - box.left + b.width / 2, y: b.top - box.top + b.height / 2 };
       };
-      const c = mid(cRef);
-      if (!c) return;
+      const c = mid(cRef); if (!c) return;
       const lRefs = [l1Ref, l2Ref, l3Ref, l4Ref, l5Ref, l6Ref, l7Ref, l8Ref];
       const rRefs = [r1Ref, r2Ref, r3Ref, r4Ref, r5Ref, r6Ref, r7Ref, r8Ref];
       const result: { d: string; delay: number }[] = [];
-      lRefs.forEach((ref, i) => {
-        const p = mid(ref);
-        if (!p) return;
-        const cx = (p.x + c.x) / 2;
-        result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38) });
-      });
-      rRefs.forEach((ref, i) => {
-        const p = mid(ref);
-        if (!p) return;
-        const cx = (c.x + p.x) / 2;
-        result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38 + 0.19) });
-      });
+      lRefs.forEach((ref, i) => { const p = mid(ref); if (!p) return; const cx = (p.x + c.x) / 2; result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38) }); });
+      rRefs.forEach((ref, i) => { const p = mid(ref); if (!p) return; const cx = (c.x + p.x) / 2; result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38 + 0.19) }); });
       setBeams(result);
     };
     const id = requestAnimationFrame(build);
@@ -561,47 +728,31 @@ function Skills() {
   }, []);
 
   const LTECH = [
-    { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111", ref: l1Ref },
-    { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript",        ref: l2Ref },
-    { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel",           ref: l3Ref },
-    { n: "PHP",          img: "https://cdn.simpleicons.org/php",               ref: l4Ref },
-    { n: "Git",          img: "https://cdn.simpleicons.org/git",               ref: l5Ref },
-    { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript",        ref: l6Ref },
-    { n: "HeroUI",       img: "https://cdn.simpleicons.org/heroui/111111",     ref: l7Ref },
-    { n: "Figma",        img: "https://cdn.simpleicons.org/figma",             ref: l8Ref },
+    { n: "Next.js 15",  img: "https://cdn.simpleicons.org/nextdotjs/111111", ref: l1Ref },
+    { n: "TypeScript",  img: "https://cdn.simpleicons.org/typescript",        ref: l2Ref },
+    { n: "Laravel",     img: "https://cdn.simpleicons.org/laravel",           ref: l3Ref },
+    { n: "PHP",         img: "https://cdn.simpleicons.org/php",               ref: l4Ref },
+    { n: "Git",         img: "https://cdn.simpleicons.org/git",               ref: l5Ref },
+    { n: "JavaScript",  img: "https://cdn.simpleicons.org/javascript",        ref: l6Ref },
+    { n: "HeroUI",      img: "https://cdn.simpleicons.org/heroui/111111",     ref: l7Ref },
+    { n: "Figma",       img: "https://cdn.simpleicons.org/figma",             ref: l8Ref },
   ];
-
   const RTECH = [
-    { n: "React",        img: "https://cdn.simpleicons.org/react",             ref: r1Ref },
-    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss",       ref: r2Ref },
-    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi",            ref: r3Ref },
-    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud",       ref: r4Ref },
-    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql",             ref: r5Ref },
-    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google",            ref: r6Ref },
-    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles",       ref: r7Ref },
-    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet",            ref: r8Ref },
+    { n: "React",        img: "https://cdn.simpleicons.org/react",            ref: r1Ref },
+    { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss",      ref: r2Ref },
+    { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi",           ref: r3Ref },
+    { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud",      ref: r4Ref },
+    { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql",            ref: r5Ref },
+    { n: "Google OAuth", img: "https://cdn.simpleicons.org/google",           ref: r6Ref },
+    { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles",      ref: r7Ref },
+    { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet",           ref: r8Ref },
   ];
-
-  const circleStyle: React.CSSProperties = {
-    width: 46, height: 46, borderRadius: "50%",
-    background: T.card, border: `1px solid ${T.border2}`,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 2px 12px rgba(0,0,0,.07)", flexShrink: 0,
-    position: "relative", overflow: "hidden",
-  };
-
+  const circleStyle: React.CSSProperties = { width: 46, height: 46, borderRadius: "50%", background: T.card, border: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,.07)", flexShrink: 0, position: "relative", overflow: "hidden" };
   const TechIcon = ({ img, name }: { img: string; name: string }) => {
     const [failed, setFailed] = useState(false);
     const initials = name.slice(0, 2).toUpperCase();
-    return failed ? (
-      <span style={{ fontSize: 11, fontWeight: 700, color: T.indigo, letterSpacing: "-0.03em" }}>{initials}</span>
-    ) : (
-      <img
-        src={img} alt={name} width={22} height={22}
-        style={{ objectFit: "contain" }}
-        onError={() => setFailed(true)}
-      />
-    );
+    return failed ? <span style={{ fontSize: 11, fontWeight: 700, color: T.indigo, letterSpacing: "-0.03em" }}>{initials}</span>
+      : <img src={img} alt={name} width={22} height={22} style={{ objectFit: "contain" }} onError={() => setFailed(true)} />;
   };
 
   return (
@@ -620,59 +771,30 @@ function Skills() {
               const gap  = (1 - parseFloat(dash)).toFixed(2);
               return (
                 <g key={i}>
-                  {/* ── Track line — lebih gelap & jelas ── */}
                   <path d={b.d} fill="none" stroke="rgba(79,70,229,0.28)" strokeWidth={1} />
-                  {/* ── Animated glow beam ── */}
-                  <path d={b.d} fill="none" stroke={T.indigo2} strokeWidth={3} strokeOpacity={0.50}
-                    strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
-                    style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
-                  {/* ── Core beam line ── */}
-                  <path d={b.d} fill="none" stroke={T.indigo} strokeWidth={1.5}
-                    strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`}
-                    style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
+                  <path d={b.d} fill="none" stroke={T.indigo2} strokeWidth={3} strokeOpacity={0.50} strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`} style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
+                  <path d={b.d} fill="none" stroke={T.indigo} strokeWidth={1.5} strokeLinecap="round" pathLength="1" strokeDasharray={`${dash} ${gap}`} style={{ animation: `beammove ${dur}s linear ${b.delay}s infinite` }} />
                 </g>
               );
             })}
           </svg>
-
-          {/* Left tech icons */}
           <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-around", zIndex: 1 }}>
             {LTECH.map(t => (
               <div key={t.n} style={{ display: "flex", alignItems: "center", position: "relative" }}>
-                <div ref={t.ref} style={circleStyle}>
-                  <TechIcon img={t.img} name={t.n} />
-                </div>
+                <div ref={t.ref} style={circleStyle}><TechIcon img={t.img} name={t.n} /></div>
                 <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: "nowrap", position: "absolute", right: "calc(100% + 10px)" }}>{t.n}</span>
               </div>
             ))}
           </div>
-
-          {/* ── Center icon ── */}
           <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%) translateY(-11px)", zIndex: 2 }}>
-            <div
-              ref={cRef}
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: "50%",
-                background: T.card,
-                border: `1px solid ${T.border2}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <div ref={cRef} style={{ width: 56, height: 56, borderRadius: "50%", background: T.card, border: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <User size={24} color={T.indigo} />
             </div>
           </div>
-
-          {/* Right tech icons */}
           <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-around", zIndex: 1 }}>
             {RTECH.map(t => (
               <div key={t.n} style={{ display: "flex", alignItems: "center", flexDirection: "row-reverse", position: "relative" }}>
-                <div ref={t.ref} style={circleStyle}>
-                  <TechIcon img={t.img} name={t.n} />
-                </div>
+                <div ref={t.ref} style={circleStyle}><TechIcon img={t.img} name={t.n} /></div>
                 <span style={{ fontSize: 12.5, color: T.text2, fontWeight: 500, whiteSpace: "nowrap", position: "absolute", left: "calc(100% + 10px)" }}>{t.n}</span>
               </div>
             ))}
@@ -683,8 +805,14 @@ function Skills() {
   );
 }
 
-// ─── Experience ───────────────────────────────────────────────────────────────
+/* ══════════════════════════════════════════════════════════════════════════
+   EXPERIENCE  — responsive
+══════════════════════════════════════════════════════════════════════════ */
 function Experience() {
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const isTablet = bp === "tablet";
+
   const jobs = [
     {
       role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi",
@@ -727,145 +855,88 @@ function Experience() {
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>(".exp-card");
     const observers: IntersectionObserver[] = [];
-
     cards.forEach((card) => {
-      const io = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            import("animejs").then(({ animate }) => {
-              animate(card, {
-                translateX: [-60, 0],
-                opacity: [0, 1],
-                duration: 700,
-                easing: "easeOutExpo",
-              });
-            });
-            io.disconnect();
-          }
-        },
-        { threshold: 0.25 },
-      );
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          import("animejs").then(({ animate }) => { animate(card, { translateX: [-60, 0], opacity: [0, 1], duration: 700, easing: "easeOutExpo" }); });
+          io.disconnect();
+        }
+      }, { threshold: 0.25 });
       io.observe(card);
       observers.push(io);
     });
 
     const workingEl = lottieWorkingRef.current;
-    if (workingEl) {
+    if (workingEl && !isMobile) {
       workingEl.style.opacity = "0";
       workingEl.style.transform = "translateX(80px)";
-
-      const ioWorking = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            import("animejs").then(({ animate }) => {
-              animate(workingEl, {
-                translateX: [80, 0],
-                opacity: [0, 1],
-                duration: 900,
-                delay: 200,
-                easing: "easeOutExpo",
-              });
-            });
-            ioWorking.disconnect();
-          }
-        },
-        { threshold: 0.15 },
-      );
-      ioWorking.observe(workingEl);
-      observers.push(ioWorking);
+      const ioW = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          import("animejs").then(({ animate }) => { animate(workingEl, { translateX: [80, 0], opacity: [0, 1], duration: 900, delay: 200, easing: "easeOutExpo" }); });
+          ioW.disconnect();
+        }
+      }, { threshold: 0.15 });
+      ioW.observe(workingEl);
+      observers.push(ioW);
     }
 
     const catEl = lottieCatRef.current;
-    if (catEl) {
+    if (catEl && !isMobile) {
       catEl.style.opacity = "0";
       catEl.style.transform = "scaleX(-1) translateX(80px)";
-
-      const ioCat = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            import("animejs").then(({ animate }) => {
-              animate(catEl, {
-                translateX: [80, 0],
-                opacity: [0, 1],
-                duration: 900,
-                delay: 400,
-                easing: "easeOutExpo",
-              });
-            });
-            ioCat.disconnect();
-          }
-        },
-        { threshold: 0.1 },
-      );
-      ioCat.observe(catEl);
-      observers.push(ioCat);
+      const ioC = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          import("animejs").then(({ animate }) => { animate(catEl, { translateX: [80, 0], opacity: [0, 1], duration: 900, delay: 400, easing: "easeOutExpo" }); });
+          ioC.disconnect();
+        }
+      }, { threshold: 0.1 });
+      ioC.observe(catEl);
+      observers.push(ioC);
     }
+    return () => observers.forEach(io => io.disconnect());
+  }, [isMobile]);
 
-    return () => observers.forEach((io) => io.disconnect());
-  }, []);
+  /* Lottie dimensions by breakpoint */
+  const lottieW = isTablet ? 240 : 330;
+  const lottieR = isTablet ? 60 : 135;
+  const catW    = isTablet ? 180 : 250;
+  const catL    = isTablet ? 60  : 185;
 
   return (
-    <section id="exp" style={{ background: T.bg, padding: "96px 0" }}>
+    <section id="exp" style={{ background: T.bg, padding: `${isMobile ? 64 : 96}px 0` }}>
       <div style={{ maxWidth: 900, marginLeft: "auto", marginRight: "auto", paddingLeft: 24, paddingRight: 24 }}>
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
+        <div style={{ textAlign: "center", marginBottom: isMobile ? 36 : 52 }}>
           <SBadge>Experience</SBadge>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: T.text }}>
+          <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,38px)`, fontWeight: 700, color: T.text }}>
             Work <span className="gtext">Experience</span>
           </h2>
         </div>
       </div>
 
-      <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: 24, paddingRight: 24 }}>
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, paddingLeft: isMobile ? 16 : 24, paddingRight: isMobile ? 16 : 24 }}>
 
-        <div
-          ref={lottieWorkingRef}
-          style={{
-            position: "absolute",
-            top: 55,
-            right: 135,
-            width: 330,
-            height: 330,
-            zIndex: 10,
-            pointerEvents: "none",
-          }}
-        >
-          <DotLottieReact
-            src="/animation/working.json"
-            autoplay
-            loop
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
+        {/* Lottie: Working — hidden on mobile */}
+        {!isMobile && (
+          <div ref={lottieWorkingRef} style={{ position: "absolute", top: 55, right: lottieR, width: lottieW, height: lottieW, zIndex: 10, pointerEvents: "none" }}>
+            <DotLottieReact src="/animation/working.json" autoplay loop style={{ width: "100%", height: "100%" }} />
+          </div>
+        )}
 
-        <div
-          ref={lottieCatRef}
-          style={{
-            position: "absolute",
-            bottom: -80,
-            left: 185,
-            width: 250,
-            height: 250,
-            zIndex: 0,
-            pointerEvents: "none",
-            transform: "scaleX(-1)",
-          }}
-        >
-          <DotLottieReact
-            src="/animation/Cat playing animation.json"
-            autoplay
-            loop
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
+        {/* Lottie: Cat — hidden on mobile */}
+        {!isMobile && (
+          <div ref={lottieCatRef} style={{ position: "absolute", bottom: -80, left: catL, width: catW, height: catW, zIndex: 0, pointerEvents: "none", transform: "scaleX(-1)" }}>
+            <DotLottieReact src="/animation/Cat playing animation.json" autoplay loop style={{ width: "100%", height: "100%" }} />
+          </div>
+        )}
 
         {jobs.map((j, i) => (
           <MCard
             key={i}
             className="exp-card"
             style={{
-              padding: 26,
-              width: "72%",
-              alignSelf: (["flex-start", "center", "flex-end"] as const)[i],
+              padding: isMobile ? 20 : 26,
+              width: isMobile ? "100%" : isTablet ? "90%" : "72%",
+              alignSelf: isMobile ? "flex-start" : (["flex-start", "center", "flex-end"] as const)[i],
               position: "relative",
               zIndex: 1,
             }}
@@ -877,8 +948,8 @@ function Experience() {
                   <Briefcase size={18} color={j.accent} />
                 </div>
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontWeight: 700, color: T.text, fontSize: 15 }}>{j.role}</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 700, color: T.text, fontSize: isMobile ? 13.5 : 15 }}>{j.role}</span>
                     {j.current && (
                       <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `rgba(${j.accentRaw},.1)`, border: `1px solid rgba(${j.accentRaw},.25)`, color: j.accent, fontWeight: 600 }}>Current</span>
                     )}
@@ -888,11 +959,11 @@ function Experience() {
                 </div>
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 6 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill,minmax(260px,1fr))", gap: 6 }}>
               {j.points.map((p, pi) => (
                 <div key={pi} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                   <div style={{ width: 5, height: 5, borderRadius: "50%", background: j.accent, flexShrink: 0, marginTop: 6 }} />
-                  <span style={{ fontSize: 13, color: T.text2, lineHeight: 1.65 }}>{p}</span>
+                  <span style={{ fontSize: isMobile ? 12.5 : 13, color: T.text2, lineHeight: 1.65 }}>{p}</span>
                 </div>
               ))}
             </div>
@@ -903,105 +974,159 @@ function Experience() {
   );
 }
 
-// ─── Projects ─────────────────────────────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
-// VARIASI O — "Zebra Stripe + Accent Border" dengan Creative Description Panel
-// Klik row → expand panel dengan animated description, highlight chips & CTA
-// ══════════════════════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════════════
+   PROJECTS  — table on desktop, card layout on mobile/tablet
+══════════════════════════════════════════════════════════════════════════ */
+const PROJECTS_DATA = [
+  {
+    title: "Portal PADU", org: "Kementerian Ekonomi Malaysia", period: "2025 – Present", role: "Lead Frontend Dev",
+    desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, AI-powered chatbot via Vertex AI, and full Strapi CMS integration with Google OAuth 2.0.",
+    highlights: ["20+ animated pages", "Vertex AI chatbot", "3D carousel timeline", "Strapi CMS"],
+    tags: ["Next.js 15", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"],
+    icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229", stat: "100k+", statLabel: "Daily Users", status: "Live", statusColor: "#16a34a", href: "/projects/padu",
+  },
+  {
+    title: "Portal Analitik", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer",
+    desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.",
+    highlights: ["Interactive charts", "KPI dashboards", "Advanced filtering", "REST API"],
+    tags: ["Next.js", "React", "Tailwind CSS", "REST API"],
+    icon: "📊", accent: T.violet, accentRaw: "124,58,237", stat: "Gov", statLabel: "Analytics", status: "Live", statusColor: "#16a34a", href: "/projects/analitik",
+  },
+  {
+    title: "Portal Panduan Pengguna", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer",
+    desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.",
+    highlights: ["Strapi headless CMS", "Google OAuth 2.0", "Dynamic content", "Staff access control"],
+    tags: ["Next.js", "Strapi CMS", "Google OAuth", "REST API"],
+    icon: "📖", accent: T.cyan, accentRaw: "8,145,178", stat: "OAuth", statLabel: "Secured", status: "Live", statusColor: "#16a34a", href: "/projects/panduan",
+  },
+  {
+    title: "Smart Ticket System", org: "Final Year Project · UiTM", period: "2025", role: "Full-Stack Developer",
+    desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.",
+    highlights: ["Real-time seat allocation", "Bukit Jalil map UI", "Full-stack Laravel", "InfinityFree deploy"],
+    tags: ["Laravel", "MySQL", "PHP", "InfinityFree"],
+    icon: "🏟️", accent: "#d97706", accentRaw: "217,119,6", stat: "FYP", statLabel: "Grade A", status: "Completed", statusColor: "#0891b2", href: "/projects/ticket",
+  },
+];
 
-function Projects() {
-  const projs = [
-    {
-      title: "Portal PADU",
-      org: "Kementerian Ekonomi Malaysia",
-      period: "2025 – Present",
-      role: "Lead Frontend Dev",
-      desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, AI-powered chatbot via Vertex AI, and full Strapi CMS integration with Google OAuth 2.0.",
-      highlights: ["20+ animated pages", "Vertex AI chatbot", "3D carousel timeline", "Strapi CMS"],
-      tags: ["Next.js 15", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"],
-      icon: "🇲🇾",
-      accent: T.indigo,
-      accentRaw: "79,70,229",
-      stat: "100k+",
-      statLabel: "Daily Users",
-      status: "Live",
-      statusColor: "#16a34a",
-      href: "/projects/padu",
-    },
-    {
-      title: "Portal Analitik",
-      org: "Kementerian Ekonomi",
-      period: "2025",
-      role: "Frontend Developer",
-      desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.",
-      highlights: ["Interactive charts", "KPI dashboards", "Advanced filtering", "REST API"],
-      tags: ["Next.js", "React", "Tailwind CSS", "REST API"],
-      icon: "📊",
-      accent: T.violet,
-      accentRaw: "124,58,237",
-      stat: "Gov",
-      statLabel: "Analytics",
-      status: "Live",
-      statusColor: "#16a34a",
-      href: "/projects/analitik",
-    },
-    {
-      title: "Portal Panduan Pengguna",
-      org: "Kementerian Ekonomi",
-      period: "2025",
-      role: "Frontend Developer",
-      desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.",
-      highlights: ["Strapi headless CMS", "Google OAuth 2.0", "Dynamic content", "Staff access control"],
-      tags: ["Next.js", "Strapi CMS", "Google OAuth", "REST API"],
-      icon: "📖",
-      accent: T.cyan,
-      accentRaw: "8,145,178",
-      stat: "OAuth",
-      statLabel: "Secured",
-      status: "Live",
-      statusColor: "#16a34a",
-      href: "/projects/panduan",
-    },
-    {
-      title: "Smart Ticket System",
-      org: "Final Year Project · UiTM",
-      period: "2025",
-      role: "Full-Stack Developer",
-      desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.",
-      highlights: ["Real-time seat allocation", "Bukit Jalil map UI", "Full-stack Laravel", "InfinityFree deploy"],
-      tags: ["Laravel", "MySQL", "PHP", "InfinityFree"],
-      icon: "🏟️",
-      accent: "#d97706",
-      accentRaw: "217,119,6",
-      stat: "FYP",
-      statLabel: "Grade A",
-      status: "Completed",
-      statusColor: "#0891b2",
-      href: "/projects/ticket",
-    },
-  ];
+/* ── Mobile/Tablet card layout ── */
+function ProjectsCards() {
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const [expandIdx, setExpandIdx] = useState<number | null>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const rowRefs    = useRef<(HTMLTableRowElement | null)[]>([]);
-  const panelRefs  = useRef<(HTMLDivElement | null)[]>([]);
+  useEffect(() => {
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return;
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          import("animejs").then(({ animate }) => {
+            animate(card, { opacity: [0, 1], translateY: [24, 0], duration: 500, delay: i * 80, easing: "easeOutExpo" });
+          });
+          io.disconnect();
+        }
+      }, { threshold: 0.2 });
+      io.observe(card);
+    });
+  }, []);
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+      {PROJECTS_DATA.map((p, i) => {
+        const isOpen = expandIdx === i;
+        return (
+          <MCard key={i} glow={`rgba(${p.accentRaw},.05)`}
+            style={{ opacity: 0 }}
+            className=""
+          >
+            <div ref={el => { cardRefs.current[i] = el; }}
+              style={{ position: "relative", overflow: "hidden" }}>
+              {/* Accent top strip */}
+              <div style={{ height: 3, background: `linear-gradient(90deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.3))` }} />
+
+              <div style={{ padding: "18px 18px 16px" }}>
+                {/* Header row */}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
+                  <div style={{ fontSize: 28, flexShrink: 0, lineHeight: 1 }}>{p.icon}</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                      <span style={{ fontWeight: 700, fontSize: 14, color: T.text }}>{p.title}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600 }}>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: p.statusColor }} />
+                        {p.status}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 11.5, color: T.text3, marginTop: 2 }}>{p.org} · {p.period}</div>
+                  </div>
+                  {/* Metric badge */}
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: p.accent, letterSpacing: "-0.02em" }}>{p.stat}</div>
+                    <div style={{ fontSize: 10, color: T.text3 }}>{p.statLabel}</div>
+                  </div>
+                </div>
+
+                {/* Role */}
+                <div style={{ fontSize: 11.5, color: p.accent, fontWeight: 600, marginBottom: 10, padding: "3px 10px", borderRadius: 999, background: `rgba(${p.accentRaw},.07)`, border: `1px solid rgba(${p.accentRaw},.15)`, width: "fit-content" }}>{p.role}</div>
+
+                {/* Tags */}
+                <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
+                  {p.tags.map(t => (
+                    <span key={t} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2 }}>{t}</span>
+                  ))}
+                </div>
+
+                {/* Expand toggle */}
+                <button
+                  onClick={() => setExpandIdx(isOpen ? null : i)}
+                  style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.text3, background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: isOpen ? 12 : 0 }}
+                >
+                  <ArrowRight size={12} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .3s ease", color: p.accent }} />
+                  <span style={{ color: isOpen ? p.accent : T.text3 }}>{isOpen ? "Hide details" : "Read more"}</span>
+                </button>
+
+                {/* Expanded content */}
+                {isOpen && (
+                  <div style={{ borderTop: `1px solid rgba(${p.accentRaw},.12)`, paddingTop: 14, animation: "fadeup .3s ease" }}>
+                    <p style={{ fontSize: 12.5, color: T.text2, lineHeight: 1.8, marginBottom: 12 }}>{p.desc}</p>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 14 }}>
+                      {p.highlights.map((hl, hi) => (
+                        <div key={hi} style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 11px", borderRadius: 999, background: `rgba(${p.accentRaw},.07)`, border: `1px solid rgba(${p.accentRaw},.18)`, fontSize: 11.5, color: p.accent, fontWeight: 600 }}>
+                          <div style={{ width: 5, height: 5, borderRadius: "50%", background: p.accent }} />
+                          {hl}
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => window.location.href = p.href}
+                      style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 999, background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.8))`, color: "#fff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12.5, boxShadow: `0 4px 14px rgba(${p.accentRaw},.25)` }}
+                    >
+                      View Project <ExternalLink size={12} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </MCard>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ── Desktop table layout (existing) ── */
+function ProjectsTable() {
+  const rowRefs   = useRef<(HTMLTableRowElement | null)[]>([]);
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [expandIdx, setExpandIdx] = useState<number | null>(null);
   const [hovIdx,    setHovIdx]    = useState<number | null>(null);
 
-  // Scroll-triggered row reveal
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     rowRefs.current.forEach((row, i) => {
       if (!row) return;
       const io = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
-        import("animejs").then(({ animate }) => {
-          animate(row, {
-            opacity:    [0, 1],
-            translateY: [20, 0],
-            duration:   480,
-            delay:      i * 90,
-            easing:     "easeOutExpo",
-          });
-        });
+        import("animejs").then(({ animate }) => { animate(row, { opacity: [0, 1], translateY: [20, 0], duration: 480, delay: i * 90, easing: "easeOutExpo" }); });
         io.disconnect();
       }, { threshold: 0.25 });
       io.observe(row);
@@ -1010,353 +1135,213 @@ function Projects() {
     return () => observers.forEach(io => io.disconnect());
   }, []);
 
-  // Toggle expand with animation
   const toggle = useCallback((i: number) => {
     if (expandIdx === i) {
-      // Collapse
       const panel = panelRefs.current[i];
       if (panel) {
         import("animejs").then(({ animate }) => {
-          animate(panel, {
-            opacity:    [1, 0],
-            translateY: [0, -8],
-            duration:   240,
-            easing:     "easeInQuad",
-            complete:   () => setExpandIdx(null),
-          });
+          animate(panel, { opacity: [1, 0], translateY: [0, -8], duration: 240, easing: "easeInQuad", complete: () => setExpandIdx(null) });
         });
-      } else {
-        setExpandIdx(null);
-      }
+      } else { setExpandIdx(null); }
       return;
     }
     setExpandIdx(i);
-    // Animate open after render
     setTimeout(() => {
       const panel = panelRefs.current[i];
       if (!panel) return;
       import("animejs").then(({ animate }) => {
-        animate(panel, {
-          opacity:    [0, 1],
-          translateY: [-12, 0],
-          duration:   380,
-          easing:     "easeOutExpo",
-        });
-        // Stagger highlight pills
+        animate(panel, { opacity: [0, 1], translateY: [-12, 0], duration: 380, easing: "easeOutExpo" });
         const pills = panel.querySelectorAll<HTMLElement>(".hl-pill");
-        if (pills.length) {
-          animate(pills, {
-            opacity:    [0, 1],
-            translateX: [-10, 0],
-            duration:   300,
-            delay:      (_el: any, idx: number) => idx * 55 + 120,
-            easing:     "easeOutExpo",
-          });
-        }
-        // Stagger desc words
+        if (pills.length) animate(pills, { opacity: [0, 1], translateX: [-10, 0], duration: 300, delay: (_el: any, idx: number) => idx * 55 + 120, easing: "easeOutExpo" });
         const descEl = panel.querySelector<HTMLElement>(".desc-text");
-        if (descEl) {
-          animate(descEl, {
-            opacity:    [0, 1],
-            translateY: [8, 0],
-            duration:   400,
-            delay:      80,
-            easing:     "easeOutExpo",
-          });
-        }
+        if (descEl) animate(descEl, { opacity: [0, 1], translateY: [8, 0], duration: 400, delay: 80, easing: "easeOutExpo" });
       });
     }, 10);
   }, [expandIdx]);
 
   return (
-    <section id="proj" style={{ background: T.bg2, padding: "96px 24px" }}>
+    <>
       <style>{`
-        .o-row {
-          opacity: 0;
-          transition: background .18s ease;
-          cursor: pointer;
-        }
-        .o-row:hover td { background: #ffffff !important; }
-        .o-row.open-row td { background: #ffffff !important; }
-        .o-row:hover .o-title { color: #4f46e5 !important; }
-        .o-row.open-row .o-title { color: #4f46e5 !important; }
-        .o-row:hover .o-chevron { opacity: 1 !important; }
-        .o-row.open-row .o-chevron { opacity: 1 !important; }
-        .o-chevron { transition: transform .32s ease, opacity .2s ease; }
-        .o-tag { transition: background .15s, color .15s, border-color .15s; }
-        .o-tag:hover { background: rgba(79,70,229,.1) !important; color: #4f46e5 !important; border-color: rgba(79,70,229,.3) !important; }
-        .hl-pill { opacity: 0; transition: background .2s, transform .2s; }
-        .hl-pill:hover { transform: translateY(-2px) !important; }
-        .desc-text { opacity: 0; }
-        .expand-panel { overflow: hidden; }
-        .proj-cta-o { transition: all .22s ease; }
-        .proj-cta-o:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15) !important; }
+        .o-row { opacity:0; transition:background .18s ease; cursor:pointer; }
+        .o-row:hover td { background:#ffffff !important; }
+        .o-row.open-row td { background:#ffffff !important; }
+        .o-row:hover .o-title { color:#4f46e5 !important; }
+        .o-row.open-row .o-title { color:#4f46e5 !important; }
+        .o-row:hover .o-chevron { opacity:1 !important; }
+        .o-row.open-row .o-chevron { opacity:1 !important; }
+        .o-chevron { transition:transform .32s ease,opacity .2s ease; }
+        .o-tag { transition:background .15s,color .15s,border-color .15s; }
+        .o-tag:hover { background:rgba(79,70,229,.1) !important; color:#4f46e5 !important; border-color:rgba(79,70,229,.3) !important; }
+        .hl-pill { opacity:0; transition:background .2s,transform .2s; }
+        .hl-pill:hover { transform:translateY(-2px) !important; }
+        .desc-text { opacity:0; }
+        .proj-cta-o { transition:all .22s ease; }
+        .proj-cta-o:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15) !important; }
       `}</style>
 
-      <div style={{ maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
-
-        {/* ── Header ── */}
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 14 }}>
-          <div>
-            <SBadge><Layers size={11} />Work</SBadge>
-            <h2 style={{ fontSize: "clamp(26px,4.5vw,42px)", fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>
-              Featured <span className="gtext">Projects</span>
-            </h2>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <p style={{ fontSize: 12.5, color: T.text3 }}>Click any row to read more ↓</p>
-            <div style={{ display: "flex", gap: 8 }}>
-              {[
-                { color: T.indigo,  label: "Gov Portal" },
-                { color: "#d97706", label: "Academic"   },
-              ].map(l => (
-                <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
-                  <div style={{ width: 9, height: 9, borderRadius: 3, background: l.color }} />
-                  {l.label}
-                </div>
+      <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${T.border2}`, boxShadow: "0 6px 32px rgba(0,0,0,.07)" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <colgroup>
+            <col style={{ width: 5 }} /><col style={{ width: 46 }} /><col />
+            <col style={{ width: "13%" }} /><col style={{ width: "11%" }} /><col style={{ width: "22%" }} />
+            <col style={{ width: "8%" }} /><col style={{ width: "9%" }} /><col style={{ width: 44 }} />
+          </colgroup>
+          <thead>
+            <tr style={{ background: T.bg3 }}>
+              <th style={{ padding: 0, borderBottom: `1px solid ${T.border2}` }} />
+              <th style={{ padding: "12px 0 12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left", fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase", letterSpacing: "0.08em" }}>#</th>
+              {["Project", "Role", "Period", "Stack", "Metric", "Status", ""].map((h, ci) => (
+                <th key={ci} style={{ padding: ci === 7 ? "12px 16px 12px 0" : "12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left", fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase", letterSpacing: "0.08em" }}>{h}</th>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Table wrapper ── */}
-        <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${T.border2}`, boxShadow: "0 6px 32px rgba(0,0,0,.07)" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <colgroup>
-              <col style={{ width: 5 }} />
-              <col style={{ width: 46 }} />
-              <col />
-              <col style={{ width: "13%" }} />
-              <col style={{ width: "11%" }} />
-              <col style={{ width: "22%" }} />
-              <col style={{ width: "8%" }} />
-              <col style={{ width: "9%" }} />
-              <col style={{ width: 44 }} />
-            </colgroup>
-
-            {/* ── Table Head ── */}
-            <thead>
-              <tr style={{ background: T.bg3 }}>
-                <th style={{ padding: 0, borderBottom: `1px solid ${T.border2}` }} />
-                <th style={{ padding: "12px 0 12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left" as const, fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>#</th>
-                {["Project", "Role", "Period", "Stack", "Metric", "Status", ""].map((h, ci) => (
-                  <th key={ci} style={{
-                    padding: ci === 7 ? "12px 16px 12px 0" : "12px 14px",
-                    borderBottom: `1px solid ${T.border2}`,
-                    textAlign: "left" as const,
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    color: T.text3,
-                    textTransform: "uppercase" as const,
-                    letterSpacing: "0.08em",
-                  }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-
-            {/* ── Table Body ── */}
-            <tbody>
-              {projs.map((p, i) => {
-                const isOpen = expandIdx === i;
-                const rowBg  = i % 2 === 0 ? T.card : "#fafaf8";
-                const bdClr  = i < projs.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
-
-                return (
-                  <>
-                    {/* ── Main row ── */}
-                    <tr
-                      key={`row-${i}`}
-                      ref={el => { rowRefs.current[i] = el; }}
-                      className={`o-row ${isOpen ? "open-row" : ""}`}
-                      onMouseEnter={() => setHovIdx(i)}
-                      onMouseLeave={() => setHovIdx(null)}
-                      onClick={() => toggle(i)}
-                    >
-                      {/* Accent left strip */}
-                      <td style={{
-                        padding: 0,
-                        background: isOpen || hovIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`,
-                        transition: "background .2s",
-                        borderBottom: bdClr,
-                      }} />
-
-                      {/* Row number */}
-                      <td style={{ padding: "18px 0 18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: `rgba(${p.accentRaw},.08)`, border: `1px solid rgba(${p.accentRaw},.18)` }}>
-                          <span style={{ fontFamily: "monospace", fontSize: 10.5, fontWeight: 700, color: p.accent }}>{i + 1}</span>
+            </tr>
+          </thead>
+          <tbody>
+            {PROJECTS_DATA.map((p, i) => {
+              const isOpen = expandIdx === i;
+              const rowBg  = i % 2 === 0 ? T.card : "#fafaf8";
+              const bdClr  = i < PROJECTS_DATA.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
+              return (
+                <React.Fragment key={i}>
+                  <tr ref={el => { rowRefs.current[i] = el; }} className={`o-row ${isOpen ? "open-row" : ""}`}
+                    onMouseEnter={() => setHovIdx(i)} onMouseLeave={() => setHovIdx(null)} onClick={() => toggle(i)}>
+                    <td style={{ padding: 0, background: isOpen || hovIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, transition: "background .2s", borderBottom: bdClr }} />
+                    <td style={{ padding: "18px 0 18px 14px", background: rowBg, borderBottom: bdClr }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: `rgba(${p.accentRaw},.08)`, border: `1px solid rgba(${p.accentRaw},.18)` }}>
+                        <span style={{ fontFamily: "monospace", fontSize: 10.5, fontWeight: 700, color: p.accent }}>{i + 1}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 20, flexShrink: 0 }}>{p.icon}</span>
+                        <div>
+                          <div className="o-title" style={{ fontSize: 13.5, fontWeight: 700, color: T.text, transition: "color .2s", letterSpacing: "-0.01em" }}>{p.title}</div>
+                          <div style={{ fontSize: 11, color: T.text3, marginTop: 1 }}>{p.org}</div>
                         </div>
-                      </td>
-
-                      {/* Project name */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <span style={{ fontSize: 20, flexShrink: 0 }}>{p.icon}</span>
-                          <div>
-                            <div className="o-title" style={{ fontSize: 13.5, fontWeight: 700, color: T.text, transition: "color .2s", letterSpacing: "-0.01em" }}>{p.title}</div>
-                            <div style={{ fontSize: 11, color: T.text3, marginTop: 1 }}>{p.org}</div>
+                      </div>
+                    </td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}><span style={{ fontSize: 12, color: T.text2, fontWeight: 500 }}>{p.role}</span></td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}><span style={{ fontSize: 12, color: T.text3 }}>{p.period}</span></td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {p.tags.slice(0, 3).map(t => (
+                          <span key={t} className="o-tag" style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2, whiteSpace: "nowrap" }}>{t}</span>
+                        ))}
+                        {p.tags.length > 3 && <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg3, color: T.text3 }}>+{p.tags.length - 3}</span>}
+                      </div>
+                    </td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 800, color: p.accent, letterSpacing: "-0.02em", lineHeight: 1 }}>{p.stat}</div>
+                      {p.statLabel && <div style={{ fontSize: 10, color: T.text3, marginTop: 2 }}>{p.statLabel}</div>}
+                    </td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 10.5, padding: "3px 9px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600, whiteSpace: "nowrap" }}>
+                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.statusColor }} />{p.status}
+                      </span>
+                    </td>
+                    <td style={{ padding: "18px 16px 18px 0", background: rowBg, borderBottom: bdClr, textAlign: "right" }}>
+                      <div className="o-chevron" style={{ opacity: isOpen ? 1 : 0, display: "inline-flex", width: 28, height: 28, borderRadius: "50%", border: `1px solid rgba(${p.accentRaw},.25)`, background: isOpen ? `rgba(${p.accentRaw},.12)` : `rgba(${p.accentRaw},.06)`, alignItems: "center", justifyContent: "center" }}>
+                        <ArrowRight size={12} color={p.accent} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .32s ease" }} />
+                      </div>
+                    </td>
+                  </tr>
+                  {isOpen && (
+                    <tr>
+                      <td style={{ padding: 0, background: p.accent, borderBottom: `1px solid ${T.border}` }} />
+                      <td colSpan={8} style={{ padding: "0 20px 24px 14px", background: "#ffffff", borderBottom: `1px solid ${T.border}` }}>
+                        <div ref={el => { panelRefs.current[i] = el; }} className="expand-panel" style={{ opacity: 0 }}>
+                          <div style={{ height: 2, background: `linear-gradient(90deg, rgba(${p.accentRaw},1) 0%, rgba(${p.accentRaw},.15) 60%, transparent 100%)`, borderRadius: 99, marginBottom: 20, marginTop: 4 }} />
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 28, alignItems: "start" }}>
+                            <div>
+                              <p className="desc-text" style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.85, marginBottom: 18, maxWidth: 560 }}>{p.desc}</p>
+                              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                                {p.highlights.map((hl, hi) => (
+                                  <div key={hi} className="hl-pill" style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 14px", borderRadius: 999, background: `rgba(${p.accentRaw},.07)`, border: `1px solid rgba(${p.accentRaw},.2)`, fontSize: 12, color: p.accent, fontWeight: 600, cursor: "default" }}>
+                                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: p.accent }} />{hl}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 16, flexShrink: 0 }}>
+                              <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
+                                {p.tags.map(t => (
+                                  <span key={t} className="o-tag" style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${p.accentRaw},.2)`, background: `rgba(${p.accentRaw},.06)`, color: p.accent, fontWeight: 500 }}>{t}</span>
+                                ))}
+                              </div>
+                              <button className="proj-cta-o" onClick={e => { e.stopPropagation(); window.location.href = p.href; }} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px", borderRadius: 999, background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.75))`, color: "#ffffff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13, boxShadow: `0 4px 16px rgba(${p.accentRaw},.28)`, whiteSpace: "nowrap" }}>
+                                View Project <ExternalLink size={13} />
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-
-                      {/* Role */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <span style={{ fontSize: 12, color: T.text2, fontWeight: 500 }}>{p.role}</span>
-                      </td>
-
-                      {/* Period */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <span style={{ fontSize: 12, color: T.text3 }}>{p.period}</span>
-                      </td>
-
-                      {/* Stack pills */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                          {p.tags.slice(0, 3).map(t => (
-                            <span key={t} className="o-tag" style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2, whiteSpace: "nowrap" as const }}>{t}</span>
-                          ))}
-                          {p.tags.length > 3 && (
-                            <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg3, color: T.text3 }}>+{p.tags.length - 3}</span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Metric */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <div style={{ fontSize: 13.5, fontWeight: 800, color: p.accent, letterSpacing: "-0.02em", lineHeight: 1 }}>{p.stat}</div>
-                        {p.statLabel && <div style={{ fontSize: 10, color: T.text3, marginTop: 2 }}>{p.statLabel}</div>}
-                      </td>
-
-                      {/* Status */}
-                      <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 10.5, padding: "3px 9px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600, whiteSpace: "nowrap" as const }}>
-                          <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.statusColor, flexShrink: 0 }} />
-                          {p.status}
-                        </span>
-                      </td>
-
-                      {/* Chevron toggle */}
-                      <td style={{ padding: "18px 16px 18px 0", background: rowBg, borderBottom: bdClr, textAlign: "right" as const }}>
-                        <div className="o-chevron" style={{ opacity: isOpen ? 1 : 0, display: "inline-flex", width: 28, height: 28, borderRadius: "50%", border: `1px solid rgba(${p.accentRaw},.25)`, background: isOpen ? `rgba(${p.accentRaw},.12)` : `rgba(${p.accentRaw},.06)`, alignItems: "center", justifyContent: "center" }}>
-                          <ArrowRight size={12} color={p.accent} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .32s ease" }} />
                         </div>
                       </td>
                     </tr>
-
-                    {/* ── Expand description panel ── */}
-                    {isOpen && (
-                      <tr key={`expand-${i}`}>
-                        <td style={{ padding: 0, background: p.accent, borderBottom: `1px solid ${T.border}` }} />
-                        <td colSpan={8} style={{ padding: "0 20px 24px 14px", background: "#ffffff", borderBottom: `1px solid ${T.border}` }}>
-
-                          <div
-                            ref={el => { panelRefs.current[i] = el; }}
-                            className="expand-panel"
-                            style={{ opacity: 0 }}
-                          >
-                            {/* Gradient divider */}
-                            <div style={{ height: 2, background: `linear-gradient(90deg, rgba(${p.accentRaw},1) 0%, rgba(${p.accentRaw},.15) 60%, transparent 100%)`, borderRadius: 99, marginBottom: 20, marginTop: 4 }} />
-
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 28, alignItems: "start" }}>
-
-                              {/* Left — description + highlights */}
-                              <div>
-                                {/* Description */}
-                                <p className="desc-text" style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.85, marginBottom: 18, maxWidth: 560 }}>
-                                  {p.desc}
-                                </p>
-
-                                {/* Highlight pills */}
-                                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                                  {p.highlights.map((hl, hi) => (
-                                    <div
-                                      key={hi}
-                                      className="hl-pill"
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 7,
-                                        padding: "7px 14px",
-                                        borderRadius: 999,
-                                        background: `rgba(${p.accentRaw},.07)`,
-                                        border: `1px solid rgba(${p.accentRaw},.2)`,
-                                        fontSize: 12,
-                                        color: p.accent,
-                                        fontWeight: 600,
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: p.accent, flexShrink: 0 }} />
-                                      {hl}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* Right — full tag list + CTA */}
-                              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 16, flexShrink: 0 }}>
-                                {/* Full stack tags */}
-                                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
-                                  {p.tags.map(t => (
-                                    <span key={t} className="o-tag" style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${p.accentRaw},.2)`, background: `rgba(${p.accentRaw},.06)`, color: p.accent, fontWeight: 500 }}>{t}</span>
-                                  ))}
-                                </div>
-
-                                {/* CTA */}
-                                <button
-                                  className="proj-cta-o"
-                                  onClick={e => { e.stopPropagation(); window.location.href = p.href; }}
-                                  style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    padding: "10px 22px",
-                                    borderRadius: 999,
-                                    background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.75))`,
-                                    color: "#ffffff",
-                                    border: "none",
-                                    cursor: "pointer",
-                                    fontWeight: 700,
-                                    fontSize: 13,
-                                    boxShadow: `0 4px 16px rgba(${p.accentRaw},.28)`,
-                                    whiteSpace: "nowrap" as const,
-                                  }}
-                                >
-                                  View Project <ExternalLink size={13} />
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                );
-              })}
-            </tbody>
-          </table>
-
-          {/* ── Table footer ── */}
-          <div style={{ padding: "11px 18px", background: T.bg3, borderTop: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: 11, color: T.text3 }}>4 projects · 2025</span>
-            <div style={{ display: "flex", gap: 5 }}>
-              {projs.map((p, i) => (
-                <div
-                  key={i}
-                  onClick={() => toggle(i)}
-                  style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }}
-                />
-              ))}
-            </div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+        <div style={{ padding: "11px 18px", background: T.bg3, borderTop: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: 11, color: T.text3 }}>4 projects · 2025</span>
+          <div style={{ display: "flex", gap: 5 }}>
+            {PROJECTS_DATA.map((p, i) => (
+              <div key={i} onClick={() => toggle(i)} style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }} />
+            ))}
           </div>
         </div>
+      </div>
+    </>
+  );
+}
+
+function Projects() {
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const isTablet = bp === "tablet";
+
+  return (
+    <section id="proj" style={{ background: T.bg2, padding: `${isMobile ? 64 : 96}px ${isMobile ? 16 : 24}px` }}>
+      <div style={{ maxWidth: isMobile || isTablet ? 760 : 1040, marginLeft: "auto", marginRight: "auto" }}>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", marginBottom: isMobile ? 24 : 32, gap: 14 }}>
+          <div>
+            <SBadge><Layers size={11} />Work</SBadge>
+            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>
+              Featured <span className="gtext">Projects</span>
+            </h2>
+          </div>
+          {!isMobile && (
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <p style={{ fontSize: 12.5, color: T.text3 }}>
+                {isTablet ? "Tap to expand ↓" : "Click any row to read more ↓"}
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
+                {[{ color: T.indigo, label: "Gov Portal" }, { color: "#d97706", label: "Academic" }].map(l => (
+                  <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
+                    <div style={{ width: 9, height: 9, borderRadius: 3, background: l.color }} />{l.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Render card layout on mobile/tablet, table on desktop */}
+        {isMobile || isTablet ? <ProjectsCards /> : <ProjectsTable />}
       </div>
     </section>
   );
 }
-// ─── Contact ──────────────────────────────────────────────────────────────────
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTACT  — responsive
+══════════════════════════════════════════════════════════════════════════ */
 function Contact() {
   const [copied, setCopied] = useState(false);
   const canvasWrapRef = useRef<HTMLDivElement>(null);
+  const bp       = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const isTablet = bp === "tablet";
   const email = "izzatzamri01@gmail.com";
   const copy = () => { navigator.clipboard?.writeText(email); setCopied(true); setTimeout(() => setCopied(false), 2500); };
 
@@ -1365,11 +1350,7 @@ function Contact() {
     if (!container) return;
     let rendererRef: any = null;
     let dead = false;
-
-    Promise.all([
-      import("three"),
-      import("animejs"),
-    ]).then(([THREE, { engine, createTimeline, utils }]) => {
+    Promise.all([import("three"), import("animejs")]).then(([THREE, { engine, createTimeline, utils }]) => {
       if (dead) return;
       engine.useDefaultMainLoop = false;
       const { width, height } = container.getBoundingClientRect();
@@ -1381,63 +1362,59 @@ function Contact() {
       renderer.setSize(width, height);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.domElement.style.position = "absolute";
-      renderer.domElement.style.inset    = "0";
+      renderer.domElement.style.inset = "0";
       container.appendChild(renderer.domElement);
       rendererRef = renderer;
       camera.position.z = 5;
       function spawnCube() {
-        const cube     = new THREE.Mesh(geometry, material);
-        const x        = utils.random(-10, 10, 2);
-        const y        = utils.random(-5,   5, 2);
-        const z        = [-10, 7] as [number, number];
-        const r        = () => utils.random(-Math.PI * 2, Math.PI * 2, 3);
+        const cube = new THREE.Mesh(geometry, material);
+        const x = utils.random(-10, 10, 2), y = utils.random(-5, 5, 2), z = [-10, 7] as [number, number];
+        const r = () => utils.random(-Math.PI * 2, Math.PI * 2, 3);
         const duration = 4000;
-        createTimeline({ delay: utils.random(0, duration), defaults: { loop: true, duration, ease: "inSine" } })
-          .add(cube.position, { x, y, z }, 0)
-          .add(cube.rotation, { x: r, y: r, z: r }, 0)
-          .init();
+        createTimeline({ delay: utils.random(0, duration), defaults: { loop: true, duration, ease: "inSine" } }).add(cube.position, { x, y, z }, 0).add(cube.rotation, { x: r, y: r, z: r }, 0).init();
         scene.add(cube);
       }
       for (let i = 0; i < 40; i++) spawnCube();
-      function render() { engine.update(); renderer.render(scene, camera); }
-      renderer.setAnimationLoop(render);
+      renderer.setAnimationLoop(() => { engine.update(); renderer.render(scene, camera); });
     });
-
     return () => {
       dead = true;
-      if (rendererRef) {
-        rendererRef.setAnimationLoop(null);
-        rendererRef.dispose();
-        if (rendererRef.domElement?.parentNode === container) container.removeChild(rendererRef.domElement);
-      }
+      if (rendererRef) { rendererRef.setAnimationLoop(null); rendererRef.dispose(); if (rendererRef.domElement?.parentNode === container) container.removeChild(rendererRef.domElement); }
     };
   }, []);
 
+  /* Links grid: 1-col mobile, 3-col tablet/desktop */
+  const linksGrid = isMobile ? "1fr" : "repeat(3,1fr)";
+
   return (
-    <section id="contact" style={{ position: "relative", background: "#0d0d0f", padding: "96px 24px 160px", overflow: "hidden" }}>
+    <section id="contact" style={{ position: "relative", background: "#0d0d0f", padding: `${isMobile ? 72 : 96}px ${isMobile ? 20 : 24}px ${isMobile ? 130 : 160}px`, overflow: "hidden" }}>
       <div ref={canvasWrapRef} style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.65, pointerEvents: "none" }} />
       <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(13,13,15,0.75) 100%)" }} />
       <div style={{ position: "relative", zIndex: 2, maxWidth: 800, marginLeft: "auto", marginRight: "auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
+        <div style={{ textAlign: "center", marginBottom: isMobile ? 36 : 52 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 13px", borderRadius: 999, border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.1)", color: "#818cf8", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" as const, marginBottom: 12, fontWeight: 600 }}>Contact</div>
-          <h2 style={{ fontSize: "clamp(26px,4.5vw,38px)", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Let&apos;s <span className="gtext">Connect</span></h2>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", marginTop: 12 }}>Interested in working together? Let&apos;s build something impactful.</p>
+          <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,38px)`, fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Let&apos;s <span className="gtext">Connect</span></h2>
+          <p style={{ fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.45)", marginTop: 12 }}>Interested in working together? Let&apos;s build something impactful.</p>
         </div>
+
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div className="bbeam">
-            <div style={{ borderRadius: 15, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", padding: "26px 30px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-                <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 13, flexShrink: 0 }}><Mail size={24} color="#818cf8" /></div>
-                <div>
-                  <div style={{ fontWeight: 600, color: "#ffffff", fontSize: 15, marginBottom: 3 }}>Drop me an email</div>
-                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>+6012-296 7752 · Kajang, Selangor</div>
-                  <code style={{ fontSize: 13, color: "#818cf8", marginTop: 6, display: "block" }}>{email}</code>
-                </div>
+          {/* Email card */}
+          <div style={{ borderRadius: 15, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", padding: isMobile ? "20px 20px" : "26px 30px", display: "flex", alignItems: isMobile ? "flex-start" : "center", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+              <div style={{ borderRadius: 14, background: "rgba(99,102,241,0.15)", border: "1.5px solid rgba(99,102,241,0.3)", padding: 13, flexShrink: 0 }}><Mail size={isMobile ? 20 : 24} color="#818cf8" /></div>
+              <div>
+                <div style={{ fontWeight: 600, color: "#ffffff", fontSize: isMobile ? 14 : 15, marginBottom: 3 }}>Drop me an email</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>+6012-296 7752 · Kajang, Selangor</div>
+                <code style={{ fontSize: isMobile ? 11.5 : 13, color: "#818cf8", marginTop: 6, display: "block" }}>{email}</code>
               </div>
-              <SBtn onClick={copy}>{copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}</SBtn>
             </div>
+            <SBtn onClick={copy} style={isMobile ? { width: "100%" } : {}}>
+              {copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}
+            </SBtn>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
+
+          {/* Links grid */}
+          <div style={{ display: "grid", gridTemplateColumns: linksGrid, gap: 10 }}>
             {[
               { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran" },
               { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran" },
@@ -1461,6 +1438,9 @@ function Contact() {
   );
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   ROOT
+══════════════════════════════════════════════════════════════════════════ */
 export default function Portfolio() {
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState("hero");
@@ -1487,16 +1467,9 @@ export default function Portfolio() {
   return (
     <>
       {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
-      <div
-        style={{
-          fontFamily: "'Inter',system-ui,-apple-system,sans-serif",
-          background: "#f8f7f4",
-          minHeight: "100vh",
-          opacity:    loaded ? 1 : 0,
-          transition: "opacity .5s ease",
-        }}
-      >
+      <div style={{ fontFamily: "'Inter',system-ui,-apple-system,sans-serif", background: "#f8f7f4", minHeight: "100vh", opacity: loaded ? 1 : 0, transition: "opacity .5s ease" }}>
         <style>{TECH_CSS}</style>
+        <style>{RESPONSIVE_CSS}</style>
         <Hero />
         <About />
         <Skills />
