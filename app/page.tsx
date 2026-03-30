@@ -76,6 +76,24 @@ function useBreakpoint() {
   return bp;
 }
 
+function smoothScrollTo(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const targetY = el.getBoundingClientRect().top + window.scrollY;
+  const startY = window.scrollY;
+  const diff = targetY - startY;
+  const duration = 900;
+  let start: number | null = null;
+  const ease = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  function step(ts: number) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    window.scrollTo(0, startY + diff * ease(p));
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
   const [txt, setTxt] = useState("");
   const [wi,  setWi]  = useState(0);
@@ -171,35 +189,11 @@ interface OrbitIconProps { item: MarqueeItem; cx: number; cy: number; dur: numbe
 function OrbitIcon({ item, cx, cy, dur, iconBg, iconBdr, iconShadow, dark }: OrbitIconProps) {
   const [hov, setHov] = useState(false);
   return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        position: "absolute", left: cx, top: cy, width: 36, height: 36,
-        borderRadius: "50%", background: hov ? (dark ? "rgba(99,102,241,0.3)" : "rgba(79,70,229,.12)") : iconBg,
-        border: `1px solid ${hov ? (dark ? "rgba(99,102,241,0.6)" : "rgba(79,70,229,.4)") : iconBdr}`,
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
-        animation: hov ? "none" : `spinccw ${dur}s linear infinite`,
-        boxShadow: hov ? `0 0 12px 3px ${dark ? "rgba(99,102,241,0.35)" : "rgba(79,70,229,.2)"}` : iconShadow,
-        backdropFilter: dark ? "blur(8px)" : undefined,
-        cursor: "default",
-        transition: "background .2s, border-color .2s, box-shadow .2s",
-        zIndex: hov ? 10 : 1,
-      }}
-    >
-      {item.img
-        ? <img src={item.img} alt={item.n} width={18} height={18} style={{ objectFit: "contain" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
-        : item.i}
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ position: "absolute", left: cx, top: cy, width: 36, height: 36, borderRadius: "50%", background: hov ? (dark ? "rgba(99,102,241,0.3)" : "rgba(79,70,229,.12)") : iconBg, border: `1px solid ${hov ? (dark ? "rgba(99,102,241,0.6)" : "rgba(79,70,229,.4)") : iconBdr}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, animation: hov ? "none" : `spinccw ${dur}s linear infinite`, boxShadow: hov ? `0 0 12px 3px ${dark ? "rgba(99,102,241,0.35)" : "rgba(79,70,229,.2)"}` : iconShadow, backdropFilter: dark ? "blur(8px)" : undefined, cursor: "default", transition: "background .2s, border-color .2s, box-shadow .2s", zIndex: hov ? 10 : 1 }}>
+      {item.img ? <img src={item.img} alt={item.n} width={18} height={18} style={{ objectFit: "contain" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} /> : item.i}
       {hov && (
-        <div style={{
-          position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-          background: dark ? "rgba(20,20,28,0.95)" : "rgba(17,17,17,0.9)",
-          color: "#fff", fontSize: 11, fontWeight: 500, whiteSpace: "nowrap",
-          padding: "4px 9px", borderRadius: 6,
-          border: `1px solid ${dark ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.1)"}`,
-          boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
-          pointerEvents: "none", zIndex: 20,
-        }}>
+        <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", background: dark ? "rgba(20,20,28,0.95)" : "rgba(17,17,17,0.9)", color: "#fff", fontSize: 11, fontWeight: 500, whiteSpace: "nowrap", padding: "4px 9px", borderRadius: 6, border: `1px solid ${dark ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.1)"}`, boxShadow: "0 4px 14px rgba(0,0,0,0.25)", pointerEvents: "none", zIndex: 20 }}>
           {item.n}
           <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderTop: `5px solid ${dark ? "rgba(20,20,28,0.95)" : "rgba(17,17,17,0.9)"}` }} />
         </div>
@@ -211,13 +205,13 @@ function OrbitIcon({ item, cx, cy, dur, iconBg, iconBdr, iconShadow, dark }: Orb
 interface OrbitRingPropsExt { icons: MarqueeItem[]; r?: number; dur?: number; dark?: boolean; }
 function OrbitRing({ icons, r = 68, dur = 24, dark = false }: OrbitRingPropsExt) {
   const n = icons.length; const sz = r * 2 + 60;
-  const trackClr  = dark ? "rgba(255,255,255,0.15)"  : T.border2;
-  const iconBg    = dark ? "rgba(255,255,255,0.08)"  : T.card;
-  const iconBdr   = dark ? "rgba(255,255,255,0.18)"  : T.border2;
-  const iconShadow= dark ? "0 2px 8px rgba(0,0,0,.4)" : "0 2px 8px rgba(0,0,0,.06)";
-  const centerBg  = dark ? "rgba(99,102,241,0.2)"    : "rgba(79,70,229,.1)";
-  const centerBdr = dark ? "rgba(99,102,241,0.5)"    : "rgba(79,70,229,.25)";
-  const centerClr = dark ? "#a5b4fc"                 : T.indigo;
+  const trackClr   = dark ? "rgba(255,255,255,0.15)"   : T.border2;
+  const iconBg     = dark ? "rgba(255,255,255,0.08)"   : T.card;
+  const iconBdr    = dark ? "rgba(255,255,255,0.18)"   : T.border2;
+  const iconShadow = dark ? "0 2px 8px rgba(0,0,0,.4)" : "0 2px 8px rgba(0,0,0,.06)";
+  const centerBg   = dark ? "rgba(99,102,241,0.2)"     : "rgba(79,70,229,.1)";
+  const centerBdr  = dark ? "rgba(99,102,241,0.5)"     : "rgba(79,70,229,.25)";
+  const centerClr  = dark ? "#a5b4fc"                  : T.indigo;
   return (
     <div style={{ position: "relative", width: sz, height: sz }}>
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", borderRadius: "50%", background: centerBg, border: `1.5px solid ${centerBdr}`, padding: 14, zIndex: 2 }}>
@@ -271,68 +265,16 @@ function Dock({ active, goto }: DockProps) {
   );
 }
 
-function GlobeCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef   = useRef(0);
-  const mouseRef  = useRef({ x: 0, y: 0 });
-  useEffect(() => {
-    const c = canvasRef.current; if (!c) return;
-    const ctx = c.getContext("2d"); if (!ctx) return;
-    let W: number, H: number, ang = 0;
-    const tiltAng = 0.22, R = 200, LAT = 18, LON = 28;
-    const resize = () => { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; };
-    resize(); window.addEventListener("resize", resize);
-    const onMove = (e: MouseEvent) => { const r = c.getBoundingClientRect(); mouseRef.current = { x: (e.clientX - r.left) / W - .5, y: (e.clientY - r.top) / H - .5 }; };
-    window.addEventListener("mousemove", onMove);
-    const project = (x: number, y: number, z: number): ProjectedPoint => { const fov = 750, dz = fov + z; return { sx: (x * fov) / dz + W / 2, sy: (y * fov) / dz + H / 2, z }; };
-    const rotY = (x: number, z: number, a: number) => ({ x: x * Math.cos(a) - z * Math.sin(a), z: x * Math.sin(a) + z * Math.cos(a) });
-    const rotX = (y: number, z: number, a: number) => ({ y: y * Math.cos(a) - z * Math.sin(a), z: y * Math.sin(a) + z * Math.cos(a) });
-    const getGrid = (ay: number, ax: number): GlobePoint[] => {
-      const pts: GlobePoint[] = [];
-      for (let i = 0; i <= LAT; i++) { const lat = (Math.PI * i) / LAT - Math.PI / 2; for (let j = 0; j <= LON; j++) { const lon = (2 * Math.PI * j) / LON; let x = Math.cos(lat) * Math.cos(lon) * R; let y = Math.sin(lat) * R; let z = Math.cos(lat) * Math.sin(lon) * R; const ry = rotY(x, z, ay); x = ry.x; z = ry.z; const rx = rotX(y, z, ax); y = rx.y; z = rx.z; pts.push({ x, y, z, i, j, front: z > -R * .15 }); } }
-      return pts;
-    };
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H); ang += 0.003;
-      const mx = mouseRef.current.x * .3, my = mouseRef.current.y * .18;
-      const pts = getGrid(ang + mx, tiltAng + my); const G = LON + 1;
-      for (let i = 0; i <= LAT; i++) { const row = pts.slice(i * G, i * G + G); ctx.beginPath(); row.forEach((p, idx) => { const { sx, sy } = project(p.x, p.y, p.z); idx === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy); }); ctx.closePath(); const avgZ = row.reduce((s, p) => s + p.z, 0) / row.length; const depth = (avgZ + R) / (R * 2); ctx.strokeStyle = `rgba(79,70,229,${depth * .28 + .04})`; ctx.lineWidth = depth * .9 + .3; ctx.stroke(); }
-      for (let j = 0; j <= LON; j++) { ctx.beginPath(); for (let i = 0; i <= LAT; i++) { const p = pts[i * G + j]; const { sx, sy } = project(p.x, p.y, p.z); i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy); } ctx.strokeStyle = "rgba(124,58,237,0.12)"; ctx.lineWidth = .5; ctx.stroke(); }
-      for (let i = 0; i <= LAT; i += 2) for (let j = 0; j <= LON; j += 2) { const p = pts[i * G + j]; if (!p.front) continue; const { sx, sy, z } = project(p.x, p.y, p.z); const bright = (z + R) / (R * 2); const grd = ctx.createRadialGradient(sx, sy, 0, sx, sy, 5); grd.addColorStop(0, `rgba(79,70,229,${bright * .5})`); grd.addColorStop(1, "transparent"); ctx.beginPath(); ctx.arc(sx, sy, 5, 0, Math.PI * 2); ctx.fillStyle = grd; ctx.fill(); ctx.beginPath(); ctx.arc(sx, sy, 1.4, 0, Math.PI * 2); ctx.fillStyle = `rgba(79,70,229,${bright * .65 + .1})`; ctx.fill(); }
-      const cg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, R * 1.2); cg.addColorStop(0, "rgba(79,70,229,0.05)"); cg.addColorStop(.5, "rgba(79,70,229,0.02)"); cg.addColorStop(1, "transparent"); ctx.beginPath(); ctx.arc(W / 2, H / 2, R * 1.2, 0, Math.PI * 2); ctx.fillStyle = cg; ctx.fill();
-      animRef.current = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { cancelAnimationFrame(animRef.current); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMove); };
-  }, []);
-  return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />;
-}
-
-const TOKENS = [
-  "const", "let", "=>", "{}", "[]", "return",
-  "async", "await", "useState", "useEffect",
-  "</>", "<div>", "null", "undefined", "true",
-  "interface", "type", "export", "import",
-  ".map()", ".filter()", ".then()", "npm run dev",
-  "git commit", "404", "200 OK", "function",
-  "class", "extends", "React", "Next.js",
-  "0xFF", "01010", "API", "fetch()", "props",
-];
-const COLORS = ["#a5b4fc", "#c4b5fd", "#67e8f9", "#ffffff", "#86efac", "#fde047", "#f9a8d4", "#93c5fd"];
+const TOKENS = ["const","let","=>","{}","[]","return","async","await","useState","useEffect","</>","<div>","null","undefined","true","interface","type","export","import",".map()",".filter()",".then()","npm run dev","git commit","404","200 OK","function","class","extends","React","Next.js","0xFF","01010","API","fetch()","props"];
+const COLORS = ["#a5b4fc","#c4b5fd","#67e8f9","#ffffff","#86efac","#fde047","#f9a8d4","#93c5fd"];
 interface TokenItem { id: number; token: string; color: string; x: number; y: number; fontSize: number; duration: number; delay: number; }
 let _tid = 0;
-const makeToken = (): TokenItem => ({
-  id: _tid++, token: TOKENS[Math.floor(Math.random() * TOKENS.length)], color: COLORS[Math.floor(Math.random() * COLORS.length)],
-  x: Math.random() * 96, y: Math.random() * 90, fontSize: Math.floor(Math.random() * 6 + 11),
-  duration: Math.random() * 3000 + 3000, delay: Math.random() * 4000,
-});
+const makeToken = (): TokenItem => ({ id: _tid++, token: TOKENS[Math.floor(Math.random() * TOKENS.length)], color: COLORS[Math.floor(Math.random() * COLORS.length)], x: Math.random() * 96, y: Math.random() * 90, fontSize: Math.floor(Math.random() * 6 + 11), duration: Math.random() * 3000 + 3000, delay: Math.random() * 4000 });
 function FloatingCodeBg() {
   const [tokens, setTokens] = useState<TokenItem[]>([]);
   useEffect(() => {
     setTokens(Array.from({ length: 36 }, makeToken));
-    const iv = setInterval(() => {
-      setTokens(prev => { const next = [...prev]; next[Math.floor(Math.random() * next.length)] = makeToken(); return next; });
-    }, 800);
+    const iv = setInterval(() => { setTokens(prev => { const next = [...prev]; next[Math.floor(Math.random() * next.length)] = makeToken(); return next; }); }, 800);
     return () => clearInterval(iv);
   }, []);
   return (
@@ -347,136 +289,118 @@ function FloatingCodeBg() {
   );
 }
 
+/* ─── Hero ───────────────────────────────────────────────────────── */
 function Hero() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
   const isTablet = bp === "tablet";
   const roles    = ["Web & Frontend Developer", "Full Stack Developer"];
 
-  if (isMobile) {
-    return (
-      <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: T.bg, overflow: "hidden", padding: "80px 28px 120px" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.08) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
-        <div style={{ position: "absolute", width: 320, height: 320, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.07)", filter: "blur(80px)", zIndex: 0 }} />
-        <div style={{ position: "absolute", width: 240, height: 240, bottom: "10%", right: "-10%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(70px)", zIndex: 0 }} />
-        <div style={{ position: "relative", zIndex: 2, width: 148, height: 148, borderRadius: "50%", padding: 3, background: `linear-gradient(135deg,rgba(79,70,229,.7),rgba(124,58,237,.6),rgba(8,145,178,.5))`, marginBottom: 28, flexShrink: 0, animation: "fadeup .6s ease .05s both" }}>
-          <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", backgroundColor: T.bg2 }}>
-            <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
-              onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:55px">👤</span>`; }} />
-          </div>
-          <div style={{ position: "absolute", inset: -12, borderRadius: "50%", border: "1px solid rgba(79,70,229,.2)", animation: "spincw 10s linear infinite" }}>
-            <div style={{ position: "absolute", top: -4, left: "50%", marginLeft: -4, width: 8, height: 8, borderRadius: "50%", background: T.indigo, boxShadow: `0 0 8px 3px ${T.indigo}66` }} />
-          </div>
-        </div>
-        <div style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(12px)", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .1s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
-            <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
-              <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
-              <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a", animation: "pulsering 1.5s ease-out infinite" }} />
-            </span>
-            Open for Work
-          </div>
-          <div style={{ animation: "fadeup .7s ease .15s both" }}>
-            <h1 style={{ fontSize: "clamp(30px,8.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: T.text }}>
-              Muhammad Izzat<br /><span className="gtext">Imran</span>
-            </h1>
-          </div>
-          <div style={{ fontFamily: "monospace", fontSize: 13, color: T.text2, animation: "fadeup .7s ease .2s both" }}>
-            <TypingAnim words={roles} />
-          </div>
-          <p style={{ fontSize: 13, color: T.text3, lineHeight: 1.8, maxWidth: 310, animation: "fadeup .7s ease .25s both" }}>
-            At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span> — building gov-tech portals with Next.js &amp; Tailwind CSS.
-          </p>
-          <div style={{ display: "flex", gap: 10, animation: "fadeup .7s ease .3s both" }}>
-            <SBtn onClick={() => window.location.href = "/projects/padu"} style={{ padding: "10px 18px", fontSize: 13 }}><Layers size={13} />Projects<ArrowRight size={13} /></SBtn>
-            <SBtn outline onClick={() => window.location.href = "mailto:izzatzamri01@gmail.com"} style={{ padding: "10px 18px", fontSize: 13 }}><Mail size={13} />Contact</SBtn>
-          </div>
-          <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", animation: "fadeup .7s ease .35s both" }}>
-            {["Next.js", "React", "TypeScript", "Tailwind", "Laravel"].map(t => (
-              <span key={t} style={{ padding: "3px 9px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", color: T.text2, fontSize: 11 }}>{t}</span>
-            ))}
-          </div>
-        </div>
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
-          <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 56, overflow: "visible" }}>
-            <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
-            <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" />
-          </svg>
-        </div>
-      </section>
-    );
-  }
-
-  const imgSize = isTablet ? 320 : 480;
-  const rightW  = isTablet ? "46%" : "52%";
-
   return (
-    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: T.bg, overflow: "hidden" }}>
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.08) 1px, transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none", zIndex: 0 }} />
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 80% at 0% 50%, rgba(248,247,244,.0) 0%, rgba(248,247,244,.85) 55%, rgba(248,247,244,1) 100%)", pointerEvents: "none", zIndex: 1 }} />
-      <div style={{ position: "absolute", width: 500, height: 500, left: "-6%", top: "5%", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(100px)", zIndex: 0, animation: "breathe 7s ease-in-out infinite" }} />
-      <div style={{ position: "absolute", width: 360, height: 360, left: "38%", bottom: "0%", borderRadius: "50%", background: "rgba(124,58,237,.05)", filter: "blur(80px)", zIndex: 0 }} />
-      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: rightW, zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-        <div style={{ position: "relative", width: imgSize, height: imgSize, flexShrink: 0 }}>
-          <div style={{ position: "absolute", inset: -18, borderRadius: "50%", backgroundImage: `radial-gradient(circle, rgba(79,70,229,.1) 0%, transparent 70%)` }} />
-          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", padding: 3, backgroundImage: `linear-gradient(135deg,rgba(79,70,229,.6),rgba(124,58,237,.5),rgba(8,145,178,.4))` }}>
-            <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", backgroundColor: T.bg2 }}>
-              <img src="ht47" alt="Izzat Imran" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
-                onError={e => { const el = e.target as HTMLImageElement; el.style.display = "none"; const p = el.parentElement!; p.style.display = "flex"; p.style.alignItems = "center"; p.style.justifyContent = "center"; p.innerHTML = `<span style="font-size:${isTablet ? 60 : 80}px">👤</span>`; }} />
-            </div>
-          </div>
-          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", overflow: "hidden", zIndex: 3, opacity: 0.28 }}><GlobeCanvas /></div>
-          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", boxShadow: "inset 0 0 40px 14px rgba(248,247,244,.55)", zIndex: 4 }} />
-        </div>
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 5 }}>
-          {[
-            { w: isTablet ? 300 : 440, h: isTablet ? 74 : 106, dur: "14s", clr: "rgba(79,70,229,.2)",  rev: false, dotClr: T.indigo },
-            { w: isTablet ? 260 : 385, h: isTablet ? 60 : 86,  dur: "20s", clr: "rgba(124,58,237,.15)", rev: true,  dotClr: T.violet },
-            { w: isTablet ? 360 : 520, h: isTablet ? 90 : 135, dur: "28s", clr: "rgba(8,145,178,.1)",   rev: false, dotClr: T.cyan },
-            { w: isTablet ? 220 : 326, h: isTablet ? 48 : 68,  dur: "10s", clr: "rgba(79,70,229,.12)",  rev: true,  dotClr: "#818cf8" },
-          ].map((o, i) => (
-            <div key={i} style={{ position: "absolute", width: o.w, height: o.h, borderRadius: "50%", border: `1px solid ${o.clr}`, animation: `${o.rev ? "spinccw" : "spincw"} ${o.dur} linear infinite` }}>
-              <div style={{ position: "absolute", top: -4, left: "50%", marginLeft: -4, width: 8, height: 8, borderRadius: "50%", background: o.dotClr, boxShadow: `0 0 8px 3px ${o.dotClr}66` }} />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 88, overflow: "visible" }}>
-          <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
-          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.12)" strokeWidth="1.5" />
-          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.85)" strokeWidth="2.5" strokeLinecap="round" pathLength="1" strokeDasharray="0.12 0.88" style={{ animation: "beammove 6s linear infinite" }} />
-        </svg>
-      </div>
-      <div style={{ position: "absolute", left: "47%", top: "10%", height: "80%", width: 1, background: `linear-gradient(to bottom, transparent, rgba(79,70,229,.15) 30%, rgba(79,70,229,.15) 70%, transparent)`, zIndex: 4, pointerEvents: "none" }} />
-      <div style={{ position: "relative", zIndex: 10, width: isTablet ? "54%" : "50%", paddingLeft: `clamp(24px,${isTablet ? 4 : 6}vw,88px)`, paddingRight: 32, display: "flex", flexDirection: "column", gap: isTablet ? 18 : 24 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 13px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.8)", backdropFilter: "blur(12px)", width: "fit-content", fontSize: 12, color: T.text2, animation: "fadeup .6s ease .05s both", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
+    <section id="hero" style={{
+      position: "relative", minHeight: "100vh", background: T.bg,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      overflow: "hidden", padding: isMobile ? "80px 28px 130px" : "80px 32px 120px",
+    }}>
+      {/* Dot grid */}
+      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.07) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
+      {/* Ambient glows */}
+      <div style={{ position: "absolute", width: 500, height: 500, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(110px)", zIndex: 0 }} />
+      <div style={{ position: "absolute", width: 320, height: 320, bottom: "8%", right: "10%", borderRadius: "50%", background: "rgba(124,58,237,.04)", filter: "blur(90px)", zIndex: 0 }} />
+
+      {/* Centered content */}
+      <div style={{
+        position: "relative", zIndex: 2,
+        maxWidth: isMobile ? "100%" : isTablet ? 640 : 800,
+        width: "100%",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", textAlign: "center",
+        gap: isMobile ? 16 : 22,
+      }}>
+
+        {/* Open for work pill */}
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 14px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(12px)", fontSize: 12, color: T.text2, animation: "fadeup .55s ease both", boxShadow: "0 2px 10px rgba(0,0,0,.05)" }}>
           <span style={{ position: "relative", width: 7, height: 7, display: "inline-block" }}>
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a", animation: "pulsering 1.5s ease-out infinite" }} />
           </span>
-          Open for Work
+          Open for Work · Unit PADU, Kementerian Ekonomi
         </div>
-        <div style={{ animation: "fadeup .7s ease .1s both" }}>
-          <h1 style={{ fontSize: `clamp(${isTablet ? 26 : 38}px,${isTablet ? 3.8 : 5.8}vw,${isTablet ? 48 : 70}px)`, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.06, color: T.text }}>
-            Muhammad Izzat<br /><span className="gtext">Imran</span>
+
+        {/* Name — satu line, tanpa <br /> */}
+        <div style={{ animation: "fadeup .65s ease .08s both" }}>
+          <h1 style={{
+            fontSize: isMobile
+              ? "clamp(28px,7.5vw,38px)"
+              : isTablet
+              ? "clamp(38px,5.8vw,54px)"
+              : "clamp(46px,5.2vw,68px)",
+            fontWeight: 800,
+            letterSpacing: "-0.04em",
+            lineHeight: 1.06,
+            color: T.text,
+            whiteSpace: "nowrap",
+          }}>
+            Muhammad Izzat <span className="gtext">Imran</span>
           </h1>
         </div>
-        <div style={{ fontFamily: "monospace", fontSize: `clamp(12px,1.4vw,16px)`, color: T.text2, animation: "fadeup .7s ease .2s both" }}>
+
+        {/* Typing role */}
+        <div style={{ fontFamily: "monospace", fontSize: isMobile ? 13 : isTablet ? 14 : 15, color: T.text2, animation: "fadeup .65s ease .16s both" }}>
           <TypingAnim words={roles} />
         </div>
-        <p style={{ fontSize: "clamp(12px,1.2vw,14.5px)", color: T.text3, lineHeight: 1.85, maxWidth: 400, animation: "fadeup .7s ease .3s both" }}>
-          At <span style={{ color: T.indigo, fontWeight: 500 }}>Unit PADU, Kementerian Ekonomi</span>, I build gov-tech portals with Next.js, React &amp; Tailwind CSS. CS grad from <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> in Netcentric Computing.
+
+        {/* Description */}
+        <p style={{ fontSize: isMobile ? 13 : 14, color: T.text3, lineHeight: 1.88, maxWidth: isMobile ? 320 : 520, animation: "fadeup .65s ease .24s both" }}>
+          CS graduate dari <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> dalam Netcentric Computing. Membangun government portals, AI chatbot, dan dashboard analytics untuk <span style={{ color: T.indigo, fontWeight: 500 }}>Kementerian Ekonomi Malaysia</span>.
         </p>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", animation: "fadeup .7s ease .4s both" }}>
-          <SBtn onClick={() => window.location.href = "/projects/padu"}><Layers size={14} />View Projects<ArrowRight size={14} /></SBtn>
-          <SBtn outline onClick={() => window.location.href = "mailto:izzatzamri01@gmail.com"}><Mail size={14} />Get In Touch</SBtn>
+
+        {/* CTA */}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", animation: "fadeup .65s ease .32s both" }}>
+          <SBtn onClick={() => smoothScrollTo("proj")}>
+            <Layers size={14} />View Projects<ArrowRight size={14} />
+          </SBtn>
+          <SBtn outline onClick={() => smoothScrollTo("contact")}>
+            <Mail size={14} />Get In Touch
+          </SBtn>
         </div>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", animation: "fadeup .7s ease .5s both" }}>
-          {(isTablet ? ["Next.js", "React", "TypeScript", "Tailwind"] : ["Next.js", "React", "TypeScript", "Tailwind", "Laravel", "Strapi", "Vertex AI", "MySQL"]).map(t => (
-            <span key={t} style={{ padding: "3px 10px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.85)", backdropFilter: "blur(6px)", color: T.text2, fontSize: 11.5 }}>{t}</span>
+
+        {/* Tech pills */}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", animation: "fadeup .65s ease .4s both" }}>
+          {(isMobile
+            ? ["Next.js", "React", "TypeScript", "Tailwind", "Laravel"]
+            : ["Next.js", "React", "TypeScript", "Tailwind", "Laravel", "Strapi", "Vertex AI", "MySQL"]
+          ).map(t => (
+            <span key={t} className="techpill" style={{ padding: "4px 12px", borderRadius: 999, border: `1px solid ${T.border2}`, background: "rgba(255,255,255,.88)", backdropFilter: "blur(6px)", color: T.text2, fontSize: 11.5, boxShadow: "0 1px 4px rgba(0,0,0,.04)" }}>{t}</span>
           ))}
         </div>
+
+        {/* Section quick-nav (desktop + tablet) */}
+        {!isMobile && (
+          <div style={{ display: "flex", gap: isTablet ? 24 : 32, paddingTop: 8, animation: "fadeup .65s ease .48s both" }}>
+            {[
+              { id: "about",   label: "About",    n: "01" },
+              { id: "skills",  label: "Skills",   n: "02" },
+              { id: "proj",    label: "Projects", n: "03" },
+              { id: "contact", label: "Contact",  n: "04" },
+            ].map(s => (
+              <button key={s.id} onClick={() => smoothScrollTo(s.id)}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                <span style={{ fontSize: 9, fontFamily: "monospace", color: T.text3, letterSpacing: "0.1em" }}>{s.n}</span>
+                <span style={{ fontSize: 12, color: T.text2, fontWeight: 500, borderBottom: `1px solid ${T.border2}`, paddingBottom: 2 }}>{s.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Wave → About (dark) */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0, zIndex: 6, pointerEvents: "none" }}>
+        <svg viewBox="0 0 1440 88" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: isMobile ? 56 : 88, overflow: "visible" }}>
+          <path d="M0,88 C360,0 1080,0 1440,88 L1440,88 L0,88 Z" fill="#0d0d0f" />
+          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.12)" strokeWidth="1.5" />
+          <path d="M0,88 C360,0 1080,0 1440,88" fill="none" stroke="rgba(99,102,241,0.85)" strokeWidth="2.5" strokeLinecap="round" pathLength="1" strokeDasharray="0.12 0.88" style={{ animation: "beammove 6s linear infinite" }} />
+        </svg>
       </div>
     </section>
   );
@@ -740,39 +664,9 @@ function Experience() {
   const isMobile = bp === "mobile";
   const isTablet = bp === "tablet";
   const jobs = [
-    {
-      role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi",
-      loc: "Putrajaya", period: "2025 – Present",
-      accent: T.indigo, accentRaw: "79,70,229", current: true,
-      points: [
-        "Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS",
-        "Integrated Strapi headless CMS with RESTful APIs for dynamic content",
-        "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI",
-        "Implemented Google OAuth 2.0 for secure authentication",
-        "Managed source code via Git (OSDEC)",
-      ],
-    },
-    {
-      role: "IT Development Intern", company: "SB Tape Group Sdn Bhd",
-      loc: "Seri Kembangan, Selangor", period: "2025",
-      accent: T.violet, accentRaw: "124,58,237", current: false,
-      points: [
-        "Developed IOSS, ICAR & SCAR modules using VB.Net & ASP.NET",
-        "Built weblogin, CRUD operations & report generation",
-        "Designed system flowcharts using Draw.io",
-        "Participated in user requirement meetings",
-      ],
-    },
-    {
-      role: "IT Development Intern", company: "MAP2U Sdn Bhd",
-      loc: "Nilai, Negeri Sembilan", period: "2023",
-      accent: T.cyan, accentRaw: "8,145,178", current: false,
-      points: [
-        "Customised template-based websites & built system components",
-        "Developed data tables & filters for E-idaman project",
-        "Supported UI/UX design for Jabatan Pengaliran Saliran (JPS)",
-      ],
-    },
+    { role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi", loc: "Putrajaya", period: "2025 – Present", accent: T.indigo, accentRaw: "79,70,229", current: true, points: ["Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS", "Integrated Strapi headless CMS with RESTful APIs for dynamic content", "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI", "Implemented Google OAuth 2.0 for secure authentication", "Managed source code via Git (OSDEC)"] },
+    { role: "IT Development Intern", company: "SB Tape Group Sdn Bhd", loc: "Seri Kembangan, Selangor", period: "2025", accent: T.violet, accentRaw: "124,58,237", current: false, points: ["Developed IOSS, ICAR & SCAR modules using VB.Net & ASP.NET", "Built weblogin, CRUD operations & report generation", "Designed system flowcharts using Draw.io", "Participated in user requirement meetings"] },
+    { role: "IT Development Intern", company: "MAP2U Sdn Bhd", loc: "Nilai, Negeri Sembilan", period: "2023", accent: T.cyan, accentRaw: "8,145,178", current: false, points: ["Customised template-based websites & built system components", "Developed data tables & filters for E-idaman project", "Supported UI/UX design for Jabatan Pengaliran Saliran (JPS)"] },
   ];
   const lottieWorkingRef = useRef<HTMLDivElement>(null);
   const lottieCatRef     = useRef<HTMLDivElement>(null);
@@ -781,10 +675,7 @@ function Experience() {
     const observers: IntersectionObserver[] = [];
     cards.forEach((card) => {
       const io = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          import("animejs").then(({ animate }) => { animate(card, { translateX: [-60, 0], opacity: [0, 1], duration: 700, easing: "easeOutExpo" }); });
-          io.disconnect();
-        }
+        if (entry.isIntersecting) { card.animate([{ opacity: 0, transform: "translateX(-60px)" }, { opacity: 1, transform: "translateX(0)" }], { duration: 700, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" }); io.disconnect(); }
       }, { threshold: 0.25 });
       io.observe(card); observers.push(io);
     });
@@ -792,10 +683,7 @@ function Experience() {
     if (workingEl && !isMobile) {
       workingEl.style.opacity = "0"; workingEl.style.transform = "translateX(80px)";
       const ioW = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          import("animejs").then(({ animate }) => { animate(workingEl, { translateX: [80, 0], opacity: [0, 1], duration: 900, delay: 200, easing: "easeOutExpo" }); });
-          ioW.disconnect();
-        }
+        if (entry.isIntersecting) { workingEl.animate([{ opacity: 0, transform: "translateX(80px)" }, { opacity: 1, transform: "translateX(0)" }], { duration: 900, delay: 200, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" }); ioW.disconnect(); }
       }, { threshold: 0.15 });
       ioW.observe(workingEl); observers.push(ioW);
     }
@@ -803,10 +691,7 @@ function Experience() {
     if (catEl && !isMobile) {
       catEl.style.opacity = "0"; catEl.style.transform = "scaleX(-1) translateX(80px)";
       const ioC = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          import("animejs").then(({ animate }) => { animate(catEl, { translateX: [80, 0], opacity: [0, 1], duration: 900, delay: 400, easing: "easeOutExpo" }); });
-          ioC.disconnect();
-        }
+        if (entry.isIntersecting) { catEl.animate([{ opacity: 0, transform: "scaleX(-1) translateX(80px)" }, { opacity: 1, transform: "scaleX(-1) translateX(0)" }], { duration: 900, delay: 400, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" }); ioC.disconnect(); }
       }, { threshold: 0.1 });
       ioC.observe(catEl); observers.push(ioC);
     }
@@ -865,136 +750,23 @@ function Experience() {
   );
 }
 
-/* ─── Projects Data ──────────────────────────────────────────────── */
 const PROJECTS_DATA = [
-  {
-    title: "Portal PADU",
-    org: "Kementerian Ekonomi Malaysia",
-    period: "2025 – Present",
-    role: "Lead Frontend Dev",
-    desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, AI-powered chatbot via Vertex AI, and full Strapi CMS integration with Google OAuth 2.0.",
-    highlights: [
-      "20+ animated page modules",
-      "3D carousel timeline (SejarahPaduPage)",
-      "PADUServices animated infographics",
-      "KolaborasiStrategik agency grid 14+",
-      "Media & press release pages",
-      "Responsive across all breakpoints",
-      "Framer Motion entrance animations",
-      "HeroUI component library",
-    ],
-    tags: ["Next.js 15", "Tailwind CSS", "Strapi", "Vertex AI", "HeroUI"],
-    icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229",
-    status: "Live", statusColor: "#16a34a", href: "/projects/padu",
-  },
-  {
-    title: "MyINFO & PADU Chatbot",
-    org: "Unit PADU, Kementerian Ekonomi",
-    period: "2025 – Present",
-    role: "AI Integration Developer",
-    desc: "AI-powered chatbot built using Google Vertex AI Conversational Agents for both MyINFO and Portal PADU. Features sophisticated NLU, custom Lottie robot animation, shadow DOM CSS injection, and auto-refresh on session close.",
-    highlights: [
-      "Google Vertex AI Conversational Agents",
-      "Natural language understanding (NLU)",
-      "Deployed on MyINFO & Portal PADU",
-      "Custom Lottie robot animation icon",
-      "Shadow DOM CSS injection",
-      "Auto-refresh on chat session close",
-      "Dialogflow intent routing",
-      "Chip text display & welcome intent",
-    ],
-    tags: ["Vertex AI", "Dialogflow", "LottieFiles", "TypeScript", "Next.js"],
-    icon: "🤖", accent: "#0891b2", accentRaw: "8,145,178",
-    status: "Live", statusColor: "#16a34a", href: "/projects/padu",
-  },
-  {
-    title: "Portal Analitik",
-    org: "Kementerian Ekonomi",
-    period: "2025",
-    role: "Frontend Developer",
-    desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.",
-    highlights: [
-      "Interactive chart dashboards",
-      "KPI monitoring panels",
-      "Advanced data filtering system",
-      "REST API integration",
-      "Policy analyst-focused UI",
-      "Real-time data rendering",
-    ],
-    tags: ["Next.js", "React", "Tailwind CSS", "REST API"],
-    icon: "📊", accent: T.violet, accentRaw: "124,58,237",
-    status: "Live", statusColor: "#16a34a", href: "/projects/padu",
-  },
-  {
-    title: "Portal Panduan Pengguna",
-    org: "Kementerian Ekonomi",
-    period: "2025",
-    role: "Frontend Developer",
-    desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.",
-    highlights: [
-      "Strapi headless CMS integration",
-      "Google OAuth 2.0 authentication",
-      "Dynamic content per slug",
-      "Staff role-based access control",
-      "RESTful API content fetching",
-      "SEO optimized URL structure",
-    ],
-    tags: ["Next.js", "Strapi CMS", "Google OAuth", "REST API"],
-    icon: "📖", accent: T.cyan, accentRaw: "8,145,178",
-    status: "Live", statusColor: "#16a34a", href: "/projects/padu",
-  },
-  {
-    title: "Smart Ticket System",
-    org: "Final Year Project · UiTM",
-    period: "2025",
-    role: "Full-Stack Developer",
-    desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.",
-    highlights: [
-      "Real-time seat allocation algorithm",
-      "Interactive Bukit Jalil SVG map",
-      "Full-stack Laravel + MySQL",
-      "CSRF protection & secure checkout",
-      "Admin CRUD dashboard",
-      "E-ticket generation with QR code",
-      "Mobile-first responsive design",
-      "Deployed on InfinityFree hosting",
-    ],
-    tags: ["Laravel", "MySQL", "PHP", "InfinityFree"],
-    icon: "🏟️", accent: "#d97706", accentRaw: "217,119,6",
-    status: "Completed", statusColor: "#0891b2", href: "/projects/fyp-project",
-  },
+  { title: "Portal PADU", org: "Kementerian Ekonomi Malaysia", period: "2025 – Present", role: "Lead Frontend Dev", desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, AI-powered chatbot via Vertex AI, and full Strapi CMS integration with Google OAuth 2.0.", highlights: ["20+ animated page modules","3D carousel timeline (SejarahPaduPage)","PADUServices animated infographics","KolaborasiStrategik agency grid 14+","Media & press release pages","Responsive across all breakpoints","Framer Motion entrance animations","HeroUI component library"], tags: ["Next.js 15","Tailwind CSS","Strapi","Vertex AI","HeroUI"], icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229", status: "Live", statusColor: "#16a34a", href: "/projects/padu" },
+  { title: "MyINFO & PADU Chatbot", org: "Unit PADU, Kementerian Ekonomi", period: "2025 – Present", role: "AI Integration Developer", desc: "AI-powered chatbot built using Google Vertex AI Conversational Agents for both MyINFO and Portal PADU. Features sophisticated NLU, custom Lottie robot animation, shadow DOM CSS injection, and auto-refresh on session close.", highlights: ["Google Vertex AI Conversational Agents","Natural language understanding (NLU)","Deployed on MyINFO & Portal PADU","Custom Lottie robot animation icon","Shadow DOM CSS injection","Auto-refresh on chat session close","Dialogflow intent routing","Chip text display & welcome intent"], tags: ["Vertex AI","Dialogflow","LottieFiles","TypeScript","Next.js"], icon: "🤖", accent: "#0891b2", accentRaw: "8,145,178", status: "Live", statusColor: "#16a34a", href: "/projects/padu" },
+  { title: "Portal Analitik", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer", desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.", highlights: ["Interactive chart dashboards","KPI monitoring panels","Advanced data filtering system","REST API integration","Policy analyst-focused UI","Real-time data rendering"], tags: ["Next.js","React","Tailwind CSS","REST API"], icon: "📊", accent: T.violet, accentRaw: "124,58,237", status: "Live", statusColor: "#16a34a", href: "/projects/padu" },
+  { title: "Portal Panduan Pengguna", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer", desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.", highlights: ["Strapi headless CMS integration","Google OAuth 2.0 authentication","Dynamic content per slug","Staff role-based access control","RESTful API content fetching","SEO optimized URL structure"], tags: ["Next.js","Strapi CMS","Google OAuth","REST API"], icon: "📖", accent: T.cyan, accentRaw: "8,145,178", status: "Live", statusColor: "#16a34a", href: "/projects/padu" },
+  { title: "Smart Ticket System", org: "Final Year Project · UiTM", period: "2025", role: "Full-Stack Developer", desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.", highlights: ["Real-time seat allocation algorithm","Interactive Bukit Jalil SVG map","Full-stack Laravel + MySQL","CSRF protection & secure checkout","Admin CRUD dashboard","E-ticket generation with QR code","Mobile-first responsive design","Deployed on InfinityFree hosting"], tags: ["Laravel","MySQL","PHP","InfinityFree"], icon: "🏟️", accent: "#d97706", accentRaw: "217,119,6", status: "Completed", statusColor: "#0891b2", href: "/projects/fyp-project" },
 ];
 
-/* ─── Feature Grid (PADU-page style) ────────────────────────────── */
 function FeatureGrid({ highlights, accent, accentRaw }: { highlights: string[]; accent: string; accentRaw: string }) {
   return (
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-      gap: "7px 10px",
-    }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "7px 10px" }}>
       {highlights.map((f, i) => (
-        <div key={i} style={{
-          display: "flex", alignItems: "flex-start", gap: 9,
-          padding: "9px 12px", borderRadius: 9,
-          background: T.bg2,
-          border: `1px solid rgba(${accentRaw},.12)`,
-          fontSize: 12.5, color: T.text2, lineHeight: 1.5,
-          transition: "background .18s, border-color .18s",
-        }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.background = `rgba(${accentRaw},.06)`;
-            (e.currentTarget as HTMLElement).style.borderColor = `rgba(${accentRaw},.28)`;
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLElement).style.background = T.bg2;
-            (e.currentTarget as HTMLElement).style.borderColor = `rgba(${accentRaw},.12)`;
-          }}
+        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 9, padding: "9px 12px", borderRadius: 9, background: T.bg2, border: `1px solid rgba(${accentRaw},.12)`, fontSize: 12.5, color: T.text2, lineHeight: 1.5, transition: "background .18s, border-color .18s" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = `rgba(${accentRaw},.06)`; (e.currentTarget as HTMLElement).style.borderColor = `rgba(${accentRaw},.28)`; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = T.bg2; (e.currentTarget as HTMLElement).style.borderColor = `rgba(${accentRaw},.12)`; }}
         >
-          <div style={{
-            width: 5, height: 5, borderRadius: "50%",
-            background: accent, flexShrink: 0, marginTop: 4,
-          }} />
+          <div style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0, marginTop: 4 }} />
           {f}
         </div>
       ))}
@@ -1002,28 +774,20 @@ function FeatureGrid({ highlights, accent, accentRaw }: { highlights: string[]; 
   );
 }
 
-/* ─── Projects Cards (mobile/tablet) ────────────────────────────── */
 function ProjectsCards() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
   const [expandIdx, setExpandIdx] = useState<number | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
   useEffect(() => {
     cardRefs.current.forEach((card, i) => {
       if (!card) return;
       const io = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          import("animejs").then(({ animate }) => {
-            animate(card, { opacity: [0, 1], translateY: [24, 0], duration: 500, delay: i * 80, easing: "easeOutExpo" });
-          });
-          io.disconnect();
-        }
+        if (entry.isIntersecting) { card.animate([{ opacity: 0, transform: "translateY(24px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 500, delay: i * 80, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" }); io.disconnect(); }
       }, { threshold: 0.2 });
       io.observe(card);
     });
   }, []);
-
   return (
     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
       {PROJECTS_DATA.map((p, i) => {
@@ -1039,8 +803,7 @@ function ProjectsCards() {
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                       <span style={{ fontWeight: 700, fontSize: 14, color: T.text }}>{p.title}</span>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, padding: "2px 8px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600 }}>
-                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: p.statusColor }} />
-                        {p.status}
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: p.statusColor }} />{p.status}
                       </span>
                     </div>
                     <div style={{ fontSize: 11.5, color: T.text3, marginTop: 2 }}>{p.org} · {p.period}</div>
@@ -1048,9 +811,7 @@ function ProjectsCards() {
                 </div>
                 <div style={{ fontSize: 11.5, color: p.accent, fontWeight: 600, marginBottom: 10, padding: "3px 10px", borderRadius: 999, background: `rgba(${p.accentRaw},.07)`, border: `1px solid rgba(${p.accentRaw},.15)`, width: "fit-content" }}>{p.role}</div>
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
-                  {p.tags.map(t => (
-                    <span key={t} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2 }}>{t}</span>
-                  ))}
+                  {p.tags.map(t => <span key={t} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2 }}>{t}</span>)}
                 </div>
                 <button onClick={() => setExpandIdx(isOpen ? null : i)} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.text3, background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: isOpen ? 12 : 0 }}>
                   <ArrowRight size={12} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .3s ease", color: p.accent }} />
@@ -1058,16 +819,10 @@ function ProjectsCards() {
                 </button>
                 {isOpen && (
                   <div style={{ borderTop: `1px solid rgba(${p.accentRaw},.12)`, paddingTop: 14, animation: "fadeup .3s ease" }}>
-                    {/* Description */}
                     <p style={{ fontSize: 12.5, color: T.text2, lineHeight: 1.8, marginBottom: 14, paddingLeft: 12, borderLeft: `3px solid rgba(${p.accentRaw},.35)` }}>{p.desc}</p>
-                    {/* Feature label */}
                     <div style={{ fontSize: 10, fontWeight: 700, color: T.text3, letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: "monospace" }}>Key Features</div>
-                    {/* PADU-style feature grid */}
                     <FeatureGrid highlights={p.highlights} accent={p.accent} accentRaw={p.accentRaw} />
-                    <button
-                      onClick={() => window.location.href = p.href}
-                      style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 999, background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.8))`, color: "#fff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12.5, boxShadow: `0 4px 14px rgba(${p.accentRaw},.25)`, marginTop: 14 }}
-                    >
+                    <button onClick={() => window.location.href = p.href} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 999, background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.8))`, color: "#fff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12.5, boxShadow: `0 4px 14px rgba(${p.accentRaw},.25)`, marginTop: 14 }}>
                       View Project <ExternalLink size={12} />
                     </button>
                   </div>
@@ -1081,88 +836,52 @@ function ProjectsCards() {
   );
 }
 
-/* ─── Projects Table (desktop) ───────────────────────────────────── */
 function ProjectsTable() {
   const rowRefs   = useRef<(HTMLTableRowElement | null)[]>([]);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [expandIdx, setExpandIdx] = useState<number | null>(null);
   const [hovIdx,    setHovIdx]    = useState<number | null>(null);
-
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     rowRefs.current.forEach((row, i) => {
       if (!row) return;
       const io = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
-        import("animejs").then(({ animate }) => { animate(row, { opacity: [0, 1], translateY: [20, 0], duration: 480, delay: i * 90, easing: "easeOutExpo" }); });
+        row.animate([{ opacity: 0, transform: "translateY(20px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 480, delay: i * 90, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" });
         io.disconnect();
       }, { threshold: 0.25 });
       io.observe(row); observers.push(io);
     });
     return () => observers.forEach(io => io.disconnect());
   }, []);
-
   const toggle = useCallback((i: number) => {
     if (expandIdx === i) {
       const panel = panelRefs.current[i];
-      if (panel) {
-        import("animejs").then(({ animate }) => {
-          animate(panel, { opacity: [1, 0], translateY: [0, -8], duration: 240, easing: "easeInQuad", complete: () => setExpandIdx(null) });
-        });
-      } else { setExpandIdx(null); }
+      if (panel) { panel.animate([{ opacity: 1, transform: "translateY(0)" }, { opacity: 0, transform: "translateY(-8px)" }], { duration: 240, easing: "ease-in", fill: "forwards" }).finished.then(() => setExpandIdx(null)); } else { setExpandIdx(null); }
       return;
     }
     setExpandIdx(i);
     setTimeout(() => {
       const panel = panelRefs.current[i];
       if (!panel) return;
-      import("animejs").then(({ animate }) => {
-        animate(panel, { opacity: [0, 1], translateY: [-12, 0], duration: 380, easing: "easeOutExpo" });
-        const pills = panel.querySelectorAll<HTMLElement>(".feat-item");
-        if (pills.length) animate(pills, { opacity: [0, 1], translateX: [-8, 0], duration: 280, delay: (_el: any, idx: number) => idx * 40 + 100, easing: "easeOutExpo" });
-        const descEl = panel.querySelector<HTMLElement>(".desc-text");
-        if (descEl) animate(descEl, { opacity: [0, 1], translateY: [8, 0], duration: 400, delay: 60, easing: "easeOutExpo" });
-      });
+      panel.animate([{ opacity: 0, transform: "translateY(-12px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 380, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" });
+      const pills = panel.querySelectorAll<HTMLElement>(".feat-item");
+      pills.forEach((pill, idx) => pill.animate([{ opacity: 0, transform: "translateX(-8px)" }, { opacity: 1, transform: "translateX(0)" }], { duration: 280, delay: idx * 40 + 100, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" }));
+      const descEl = panel.querySelector<HTMLElement>(".desc-text");
+      if (descEl) descEl.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 400, delay: 60, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "forwards" });
     }, 10);
   }, [expandIdx]);
-
   return (
     <>
-      <style>{`
-        .o-row { opacity:0; transition:background .18s ease; cursor:pointer; }
-        .o-row:hover td { background:#ffffff !important; }
-        .o-row.open-row td { background:#ffffff !important; }
-        .o-row:hover .o-title { color:#4f46e5 !important; }
-        .o-row.open-row .o-title { color:#4f46e5 !important; }
-        .o-row:hover .o-chevron { opacity:1 !important; }
-        .o-row.open-row .o-chevron { opacity:1 !important; }
-        .o-chevron { transition:transform .32s ease,opacity .2s ease; }
-        .o-tag { transition:background .15s,color .15s,border-color .15s; }
-        .o-tag:hover { background:rgba(79,70,229,.1) !important; color:#4f46e5 !important; border-color:rgba(79,70,229,.3) !important; }
-        .feat-item { opacity:0; }
-        .feat-item:hover { background:rgba(79,70,229,.06) !important; border-color:rgba(79,70,229,.2) !important; }
-        .desc-text { opacity:0; }
-        .proj-cta-o { transition:all .22s ease; }
-        .proj-cta-o:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15) !important; }
-      `}</style>
+      <style>{`.o-row{opacity:0;transition:background .18s ease;cursor:pointer}.o-row:hover td{background:#ffffff!important}.o-row.open-row td{background:#ffffff!important}.o-row:hover .o-title{color:#4f46e5!important}.o-row.open-row .o-title{color:#4f46e5!important}.o-row:hover .o-chevron{opacity:1!important}.o-row.open-row .o-chevron{opacity:1!important}.o-chevron{transition:transform .32s ease,opacity .2s ease}.o-tag{transition:background .15s,color .15s,border-color .15s}.o-tag:hover{background:rgba(79,70,229,.1)!important;color:#4f46e5!important;border-color:rgba(79,70,229,.3)!important}.feat-item{opacity:0}.feat-item:hover{background:rgba(79,70,229,.06)!important;border-color:rgba(79,70,229,.2)!important}.desc-text{opacity:0}.proj-cta-o{transition:all .22s ease}.proj-cta-o:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)!important}`}</style>
       <div style={{ borderRadius: 18, overflow: "hidden", border: `1px solid ${T.border2}`, boxShadow: "0 6px 32px rgba(0,0,0,.07)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          {/* ── colgroup: removed metric col ── */}
-          <colgroup>
-            <col style={{ width: 5 }} />
-            <col style={{ width: 46 }} />
-            <col />
-            <col style={{ width: "14%" }} />
-            <col style={{ width: "12%" }} />
-            <col style={{ width: "25%" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: 44 }} />
-          </colgroup>
+          <colgroup><col style={{ width: 5 }} /><col style={{ width: 46 }} /><col /><col style={{ width: "14%" }} /><col style={{ width: "12%" }} /><col style={{ width: "25%" }} /><col style={{ width: "10%" }} /><col style={{ width: 44 }} /></colgroup>
           <thead>
             <tr style={{ background: T.bg3 }}>
               <th style={{ padding: 0, borderBottom: `1px solid ${T.border2}` }} />
               <th style={{ padding: "12px 0 12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left", fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase", letterSpacing: "0.08em" }}>#</th>
-              {["Project", "Role", "Period", "Stack", "Status", ""].map((h, ci) => (
+              {["Project","Role","Period","Stack","Status",""].map((h, ci) => (
                 <th key={ci} style={{ padding: ci === 5 ? "12px 16px 12px 0" : "12px 14px", borderBottom: `1px solid ${T.border2}`, textAlign: "left", fontSize: 10.5, fontWeight: 600, color: T.text3, textTransform: "uppercase", letterSpacing: "0.08em" }}>{h}</th>
               ))}
             </tr>
@@ -1174,17 +893,13 @@ function ProjectsTable() {
               const bdClr  = i < PROJECTS_DATA.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
               return (
                 <React.Fragment key={i}>
-                  <tr ref={el => { rowRefs.current[i] = el; }} className={`o-row ${isOpen ? "open-row" : ""}`}
-                    onMouseEnter={() => setHovIdx(i)} onMouseLeave={() => setHovIdx(null)} onClick={() => toggle(i)}>
-                    {/* Accent bar */}
+                  <tr ref={el => { rowRefs.current[i] = el; }} className={`o-row ${isOpen ? "open-row" : ""}`} onMouseEnter={() => setHovIdx(i)} onMouseLeave={() => setHovIdx(null)} onClick={() => toggle(i)}>
                     <td style={{ padding: 0, background: isOpen || hovIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, transition: "background .2s", borderBottom: bdClr }} />
-                    {/* Number */}
                     <td style={{ padding: "18px 0 18px 14px", background: rowBg, borderBottom: bdClr }}>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: `rgba(${p.accentRaw},.08)`, border: `1px solid rgba(${p.accentRaw},.18)` }}>
                         <span style={{ fontFamily: "monospace", fontSize: 10.5, fontWeight: 700, color: p.accent }}>{i + 1}</span>
                       </div>
                     </td>
-                    {/* Project name */}
                     <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 20, flexShrink: 0 }}>{p.icon}</span>
@@ -1194,79 +909,43 @@ function ProjectsTable() {
                         </div>
                       </div>
                     </td>
-                    {/* Role */}
-                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                      <span style={{ fontSize: 12, color: T.text2, fontWeight: 500 }}>{p.role}</span>
-                    </td>
-                    {/* Period */}
-                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
-                      <span style={{ fontSize: 12, color: T.text3 }}>{p.period}</span>
-                    </td>
-                    {/* Stack */}
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}><span style={{ fontSize: 12, color: T.text2, fontWeight: 500 }}>{p.role}</span></td>
+                    <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}><span style={{ fontSize: 12, color: T.text3 }}>{p.period}</span></td>
                     <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
                       <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {p.tags.slice(0, 3).map(t => (
-                          <span key={t} className="o-tag" style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2, whiteSpace: "nowrap" }}>{t}</span>
-                        ))}
+                        {p.tags.slice(0, 3).map(t => <span key={t} className="o-tag" style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg2, color: T.text2, whiteSpace: "nowrap" }}>{t}</span>)}
                         {p.tags.length > 3 && <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, border: `1px solid ${T.border2}`, background: T.bg3, color: T.text3 }}>+{p.tags.length - 3}</span>}
                       </div>
                     </td>
-                    {/* Status */}
                     <td style={{ padding: "18px 14px", background: rowBg, borderBottom: bdClr }}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 10.5, padding: "3px 9px", borderRadius: 999, background: `${p.statusColor}14`, border: `1px solid ${p.statusColor}33`, color: p.statusColor, fontWeight: 600, whiteSpace: "nowrap" }}>
                         <span style={{ width: 5, height: 5, borderRadius: "50%", background: p.statusColor }} />{p.status}
                       </span>
                     </td>
-                    {/* Chevron */}
                     <td style={{ padding: "18px 16px 18px 0", background: rowBg, borderBottom: bdClr, textAlign: "right" }}>
                       <div className="o-chevron" style={{ opacity: isOpen ? 1 : 0.2, display: "inline-flex", width: 28, height: 28, borderRadius: "50%", border: `1px solid rgba(${p.accentRaw},.25)`, background: isOpen ? `rgba(${p.accentRaw},.12)` : `rgba(${p.accentRaw},.06)`, alignItems: "center", justifyContent: "center" }}>
                         <ArrowRight size={12} color={p.accent} style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .32s ease" }} />
                       </div>
                     </td>
                   </tr>
-
-                  {/* ── Expanded panel ── */}
                   {isOpen && (
                     <tr>
                       <td style={{ padding: 0, background: p.accent, borderBottom: `1px solid ${T.border}` }} />
                       <td colSpan={7} style={{ padding: "0 24px 28px 16px", background: "#ffffff", borderBottom: `1px solid ${T.border}` }}>
                         <div ref={el => { panelRefs.current[i] = el; }} style={{ opacity: 0 }}>
-                          {/* Top accent bar */}
                           <div style={{ height: 2, background: `linear-gradient(90deg, rgba(${p.accentRaw},1) 0%, rgba(${p.accentRaw},.15) 60%, transparent 100%)`, borderRadius: 99, marginBottom: 20, marginTop: 4 }} />
-
-                          {/* Description */}
-                          <p className="desc-text" style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.85, marginBottom: 18, maxWidth: 660, paddingLeft: 14, borderLeft: `3px solid rgba(${p.accentRaw},.4)` }}>
-                            {p.desc}
-                          </p>
-
-                          {/* Features label */}
-                          <div style={{ fontSize: 10, fontWeight: 700, color: T.text3, letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: 12, fontFamily: "monospace" }}>
-                            Key Features
-                          </div>
-
-                          {/* PADU-style feature grid */}
+                          <p className="desc-text" style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.85, marginBottom: 18, maxWidth: 660, paddingLeft: 14, borderLeft: `3px solid rgba(${p.accentRaw},.4)` }}>{p.desc}</p>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: T.text3, letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: 12, fontFamily: "monospace" }}>Key Features</div>
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px,1fr))", gap: "7px 10px", marginBottom: 22 }}>
                             {p.highlights.map((f, fi) => (
-                              <div key={fi} className="feat-item" style={{
-                                display: "flex", alignItems: "flex-start", gap: 9,
-                                padding: "9px 12px", borderRadius: 9,
-                                background: T.bg2,
-                                border: `1px solid rgba(${p.accentRaw},.12)`,
-                                fontSize: 12.5, color: T.text2, lineHeight: 1.5,
-                                transition: "background .18s, border-color .18s",
-                              }}>
-                                <div style={{ width: 5, height: 5, borderRadius: "50%", background: p.accent, flexShrink: 0, marginTop: 4 }} />
-                                {f}
+                              <div key={fi} className="feat-item" style={{ display: "flex", alignItems: "flex-start", gap: 9, padding: "9px 12px", borderRadius: 9, background: T.bg2, border: `1px solid rgba(${p.accentRaw},.12)`, fontSize: 12.5, color: T.text2, lineHeight: 1.5, transition: "background .18s, border-color .18s" }}>
+                                <div style={{ width: 5, height: 5, borderRadius: "50%", background: p.accent, flexShrink: 0, marginTop: 4 }} />{f}
                               </div>
                             ))}
                           </div>
-
-                          {/* Footer row: tags + CTA */}
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
                             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                              {p.tags.map(t => (
-                                <span key={t} className="o-tag" style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${p.accentRaw},.2)`, background: `rgba(${p.accentRaw},.06)`, color: p.accent, fontWeight: 500 }}>{t}</span>
-                              ))}
+                              {p.tags.map(t => <span key={t} className="o-tag" style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${p.accentRaw},.2)`, background: `rgba(${p.accentRaw},.06)`, color: p.accent, fontWeight: 500 }}>{t}</span>)}
                             </div>
                             <button className="proj-cta-o" onClick={e => { e.stopPropagation(); window.location.href = p.href; }} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px", borderRadius: 999, background: `linear-gradient(135deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.75))`, color: "#ffffff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13, boxShadow: `0 4px 16px rgba(${p.accentRaw},.28)`, whiteSpace: "nowrap" }}>
                               View Project <ExternalLink size={13} />
@@ -1281,14 +960,10 @@ function ProjectsTable() {
             })}
           </tbody>
         </table>
-
-        {/* Footer pagination dots */}
         <div style={{ padding: "11px 18px", background: T.bg3, borderTop: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: 11, color: T.text3 }}>{PROJECTS_DATA.length} projects · 2025</span>
           <div style={{ display: "flex", gap: 5 }}>
-            {PROJECTS_DATA.map((p, i) => (
-              <div key={i} onClick={() => toggle(i)} style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }} />
-            ))}
+            {PROJECTS_DATA.map((p, i) => <div key={i} onClick={() => toggle(i)} style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }} />)}
           </div>
         </div>
       </div>
@@ -1306,15 +981,11 @@ function Projects() {
         <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", marginBottom: isMobile ? 24 : 32, gap: 14 }}>
           <div>
             <SBadge><Layers size={11} />Work</SBadge>
-            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>
-              Featured <span className="gtext">Projects</span>
-            </h2>
+            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>Featured <span className="gtext">Projects</span></h2>
           </div>
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <p style={{ fontSize: 12.5, color: T.text3 }}>
-                {isTablet ? "Tap to expand ↓" : "Click any row to read more ↓"}
-              </p>
+              <p style={{ fontSize: 12.5, color: T.text3 }}>{isTablet ? "Tap to expand ↓" : "Click any row to read more ↓"}</p>
               <div style={{ display: "flex", gap: 8 }}>
                 {[{ color: T.indigo, label: "Gov Portal" }, { color: "#0891b2", label: "AI / Bot" }, { color: "#d97706", label: "Academic" }].map(l => (
                   <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
@@ -1339,7 +1010,6 @@ function Contact() {
   const isTablet = bp === "tablet";
   const email = "izzatzamri01@gmail.com";
   const copy = () => { navigator.clipboard?.writeText(email); setCopied(true); setTimeout(() => setCopied(false), 2500); };
-
   useEffect(() => {
     const container = canvasWrapRef.current;
     if (!container) return;
@@ -1354,30 +1024,22 @@ function Contact() {
       const camera   = new THREE.PerspectiveCamera(65, width / height, 0.1, 20);
       const geometry = new THREE.BoxGeometry(1, 1, 1);
       const material = new THREE.MeshBasicMaterial({ color: 0xa5b4fc, wireframe: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.domElement.style.position = "absolute";
-      renderer.domElement.style.inset = "0";
-      container.appendChild(renderer.domElement);
-      rendererRef = renderer;
-      camera.position.z = 5;
+      renderer.setSize(width, height); renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.domElement.style.position = "absolute"; renderer.domElement.style.inset = "0";
+      container.appendChild(renderer.domElement); rendererRef = renderer; camera.position.z = 5;
       function spawnCube() {
         const cube = new THREE.Mesh(geometry, material);
         const x = utils.random(-10, 10, 2), y = utils.random(-5, 5, 2), z = [-10, 7] as [number, number];
         const r = () => utils.random(-Math.PI * 2, Math.PI * 2, 3);
         const duration = 4000;
-        createTimeline({ delay: utils.random(0, duration), defaults: { loop: true, duration, ease: "inSine" } }).add(cube.position, { x, y, z }, 0).add(cube.rotation, { x: r, y: r, z: r }, 0).init();
+        createTimeline({ delay: utils.random(0, duration), defaults: { loop: true, duration, ease: "inSine" } }).add(cube.position, { x, y, z, at: 0 }).add(cube.rotation, { x: r, y: r, z: r, at: 0 }).init();
         scene.add(cube);
       }
       for (let i = 0; i < 40; i++) spawnCube();
       renderer.setAnimationLoop(() => { engine.update(); renderer.render(scene, camera); });
     });
-    return () => {
-      dead = true;
-      if (rendererRef) { rendererRef.setAnimationLoop(null); rendererRef.dispose(); if (rendererRef.domElement?.parentNode === container) container.removeChild(rendererRef.domElement); }
-    };
+    return () => { dead = true; if (rendererRef) { rendererRef.setAnimationLoop(null); rendererRef.dispose(); if (rendererRef.domElement?.parentNode === container) container.removeChild(rendererRef.domElement); } };
   }, []);
-
   const linksGrid = isMobile ? "1fr" : "repeat(3,1fr)";
   return (
     <section id="contact" style={{ position: "relative", background: "#0d0d0f", padding: `${isMobile ? 72 : 96}px ${isMobile ? 20 : 24}px ${isMobile ? 130 : 160}px`, overflow: "hidden" }}>
@@ -1399,16 +1061,10 @@ function Contact() {
                 <code style={{ fontSize: isMobile ? 11.5 : 13, color: "#818cf8", marginTop: 6, display: "block" }}>{email}</code>
               </div>
             </div>
-            <SBtn onClick={copy} style={isMobile ? { width: "100%" } : {}}>
-              {copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}
-            </SBtn>
+            <SBtn onClick={copy} style={isMobile ? { width: "100%" } : {}}>{copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}</SBtn>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: linksGrid, gap: 10 }}>
-            {[
-              { Icon: Github,   lbl: "GitHub",     hdl: "github.com/izzatimran" },
-              { Icon: Linkedin, lbl: "LinkedIn",   hdl: "Izzat Imran" },
-              { Icon: Globe2,   lbl: "University", hdl: "UiTM · CS Graduate 2025" },
-            ].map(({ Icon, lbl, hdl }) => (
+            {[{ Icon: Github, lbl: "GitHub", hdl: "github.com/izzatimran" }, { Icon: Linkedin, lbl: "LinkedIn", hdl: "Izzat Imran" }, { Icon: Globe2, lbl: "University", hdl: "UiTM · CS Graduate 2025" }].map(({ Icon, lbl, hdl }) => (
               <div key={lbl} style={{ padding: "18px 16px", borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(16px)", cursor: "pointer" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                   <div style={{ borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", padding: 9 }}><Icon size={17} color="rgba(255,255,255,0.6)" /></div>
@@ -1427,49 +1083,25 @@ function Contact() {
   );
 }
 
-/* ─── Main Portfolio Component ───────────────────────────────────── */
 export default function Portfolio() {
-  const [loaded, setLoaded] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return !!sessionStorage.getItem("portfolio_visited");
-  });
+  const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState("hero");
-
-  const goto = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setActive(id);
-  }, []);
-
+  useEffect(() => { if (sessionStorage.getItem("portfolio_visited")) { setLoaded(true); } }, []);
+  const goto = useCallback((id: string) => { smoothScrollTo(id); setActive(id); }, []);
   useEffect(() => {
     const fn = () => {
-      for (const id of ["hero", "about", "skills", "exp", "proj", "contact"]) {
+      for (const id of ["hero","about","skills","exp","proj","contact"]) {
         const el = document.getElementById(id);
-        if (el) {
-          const r = el.getBoundingClientRect();
-          if (r.top <= 180 && r.bottom >= 180) { setActive(id); break; }
-        }
+        if (el) { const r = el.getBoundingClientRect(); if (r.top <= 180 && r.bottom >= 180) { setActive(id); break; } }
       }
     };
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
-
   return (
     <>
-      {!loaded && (
-        <LoadingScreen
-          onDone={() => {
-            sessionStorage.setItem("portfolio_visited", "1");
-            setLoaded(true);
-          }}
-        />
-      )}
-      <div style={{
-        fontFamily: "'Inter',system-ui,-apple-system,sans-serif",
-        background: "#f8f7f4", minHeight: "100vh",
-        opacity: loaded ? 1 : 0,
-        transition: "opacity .5s ease",
-      }}>
+      {!loaded && <LoadingScreen onDone={() => { sessionStorage.setItem("portfolio_visited", "1"); setLoaded(true); }} />}
+      <div style={{ fontFamily: "'Inter',system-ui,-apple-system,sans-serif", background: "#f8f7f4", minHeight: "100vh", opacity: loaded ? 1 : 0, transition: "opacity .5s ease" }}>
         <style>{TECH_CSS}</style>
         <style>{RESPONSIVE_CSS}</style>
         <Hero />

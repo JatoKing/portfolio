@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   ArrowLeft, ExternalLink, Calendar, MapPin,
-  Users, Code2, Trophy, Star, ChevronRight, Zap, X, ZoomIn,
+  Users, Code2, Trophy, Star, Zap, X, ZoomIn,
   AlertTriangle, Target, CheckCircle2, FileText,
 } from "lucide-react";
 
@@ -231,8 +231,8 @@ function ObjectiveCard({
       style={{
         display: "flex", alignItems: "flex-start", gap: 20,
         padding: "20px 24px", borderRadius: 16,
-        background: hov ? "rgba(22,163,74,0.07)" : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hov ? "rgba(22,163,74,0.28)" : C.border}`,
+        background: hov ? "rgba(22,163,74,0.07)" : C.card,
+        border: `1px solid ${hov ? "rgba(22,163,74,0.28)" : C.border2}`,
         transition: "all 0.25s ease", cursor: "default",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateX(0)" : "translateX(-16px)",
@@ -467,7 +467,7 @@ function ProblemObjectivesSection() {
           {/* Objective cards with vertical connector line */}
           <div style={{ position: "relative" }}>
             <div style={{
-              position: "absolute", left: 23, top: 48, bottom: 48, width: 1,
+              position: "absolute", left: 48, top: 48, bottom: 48, width: 1,
               background: "linear-gradient(180deg, rgba(22,163,74,0.4), rgba(22,163,74,0.06))",
               pointerEvents: "none",
             }} />
@@ -493,6 +493,7 @@ interface ModalData {
 
 function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => void }) {
   const [imgLoaded, setImgLoaded] = useState(false);
+  const modalImgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -503,6 +504,10 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
       document.body.style.overflow = "";
     };
   }, [onClose]);
+
+  useEffect(() => {
+    if (modalImgRef.current?.complete) setImgLoaded(true);
+  }, [data.src]);
 
   return (
     <div
@@ -590,6 +595,7 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
             </div>
           )}
           <img
+            ref={modalImgRef}
             src={data.src} alt={data.alt}
             onLoad={() => setImgLoaded(true)}
             style={{
@@ -632,6 +638,7 @@ function ScreenshotCard({
   const [loaded, setLoaded] = useState(false);
   const [hov, setHov] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -643,6 +650,10 @@ function ScreenshotCard({
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true);
+  }, [src]);
 
   return (
     <div
@@ -710,6 +721,7 @@ function ScreenshotCard({
           </div>
         )}
         <img
+          ref={imgRef}
           src={src} alt={alt}
           onLoad={() => setLoaded(true)}
           style={{
@@ -1106,28 +1118,6 @@ export default function SmartTicketPage() {
         </div>
       </section>
 
-      {/* ── CTA Footer ── */}
-      <section style={{
-        padding: "64px 24px",
-        background: `linear-gradient(180deg, ${C.bg}, #040709)`,
-        borderTop: `1px solid rgba(22,163,74,0.1)`,
-        textAlign: "center",
-      }}>
-        <p style={{ fontSize: 13, color: C.muted2, marginBottom: 28 }}>Want to see more projects?</p>
-        <a href="/" style={{ textDecoration: "none" }}>
-          <button className="cta-btn" style={{
-            display: "inline-flex", alignItems: "center", gap: 10,
-            padding: "13px 30px", borderRadius: 999,
-            background: `linear-gradient(135deg, ${C.green}, ${C.green2})`,
-            color: "#fff", border: "none", cursor: "pointer",
-            fontWeight: 700, fontSize: 14,
-            boxShadow: "0 8px 24px rgba(22,163,74,0.25)",
-            transition: "all 0.25s ease",
-          }}>
-            <ArrowLeft size={15} /> Back to Portfolio <ChevronRight size={15} />
-          </button>
-        </a>
-      </section>
     </div>
   );
 }
