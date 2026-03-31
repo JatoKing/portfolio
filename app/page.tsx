@@ -6,6 +6,7 @@ import {
   ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap,
 } from "lucide-react";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import { FloatingClouds } from "@/components/ui/FloatingClouds";
 
 interface TypingAnimProps { words: string[]; spd?: number; del?: number; pause?: number; }
 interface MCardProps { children: React.ReactNode; style?: React.CSSProperties; glow?: string; className?: string; }
@@ -291,75 +292,6 @@ function FloatingCodeBg() {
   );
 }
 
-/* ─── World Map Background ───────────────────────────────────────── */
-function WorldMapBg() {
-  const [svg, setSvg] = useState<string>("");
-
-  useEffect(() => {
-    import("dotted-map").then(({ default: DottedMap }) => {
-      const map = new DottedMap({ height: 60, grid: "diagonal" });
-      const svgStr = map.getSVG({
-        radius: 0.28,
-        color: "rgba(79,70,229,0.28)",
-        shape: "circle",
-        backgroundColor: "transparent",
-      });
-      setSvg(svgStr);
-    });
-  }, []);
-
-  if (!svg) return null;
-
-  // Malaysia (KL): lng 101.9758 → ~78.3% from left, lat 4.2105 → ~47.7% from top
-  const pinX = "78.3%";
-  const pinY = "47.7%";
-  const flagR = 18; // radius of flag circle in px
-
-  return (
-    <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden" }}>
-      {/* Global dotted map */}
-      <div style={{ position: "absolute", inset: 0 }} dangerouslySetInnerHTML={{ __html: svg }} />
-
-      {/* Edge fade */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: `radial-gradient(ellipse 80% 75% at 50% 50%, transparent 40%, ${T.bg} 85%)`,
-      }} />
-
-      {/* Malaysia pin */}
-      <div style={{
-        position: "absolute", left: pinX, top: pinY,
-        transform: "translate(-50%, -50%)",
-        display: "flex", alignItems: "center", gap: 6,
-        zIndex: 10, pointerEvents: "none",
-      }}>
-        {/* Flag circle */}
-        <div style={{
-          width: flagR * 2, height: flagR * 2, borderRadius: "50%",
-          overflow: "hidden", border: "2px solid rgba(79,70,229,0.5)",
-          boxShadow: "0 0 0 3px rgba(79,70,229,0.15)",
-          flexShrink: 0, animation: "myPulse 2.5s ease-out infinite",
-        }}>
-          <img
-            src="https://flagcdn.com/w80/my.webp"
-            alt="Malaysia"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </div>
-        {/* Label pill */}
-        <div style={{
-          background: "rgba(0,0,0,0.55)", backdropFilter: "blur(6px)",
-          borderRadius: 999, padding: "3px 10px",
-          fontSize: 11, fontWeight: 600, color: "#ffffff",
-          whiteSpace: "nowrap", letterSpacing: "0.02em",
-        }}>
-          Malaysia
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── Hero ───────────────────────────────────────────────────────── */
 function Hero() {
   const bp       = useBreakpoint();
@@ -369,15 +301,15 @@ function Hero() {
 
   return (
     <section id="hero" style={{
-      position: "relative", minHeight: "100vh", background: T.bg,
+      position: "relative", minHeight: "100vh",
+      background: "linear-gradient(to bottom, #7dd3fc, #bae6fd, #e0f2fe)",
       display: "flex", alignItems: "center", justifyContent: "center",
       overflow: "hidden", padding: isMobile ? "80px 28px 130px" : "80px 32px 120px",
     }}>
-      {/* World Map Background */}
-      <WorldMapBg />
-      {/* Ambient glows */}
-      <div style={{ position: "absolute", width: 500, height: 500, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(110px)", zIndex: 0 }} />
-      <div style={{ position: "absolute", width: 320, height: 320, bottom: "8%", right: "10%", borderRadius: "50%", background: "rgba(124,58,237,.04)", filter: "blur(90px)", zIndex: 0 }} />
+      {/* Clouds layer belakang */}
+      <FloatingClouds number={8} minSize={48} maxSize={80} minSpeed={35} maxSpeed={55} />
+      {/* Clouds layer depan */}
+      <FloatingClouds number={6} minSize={20} maxSize={40} minSpeed={18} maxSpeed={30} />
 
       {/* Centered content */}
       <div style={{
