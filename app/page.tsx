@@ -6,7 +6,6 @@ import {
   ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap,
 } from "lucide-react";
 import LoadingScreen from "@/components/ui/LoadingScreen";
-import { FloatingClouds } from "@/components/ui/FloatingClouds";
 
 interface TypingAnimProps { words: string[]; spd?: number; del?: number; pause?: number; }
 interface MCardProps { children: React.ReactNode; style?: React.CSSProperties; glow?: string; className?: string; }
@@ -301,15 +300,15 @@ function Hero() {
 
   return (
     <section id="hero" style={{
-      position: "relative", minHeight: "100vh",
-      background: "linear-gradient(to bottom, #7dd3fc, #bae6fd, #e0f2fe)",
+      position: "relative", minHeight: "100vh", background: T.bg,
       display: "flex", alignItems: "center", justifyContent: "center",
       overflow: "hidden", padding: isMobile ? "80px 28px 130px" : "80px 32px 120px",
     }}>
-      {/* Clouds layer belakang */}
-      <FloatingClouds number={8} minSize={48} maxSize={80} minSpeed={35} maxSpeed={55} />
-      {/* Clouds layer depan */}
-      <FloatingClouds number={6} minSize={20} maxSize={40} minSpeed={18} maxSpeed={30} />
+      {/* Dot grid */}
+      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.07) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
+      {/* Ambient glows */}
+      <div style={{ position: "absolute", width: 500, height: 500, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(110px)", zIndex: 0 }} />
+      <div style={{ position: "absolute", width: 320, height: 320, bottom: "8%", right: "10%", borderRadius: "50%", background: "rgba(124,58,237,.04)", filter: "blur(90px)", zIndex: 0 }} />
 
       {/* Centered content */}
       <div style={{
