@@ -895,6 +895,25 @@ export default function SmartTicketPage() {
           overflow: "hidden", padding: "120px 24px 60px",
         }}
       >
+        {/* Left arrow — navigate to PADU project */}
+        <a
+          href="/projects/padu"
+          style={{
+            position: "absolute", left: 20, top: "50%", transform: "translateY(-50%)",
+            zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+            background: "rgba(15,28,33,0.85)", border: `1px solid ${C.border2}`, borderRadius: 16,
+            padding: "20px 14px", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.3)",
+            color: C.muted, fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+            textTransform: "uppercase", textDecoration: "none", transition: "all .2s ease",
+            backdropFilter: "blur(12px)",
+          }}
+          onMouseEnter={e => { const b = e.currentTarget; b.style.color = C.green3; b.style.borderColor = "rgba(74,222,128,0.4)"; b.style.boxShadow = "0 8px 28px rgba(22,163,74,.2)"; }}
+          onMouseLeave={e => { const b = e.currentTarget; b.style.color = C.muted; b.style.borderColor = C.border2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.3)"; }}
+        >
+          <ArrowLeft size={24} />
+          <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>PADU</span>
+        </a>
+
         <div style={{ position: "absolute", inset: 0 }}>
           <div style={{
             position: "absolute", inset: 0, zIndex: 1,

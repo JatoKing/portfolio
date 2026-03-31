@@ -39,6 +39,8 @@ const T = {
 
 const TECH_CSS = `
   @keyframes beammove { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
+  @keyframes myPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(79,70,229,0.5); } 50% { box-shadow: 0 0 0 10px rgba(79,70,229,0); } }
+  @keyframes myRipple { 0% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; } 100% { transform: translate(-50%,-50%) scale(3.5); opacity: 0; } }
   .techpill { transition: border-color .2s, background .2s, color .2s; cursor: default; }
   .techpill:hover { border-color: rgba(79,70,229,.35) !important; background: rgba(79,70,229,.07) !important; color: #4f46e5 !important; }
 `;
@@ -289,6 +291,75 @@ function FloatingCodeBg() {
   );
 }
 
+/* ─── World Map Background ───────────────────────────────────────── */
+function WorldMapBg() {
+  const [svg, setSvg] = useState<string>("");
+
+  useEffect(() => {
+    import("dotted-map").then(({ default: DottedMap }) => {
+      const map = new DottedMap({ height: 60, grid: "diagonal" });
+      const svgStr = map.getSVG({
+        radius: 0.28,
+        color: "rgba(79,70,229,0.28)",
+        shape: "circle",
+        backgroundColor: "transparent",
+      });
+      setSvg(svgStr);
+    });
+  }, []);
+
+  if (!svg) return null;
+
+  // Malaysia (KL): lng 101.9758 → ~78.3% from left, lat 4.2105 → ~47.7% from top
+  const pinX = "78.3%";
+  const pinY = "47.7%";
+  const flagR = 18; // radius of flag circle in px
+
+  return (
+    <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden" }}>
+      {/* Global dotted map */}
+      <div style={{ position: "absolute", inset: 0 }} dangerouslySetInnerHTML={{ __html: svg }} />
+
+      {/* Edge fade */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: `radial-gradient(ellipse 80% 75% at 50% 50%, transparent 40%, ${T.bg} 85%)`,
+      }} />
+
+      {/* Malaysia pin */}
+      <div style={{
+        position: "absolute", left: pinX, top: pinY,
+        transform: "translate(-50%, -50%)",
+        display: "flex", alignItems: "center", gap: 6,
+        zIndex: 10, pointerEvents: "none",
+      }}>
+        {/* Flag circle */}
+        <div style={{
+          width: flagR * 2, height: flagR * 2, borderRadius: "50%",
+          overflow: "hidden", border: "2px solid rgba(79,70,229,0.5)",
+          boxShadow: "0 0 0 3px rgba(79,70,229,0.15)",
+          flexShrink: 0, animation: "myPulse 2.5s ease-out infinite",
+        }}>
+          <img
+            src="https://flagcdn.com/w80/my.webp"
+            alt="Malaysia"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+        {/* Label pill */}
+        <div style={{
+          background: "rgba(0,0,0,0.55)", backdropFilter: "blur(6px)",
+          borderRadius: 999, padding: "3px 10px",
+          fontSize: 11, fontWeight: 600, color: "#ffffff",
+          whiteSpace: "nowrap", letterSpacing: "0.02em",
+        }}>
+          Malaysia
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Hero ───────────────────────────────────────────────────────── */
 function Hero() {
   const bp       = useBreakpoint();
@@ -302,8 +373,8 @@ function Hero() {
       display: "flex", alignItems: "center", justifyContent: "center",
       overflow: "hidden", padding: isMobile ? "80px 28px 130px" : "80px 32px 120px",
     }}>
-      {/* Dot grid */}
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(79,70,229,.07) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
+      {/* World Map Background */}
+      <WorldMapBg />
       {/* Ambient glows */}
       <div style={{ position: "absolute", width: 500, height: 500, top: "5%", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "rgba(79,70,229,.06)", filter: "blur(110px)", zIndex: 0 }} />
       <div style={{ position: "absolute", width: 320, height: 320, bottom: "8%", right: "10%", borderRadius: "50%", background: "rgba(124,58,237,.04)", filter: "blur(90px)", zIndex: 0 }} />

@@ -173,18 +173,6 @@ function ShinyBadge({ children }: { children:React.ReactNode }) {
   );
 }
 
-/* ─── Number Ticker ───────────────────────────── */
-function Ticker({ to, sfx="" }: { to:number; sfx?:string }) {
-  const [n,setN]=useState(0); const ref=useRef<HTMLSpanElement>(null); const done=useRef(false);
-  useEffect(()=>{
-    const io=new IntersectionObserver(([e])=>{
-      if(e.isIntersecting&&!done.current){ done.current=true; let t0:number|undefined;
-        const step=(ts:number)=>{if(!t0)t0=ts;const p=Math.min((ts-t0)/1400,1);setN(Math.round((1-(1-p)**3)*to));if(p<1)requestAnimationFrame(step);};
-        requestAnimationFrame(step);}},{threshold:.5});
-    if(ref.current)io.observe(ref.current); return()=>io.disconnect();
-  },[to]);
-  return <span ref={ref}>{n}{sfx}</span>;
-}
 
 /* ─── File Tree ───────────────────────────────── */
 function TreeNode({ node, depth=0 }: { node:FileNode; depth?:number }) {
@@ -258,19 +246,19 @@ const PROJECTS: {
 }[] = [
   {
     id:"awam", idx:"01", icon:"🇲🇾", title:"Portal Awam PADU",
-    imgs:["/images/portal-awam-1.png","/images/portal-awam-2.png","/images/portal-awam-3.png"],
+    imgs:["/homeportalawam.png"],
     sub:"Public Portal · padu-portal-awam-v2",
     color:T.ind, colorRaw:"79,70,229",
     desc:"Portal awam rasmi Pangkalan Data Utama Malaysia. Antara muka utama untuk rakyat Malaysia mengakses maklumat sosio-ekonomi, semak status, dan berinteraksi dengan sistem PADU. Dibangunkan dengan 20+ halaman animasi termasuk infografik, karusel 3D, dan chatbot AI.",
     stats:[{v:100,sfx:"k+",l:"Daily Users"},{v:20,sfx:"+",l:"Pages"},{v:4,sfx:"",l:"Core Services"}],
     features:["20+ animated page modules","3D carousel timeline (SejarahPaduPage)","PADUServices animated infographics","KolaborasiStrategik agency grid 14+","Media & press release pages","Responsive across all breakpoints","Framer Motion entrance animations","HeroUI component library"],
     techs:[
-      {n:"Next.js 15",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
+      {n:"Next.js",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
       {n:"TypeScript",img:"https://cdn.simpleicons.org/typescript"},
-      {n:"Tailwind CSS",img:"https://cdn.simpleicons.org/tailwindcss"},
+      {n:"Tailwind",img:"https://cdn.simpleicons.org/tailwindcss"},
       {n:"HeroUI",img:"https://cdn.simpleicons.org/heroui/111111"},
-      {n:"Framer Motion",img:"https://cdn.simpleicons.org/framer/111111"},
-      {n:"LottieFiles",img:"https://cdn.simpleicons.org/lottiefiles"},
+      {n:"Framer",img:"https://cdn.simpleicons.org/framer/111111"},
+      {n:"Lottie",img:"https://cdn.simpleicons.org/lottiefiles"},
     ],
     tree:[
       {name:"app",type:"folder",children:[
@@ -293,7 +281,7 @@ const PROJECTS: {
   },
   {
     id:"panduan", idx:"02", icon:"📖", title:"Portal Panduan Pengguna",
-    imgs:["/images/portal-panduan-1.png","/images/portal-panduan-2.png"],
+    imgs:["/homepanduan.png"],
     sub:"User Guide Portal · Strapi CMS",
     color:T.vio, colorRaw:"124,58,237",
     desc:"Portal panduan pengguna rasmi dengan headless CMS menggunakan Strapi. Membolehkan pengurusan kandungan dinamik oleh admin tanpa perlu kod, dilengkapi autentikasi selamat Google OAuth 2.0 untuk kawalan akses kakitangan kerajaan.",
@@ -325,8 +313,47 @@ const PROJECTS: {
     ] as FileNode[],
   },
   {
-    id:"chatbot", idx:"03", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
-    imgs:["/images/chatbot-1.png","/images/chatbot-2.png"],
+    id:"analitik", idx:"03", icon:"📊", title:"Portal Analitik",
+    imgs:["/homeanalitik.jpeg"],
+    sub:"Analytics Portal · Kementerian Ekonomi",
+    color:T.grn, colorRaw:"22,163,74",
+    desc:"Portal analitik data kerajaan untuk pemantauan KPI dan perancangan dasar. Dibangunkan dengan dashboard carta interaktif, sistem penapisan data lanjutan, dan panel pemantauan KPI masa nyata untuk penganalisis polisi dengan integrasi REST API.",
+    stats:[{v:10,sfx:"+",l:"Chart Modules"},{v:100,sfx:"%",l:"Real-time"},{v:3,sfx:"",l:"KPI Panels"}],
+    features:["Interactive chart dashboards","KPI monitoring panels","Advanced data filtering system","REST API integration","Policy analyst-focused UI","Real-time data rendering"],
+    techs:[
+      {n:"Next.js",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
+      {n:"React",img:"https://cdn.simpleicons.org/react"},
+      {n:"Tailwind CSS",img:"https://cdn.simpleicons.org/tailwindcss"},
+      {n:"REST API",img:"https://cdn.simpleicons.org/fastapi"},
+      {n:"TypeScript",img:"https://cdn.simpleicons.org/typescript"},
+    ],
+    tree:[
+      {name:"app",type:"folder",children:[
+        {name:"analitik",type:"folder",children:[
+          {name:"dashboard",type:"folder",children:[{name:"page.tsx",type:"file"}]},
+          {name:"kpi",type:"folder",children:[{name:"page.tsx",type:"file"}]},
+          {name:"page.tsx",type:"file"},
+        ]},
+        {name:"api",type:"folder",children:[
+          {name:"data",type:"folder",children:[{name:"route.ts",type:"file"}]},
+          {name:"kpi",type:"folder",children:[{name:"route.ts",type:"file"}]},
+        ]},
+      ]},
+      {name:"components",type:"folder",children:[
+        {name:"charts",type:"folder",children:[
+          {name:"BarChart.tsx",type:"file"},
+          {name:"LineChart.tsx",type:"file"},
+          {name:"KPIPanel.tsx",type:"file"},
+        ]},
+        {name:"filters",type:"folder",children:[
+          {name:"DataFilter.tsx",type:"file"},
+        ]},
+      ]},
+    ] as FileNode[],
+  },
+  {
+    id:"chatbot", idx:"04", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
+    imgs:["/chatbotportalawam.png","/chatbotmyinfo.jpeg"],
     sub:"Vertex AI · Conversational Agent",
     color:T.cyn, colorRaw:"8,145,178",
     desc:"AI-powered chatbot dibangunkan menggunakan Google Vertex AI Conversational Agents untuk MyINFO dan Portal PADU. Meningkatkan interaksi pengguna dan aksesibiliti maklumat secara automatik dengan NLU yang sofistikated dan animasi Lottie custom.",
@@ -393,9 +420,9 @@ const STACK_BOT = [
    SCREENSHOT MOCKUP
 ════════════════════════════════════════════ */
 function ScreenshotMockup({
-  src, title, icon, color, index, total,
+  src, title, icon, color, compact = false, imgFit = "cover",
 }: {
-  src: string; title: string; icon: string; color: string; index: number; total: number;
+  src: string; title: string; icon: string; color: string; compact?: boolean; imgFit?: "cover"|"contain";
 }) {
   return (
     <div className="ss-wrap" style={{
@@ -420,7 +447,7 @@ function ScreenshotMockup({
           textAlign: "center", overflow: "hidden",
           whiteSpace: "nowrap", textOverflow: "ellipsis",
         }}>
-          padu.gov.my {total > 1 ? `· view ${index + 1}/${total}` : ""}
+          padu.gov.my
         </div>
         <div style={{
           fontSize: 9, padding: "1px 6px",
@@ -431,21 +458,21 @@ function ScreenshotMockup({
       </div>
       {/* Image */}
       <div style={{
-        position: "relative", width: "100%", aspectRatio: "16/9",
+        position: "relative", width: "100%", aspectRatio: compact ? "16/9" : "4/3",
         background: `rgba(${color === T.ind ? "79,70,229" : color === T.vio ? "124,58,237" : "8,145,178"},.04)`,
         overflow: "hidden",
       }}>
         <img
           src={src}
-          alt={`${title} screenshot ${index + 1}`}
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
+          alt={`${title} screenshot`}
+          style={{ width: "100%", height: "100%", objectFit: imgFit ?? "cover", objectPosition: "top", display: "block" }}
           onError={e => {
             const el = e.target as HTMLImageElement;
             el.style.display = "none";
             const p = el.parentElement!;
             p.style.display = "flex"; p.style.alignItems = "center";
             p.style.justifyContent = "center"; p.style.flexDirection = "column"; p.style.gap = "8px";
-            p.innerHTML = `<div style="font-size:32px">${icon}</div><div style="font-size:10px;color:#aaa;font-family:system-ui;text-align:center;padding:0 8px">Screenshot ${index+1}<br/><code style="background:rgba(0,0,0,.06);padding:1px 5px;border-radius:3px;font-size:9px">/public${src}</code></div>`;
+            p.innerHTML = `<div style="font-size:32px">${icon}</div><div style="font-size:10px;color:#aaa;font-family:system-ui;text-align:center;padding:0 8px">Screenshot<br/><code style="background:rgba(0,0,0,.06);padding:1px 5px;border-radius:3px;font-size:9px">/public${src}</code></div>`;
           }}
         />
       </div>
@@ -554,31 +581,24 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
               </div>
             </div>
 
-            {/* Stats row */}
-            <div className="proj-stats-row" style={{
-              display: "flex",
-              gap: isMobile ? 20 : 32,
-              flexShrink: 0,
-              flexWrap: "wrap",
-            }}>
-              {proj.stats.map((s, i) => (
-                <div key={i} style={{ textAlign: isSmall ? "left" : "right" }}>
-                  <div style={{
-                    fontSize: isMobile ? "clamp(20px,5vw,24px)" : "clamp(22px,3vw,30px)",
-                    fontWeight: 800,
-                    color: proj.color, letterSpacing: "-0.03em", lineHeight: 1,
-                  }}>
-                    <Ticker to={s.v} sfx={s.sfx} />
-                  </div>
-                  <div style={{
-                    fontSize: 10, color: T.tx3, marginTop: 3,
-                    fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.07em",
-                  }}>
-                    {s.l}
-                  </div>
+            {/* Tech Pills — replacing stats position */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, flexShrink: 0, justifyContent: "flex-end", maxWidth: isSmall ? "100%" : 320 }}>
+              {proj.techs.map((t, ti) => (
+                <div key={ti} className="tech-pill-min" style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  padding: "5px 11px", borderRadius: 999,
+                  border: `1px solid ${T.bdr2}`,
+                  background: T.bg2, fontSize: 11.5, color: T.tx2, fontWeight: 500,
+                  cursor: "default",
+                }}>
+                  <img src={t.img} alt={t.n} width={13} height={13}
+                    style={{ objectFit: "contain", flexShrink: 0 }}
+                    onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  {t.n}
                 </div>
               ))}
             </div>
+
           </div>
         </BlurFade>
 
@@ -586,7 +606,7 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
         {/* Mobile/tablet → single column, desktop → two column */}
         <div className="proj-detail-grid" style={{
           display: "grid",
-          gridTemplateColumns: isSmall ? "1fr" : "1fr 1.15fr",
+          gridTemplateColumns: isSmall ? "1fr" : "1fr 1.7fr",
           gap: isMobile ? 28 : isTablet ? 32 : 40,
           marginBottom: isMobile ? 28 : 40,
           alignItems: "start",
@@ -634,59 +654,33 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
                 </div>
               </div>
 
-              {/* Tech Pills */}
-              <div>
-                <div style={{
-                  fontSize: 10, fontWeight: 700, color: T.tx3,
-                  letterSpacing: "0.12em", textTransform: "uppercase",
-                  marginBottom: 10, fontFamily: "monospace",
-                }}>
-                  Stack
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {proj.techs.map((t, ti) => (
-                    <div key={ti} className="tech-pill-min" style={{
-                      display: "inline-flex", alignItems: "center", gap: 6,
-                      padding: "5px 11px", borderRadius: 999,
-                      border: `1px solid ${T.bdr2}`,
-                      background: T.bg2, fontSize: 11.5, color: T.tx2, fontWeight: 500,
-                      cursor: "default",
-                    }}>
-                      <img src={t.img} alt={t.n} width={13} height={13}
-                        style={{ objectFit: "contain", flexShrink: 0 }}
-                        onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      {t.n}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </BlurFade>
 
           {/* Right: Screenshots */}
           <BlurFade delay={isSmall ? 0.06 : 0.14}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {proj.imgs.length > 1 ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center", justifyContent: "center", height: "100%" }}>
+                {[
+                  { src: proj.imgs[0], label: "Portal Awam PADU", imgFit: "cover" as const },
+                  { src: proj.imgs[1], label: "Portal MyINFO", imgFit: "contain" as const },
+                ].map(({ src, label, imgFit }, si) => (
+                  <div key={si} style={{ width: "100%" }}>
+                    <div style={{
+                      fontSize: 10, fontWeight: 700, color: proj.color,
+                      letterSpacing: "0.1em", textTransform: "uppercase",
+                      fontFamily: "monospace", marginBottom: 6, textAlign: "center",
+                    }}>{label}</div>
+                    <ScreenshotMockup src={src} title={label} icon={proj.icon} color={proj.color} compact imgFit={imgFit} />
+                  </div>
+                ))}
+              </div>
+            ) : (
               <ScreenshotMockup
                 src={proj.imgs[0]} title={proj.title}
                 icon={proj.icon} color={proj.color}
-                index={0} total={proj.imgs.length}
               />
-              {proj.imgs.length > 1 && (
-                <div className="ss-secondary-grid" style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(${proj.imgs.length - 1}, 1fr)`,
-                  gap: 10,
-                }}>
-                  {proj.imgs.slice(1).map((src, si) => (
-                    <ScreenshotMockup
-                      key={si} src={src} title={proj.title}
-                      icon={proj.icon} color={proj.color}
-                      index={si + 1} total={proj.imgs.length}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
           </BlurFade>
         </div>
 
@@ -715,6 +709,7 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
               <TreeNode node={{
                 name: proj.id === "awam" ? "padu-portal-awam-v2"
                   : proj.id === "panduan" ? "portal-panduan"
+                  : proj.id === "analitik" ? "portal-analitik"
                   : "chatbot-widget",
                 type: "folder", children: proj.tree,
               }} depth={0} />
@@ -750,7 +745,7 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
                 letterSpacing: "0.14em", textTransform: "uppercase",
                 fontFamily: "monospace", marginBottom: 10,
               }}>
-                3 Projects · 2025
+                4 Projects · 2025
               </div>
               <h2 style={{
                 fontSize: "clamp(26px,4vw,40px)",
@@ -822,22 +817,6 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
                   </div>
                 </div>
 
-                {/* Stats mini */}
-                <div style={{ display: "flex", gap: 28, flexShrink: 0 }}>
-                  {p.stats.slice(0, 2).map((s, si) => (
-                    <div key={si} style={{ textAlign: "center" }}>
-                      <div style={{
-                        fontSize: 18, fontWeight: 800,
-                        color: hovIdx === i ? p.color : T.tx,
-                        letterSpacing: "-0.02em", lineHeight: 1,
-                        transition: "color .18s",
-                      }}>
-                        {s.v}{s.sfx}
-                      </div>
-                      <div style={{ fontSize: 10, color: T.tx3, marginTop: 2 }}>{s.l}</div>
-                    </div>
-                  ))}
-                </div>
 
                 {/* Tech pills — compact */}
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
@@ -995,6 +974,23 @@ export default function PaduPage() {
           padding: "80px 20px 60px",
           textAlign: "center", background: T.bg,
         }}>
+          {/* Right arrow — navigate to FYP project */}
+          <button
+            onClick={() => window.location.href = "/projects/fyp-project"}
+            style={{
+              position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)",
+              zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+              background: T.card, border: `1px solid ${T.bdr2}`, borderRadius: 16,
+              padding: "20px 14px", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.08)",
+              color: T.tx3, fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+              textTransform: "uppercase", transition: "all .2s ease",
+            }}
+            onMouseEnter={e => { const b = e.currentTarget; b.style.color = T.ind; b.style.borderColor = T.ind; b.style.boxShadow = "0 8px 28px rgba(79,70,229,.15)"; }}
+            onMouseLeave={e => { const b = e.currentTarget; b.style.color = T.tx3; b.style.borderColor = T.bdr2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.08)"; }}
+          >
+            <ArrowRight size={24} />
+            <span style={{ writingMode: "vertical-rl" }}>FYP</span>
+          </button>
           <RetroGrid />
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 50% 50%,rgba(79,70,229,.07) 0%,transparent 65%)", zIndex: 1, pointerEvents: "none" }} />
           <div style={{ position: "relative", zIndex: 10, maxWidth: 760, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
