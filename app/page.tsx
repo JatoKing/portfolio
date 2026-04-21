@@ -778,8 +778,8 @@ function ProjectsCards() {
       {PROJECTS_DATA.map((p, i) => {
         const isOpen = expandIdx === i;
         return (
-          <MCard key={i} glow={`rgba(${p.accentRaw},.05)`} style={{ opacity: 0 }} className="">
-            <div ref={el => { cardRefs.current[i] = el; }} style={{ position: "relative", overflow: "hidden" }}>
+          <MCard key={i} glow={`rgba(${p.accentRaw},.05)`} className="">
+            <div ref={el => { cardRefs.current[i] = el; }} style={{ position: "relative", overflow: "hidden", opacity: 0 }}>
               <div style={{ height: 3, background: `linear-gradient(90deg, rgba(${p.accentRaw},1), rgba(${p.accentRaw},.3))` }} />
               <div style={{ padding: "18px 18px 16px" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
