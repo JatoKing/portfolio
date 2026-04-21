@@ -1,14 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import {
-  ArrowLeft, ExternalLink, Globe, Database, Code2, Layers,
-  CheckCircle2, FolderOpen, Folder, FileCode, ChevronRight,
-  ArrowRight, Clock, Star, Lock, MessageSquare, Users, Zap,
-  BookOpen, Bot, ArrowUpRight,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 
 interface FileNode { name: string; type: "file"|"folder"; children?: FileNode[]; }
-interface TermLine { text: string; kind: "cmd"|"out"|"ok"|"info"; }
 
 /* ─── Breakpoint Hook ─────────────────────────── */
 function useBreakpoint() {
@@ -174,48 +168,6 @@ function ShinyBadge({ children }: { children:React.ReactNode }) {
 }
 
 
-/* ─── File Tree ───────────────────────────────── */
-function TreeNode({ node, depth=0 }: { node:FileNode; depth?:number }) {
-  const [open,setOpen]=useState(depth<2);
-  const ext=node.name.split(".").pop();
-  const fclr=ext==="tsx"||ext==="jsx"?"#0891b2":ext==="ts"||ext==="js"?"#3178c6":ext==="css"?"#e85d04":ext==="json"?"#d97706":T.tx2;
-  return (
-    <div>
-      <div onClick={()=>node.type==="folder"&&setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,padding:"3px 0",paddingLeft:depth*14,cursor:node.type==="folder"?"pointer":"default",fontSize:12,color:node.type==="folder"?T.tx:fclr}}>
-        {node.type==="folder"?(<><ChevronRight size={11} color={T.tx3} style={{transform:open?"rotate(90deg)":"none",transition:"transform .15s",flexShrink:0}}/>{open?<FolderOpen size={13} color="#f59e0b" style={{flexShrink:0}}/>:<Folder size={13} color="#f59e0b" style={{flexShrink:0}}/>}</>):(<><span style={{width:11,flexShrink:0}}/><FileCode size={12} color={fclr} style={{flexShrink:0}}/></>)}
-        <span style={{fontFamily:"monospace"}}>{node.name}</span>
-      </div>
-      {node.type==="folder"&&open&&node.children?.map((c,i)=><TreeNode key={i} node={c} depth={depth+1}/>)}
-    </div>
-  );
-}
-
-/* ─── Terminal ────────────────────────────────── */
-function Terminal({ lines }: { lines:TermLine[] }) {
-  const [vis,setVis]=useState(0); const ref=useRef<HTMLDivElement>(null); const done=useRef(false);
-  useEffect(()=>{
-    const io=new IntersectionObserver(([e])=>{
-      if(e.isIntersecting&&!done.current){done.current=true;lines.forEach((_,i)=>setTimeout(()=>setVis(i+1),i*280));}},{threshold:.3});
-    if(ref.current)io.observe(ref.current); return()=>io.disconnect();
-  },[lines.length]);
-  const clr=(k:string)=>k==="cmd"?"#818cf8":k==="ok"?"#4ade80":k==="info"?"#67e8f9":"rgba(255,255,255,.35)";
-  const pfx=(k:string)=>k==="cmd"?"❯ ":k==="ok"?"✓ ":k==="info"?"▲ ":"  ";
-  return (
-    <div ref={ref} style={{fontFamily:"monospace",fontSize:12.5,lineHeight:1.85,padding:"20px 22px",background:"#0c0c10",borderRadius:14,border:`1px solid rgba(255,255,255,.06)`,minHeight:200}}>
-      <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:14,paddingBottom:10,borderBottom:"1px solid rgba(255,255,255,.06)"}}>
-        {["#ef4444","#f59e0b","#22c55e"].map((c,i)=><div key={i} style={{width:10,height:10,borderRadius:"50%",background:c}}/>)}
-        <span style={{fontSize:11,color:"rgba(255,255,255,.2)",marginLeft:8}}>zsh — padu-portal</span>
-      </div>
-      {lines.slice(0,vis).map((l,i)=>(
-        <div key={i} className="term-line" style={{color:clr(l.kind)}}>
-          <span style={{opacity:.5}}>{pfx(l.kind)}</span>{l.text}
-        </div>
-      ))}
-      {vis<lines.length&&<span style={{color:"#818cf8"}}>█</span>}
-    </div>
-  );
-}
-
 /* ─── Marquee ─────────────────────────────────── */
 function Marquee({ items, rev=false }: { items:{n:string;img:string}[]; rev?:boolean }) {
   const all=[...items,...items];
@@ -238,20 +190,21 @@ function Marquee({ items, rev=false }: { items:{n:string;img:string}[]; rev?:boo
 ════════════════════════════════════════════ */
 const PROJECTS: {
   id:string; idx:string; icon:string; title:string; imgs:string[]; sub:string;
-  color:string; colorRaw:string; desc:string;
+  color:string; colorRaw:string; desc:string; url?:string; imgFit?:"cover"|"contain";
   stats:{v:number;sfx:string;l:string}[];
   features:string[];
   techs:{n:string;img:string}[];
   tree:FileNode[];
 }[] = [
   {
-    id:"awam", idx:"01", icon:"🇲🇾", title:"Portal Awam PADU",
-    imgs:["/homeportalawam.png"],
+    id:"awam", idx:"01", icon:"🇲🇾", title:"PADU Public Portal",
+    imgs:["/herosectionpadu.png"],
     sub:"Public Portal · padu-portal-awam-v2",
+    url:"https://www.padu.gov.my",
     color:T.ind, colorRaw:"79,70,229",
-    desc:"Portal awam rasmi Pangkalan Data Utama Malaysia. Antara muka utama untuk rakyat Malaysia mengakses maklumat sosio-ekonomi, semak status, dan berinteraksi dengan sistem PADU. Dibangunkan dengan 20+ halaman animasi termasuk infografik, karusel 3D, dan chatbot AI.",
+    desc:"Official information website for Malaysia's Pangkalan Data Utama (PADU). I developed the front end of this official government portal — serving as the primary source for Malaysians to learn about the PADU system, featuring 20+ animated pages including infographics, a 3D carousel, and an AI chatbot.",
     stats:[{v:100,sfx:"k+",l:"Daily Users"},{v:20,sfx:"+",l:"Pages"},{v:4,sfx:"",l:"Core Services"}],
-    features:["20+ animated page modules","3D carousel timeline (SejarahPaduPage)","PADUServices animated infographics","KolaborasiStrategik agency grid 14+","Media & press release pages","Responsive across all breakpoints","Framer Motion entrance animations","HeroUI component library"],
+    features:["20+ animated page modules","3D carousel timeline (SejarahPaduPage)","PADUServices animated infographics","Strategic Collaboration agency grid 14+","Media & press release pages","Responsive across all breakpoints","Framer Motion entrance animations","HeroUI component library"],
     techs:[
       {n:"Next.js",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
       {n:"TypeScript",img:"https://cdn.simpleicons.org/typescript"},
@@ -280,11 +233,11 @@ const PROJECTS: {
     ] as FileNode[],
   },
   {
-    id:"panduan", idx:"02", icon:"📖", title:"Portal Panduan Pengguna",
+    id:"panduan", idx:"02", icon:"📖", title:"User Guide Portal",
     imgs:["/homepanduan.png"],
     sub:"User Guide Portal · Strapi CMS",
     color:T.vio, colorRaw:"124,58,237",
-    desc:"Portal panduan pengguna rasmi dengan headless CMS menggunakan Strapi. Membolehkan pengurusan kandungan dinamik oleh admin tanpa perlu kod, dilengkapi autentikasi selamat Google OAuth 2.0 untuk kawalan akses kakitangan kerajaan.",
+    desc:"Official user guide portal with a headless CMS powered by Strapi. Enables dynamic content management by admins without writing code, paired with secure Google OAuth 2.0 authentication for government staff access control.",
     stats:[{v:3,sfx:"",l:"CMS Modules"},{v:100,sfx:"%",l:"Dynamic Content"},{v:1,sfx:"",l:"OAuth Provider"}],
     features:["Strapi headless CMS integration","RESTful API dynamic content fetching","Google OAuth 2.0 authentication","Government staff role-based access","Dynamic page rendering per slug","Content editor friendly interface","SEO optimized URL structure","Secure session management"],
     techs:[
@@ -313,11 +266,11 @@ const PROJECTS: {
     ] as FileNode[],
   },
   {
-    id:"analitik", idx:"03", icon:"📊", title:"Portal Analitik",
+    id:"analitik", idx:"03", icon:"📊", title:"Analytics Portal",
     imgs:["/homeanalitik.jpeg"],
-    sub:"Analytics Portal · Kementerian Ekonomi",
+    sub:"Analytics Portal · Ministry of Economy",
     color:T.grn, colorRaw:"22,163,74",
-    desc:"Portal analitik data kerajaan untuk pemantauan KPI dan perancangan dasar. Dibangunkan dengan dashboard carta interaktif, sistem penapisan data lanjutan, dan panel pemantauan KPI masa nyata untuk penganalisis polisi dengan integrasi REST API.",
+    desc:"Government data analytics portal for KPI monitoring and policy planning. Built with interactive chart dashboards, advanced data filtering, and real-time KPI monitoring panels for policy analysts with REST API integration.",
     stats:[{v:10,sfx:"+",l:"Chart Modules"},{v:100,sfx:"%",l:"Real-time"},{v:3,sfx:"",l:"KPI Panels"}],
     features:["Interactive chart dashboards","KPI monitoring panels","Advanced data filtering system","REST API integration","Policy analyst-focused UI","Real-time data rendering"],
     techs:[
@@ -353,10 +306,11 @@ const PROJECTS: {
   },
   {
     id:"chatbot", idx:"04", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
-    imgs:["/chatbotportalawam.png","/chatbotmyinfo.jpeg"],
+    imgs:["/chatbotmyinfo.jpeg"],
+    imgFit:"contain",
     sub:"Vertex AI · Conversational Agent",
     color:T.cyn, colorRaw:"8,145,178",
-    desc:"AI-powered chatbot dibangunkan menggunakan Google Vertex AI Conversational Agents untuk MyINFO dan Portal PADU. Meningkatkan interaksi pengguna dan aksesibiliti maklumat secara automatik dengan NLU yang sofistikated dan animasi Lottie custom.",
+    desc:"AI-powered chatbot built using Google Vertex AI Conversational Agents for MyINFO and the PADU Portal. Enhances user interaction and information accessibility with sophisticated NLU and custom Lottie animations.",
     stats:[{v:2,sfx:"",l:"Portals"},{v:24,sfx:"/7",l:"Uptime"},{v:100,sfx:"%",l:"AI Powered"}],
     features:["Google Vertex AI Conversational Agents","Natural language understanding (NLU)","Integrated into MyINFO portal","Integrated into Portal PADU","Custom Lottie animation robot icon","Shadow DOM CSS injection","Auto-refresh on session close","Dialogflow-compatible intent routing"],
     techs:[
@@ -385,15 +339,6 @@ const PROJECTS: {
   },
 ];
 
-const TERM_LINES: TermLine[] = [
-  {text:"cd padu-portal-awam-v2",kind:"cmd"},
-  {text:"npm install",kind:"cmd"},
-  {text:"added 318 packages in 19s",kind:"out"},
-  {text:"npm run dev",kind:"cmd"},
-  {text:"Next.js 15.0.0 (Turbopack)",kind:"info"},
-  {text:"Compiled /beranda in 1.1s",kind:"ok"},
-  {text:"Ready on http://localhost:3000",kind:"ok"},
-];
 
 const STACK_TOP = [
   {n:"Next.js 15",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
@@ -577,6 +522,20 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
                   }}>
                     Active
                   </span>
+                  {proj.url && (
+                    <a href={proj.url} target="_blank" rel="noopener noreferrer" style={{
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      fontSize: 10, padding: "2px 8px", borderRadius: 999,
+                      background: `rgba(${cr},.08)`,
+                      border: `1px solid rgba(${cr},.2)`,
+                      color: proj.color, fontWeight: 600,
+                      fontFamily: "sans-serif", textDecoration: "none",
+                      transition: "background .15s",
+                    }}>
+                      <ArrowUpRight size={10} />
+                      padu.gov.my
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -606,7 +565,7 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
         {/* Mobile/tablet → single column, desktop → two column */}
         <div className="proj-detail-grid" style={{
           display: "grid",
-          gridTemplateColumns: isSmall ? "1fr" : "1fr 1.7fr",
+          gridTemplateColumns: isSmall || proj.imgs.length === 0 ? "1fr" : "1fr 1.7fr",
           gap: isMobile ? 28 : isTablet ? 32 : 40,
           marginBottom: isMobile ? 28 : 40,
           alignItems: "start",
@@ -615,13 +574,29 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
           <BlurFade delay={0.08}>
             <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 20 : 28 }}>
               {/* Prose */}
-              <p style={{
-                fontSize: isMobile ? 13 : 14, color: T.tx2, lineHeight: 1.9,
-                borderLeft: `3px solid rgba(${cr},.35)`,
-                paddingLeft: 14,
-              }}>
-                {proj.desc}
-              </p>
+              <div>
+                <p style={{
+                  fontSize: isMobile ? 13 : 14, color: T.tx2, lineHeight: 1.9,
+                  borderLeft: `3px solid rgba(${cr},.35)`,
+                  paddingLeft: 14,
+                  marginBottom: proj.url ? 12 : 0,
+                }}>
+                  {proj.desc}
+                </p>
+                {proj.url && (
+                  <a href={proj.url} target="_blank" rel="noopener noreferrer" style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    padding: "9px 16px", borderRadius: 999,
+                    background: `rgba(${cr},.08)`,
+                    border: `1px solid rgba(${cr},.25)`,
+                    color: proj.color, fontWeight: 600, fontSize: 13,
+                    textDecoration: "none", transition: "background .18s",
+                  }}>
+                    <ArrowUpRight size={14} />
+                    {proj.url.replace("https://www.", "")}
+                  </a>
+                )}
+              </div>
 
               {/* Features grid */}
               <div>
@@ -658,64 +633,34 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
           </BlurFade>
 
           {/* Right: Screenshots */}
-          <BlurFade delay={isSmall ? 0.06 : 0.14}>
-            {proj.imgs.length > 1 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center", justifyContent: "center", height: "100%" }}>
-                {[
-                  { src: proj.imgs[0], label: "Portal Awam PADU", imgFit: "cover" as const },
-                  { src: proj.imgs[1], label: "Portal MyINFO", imgFit: "contain" as const },
-                ].map(({ src, label, imgFit }, si) => (
-                  <div key={si} style={{ width: "100%" }}>
-                    <div style={{
-                      fontSize: 10, fontWeight: 700, color: proj.color,
-                      letterSpacing: "0.1em", textTransform: "uppercase",
-                      fontFamily: "monospace", marginBottom: 6, textAlign: "center",
-                    }}>{label}</div>
-                    <ScreenshotMockup src={src} title={label} icon={proj.icon} color={proj.color} compact imgFit={imgFit} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <ScreenshotMockup
-                src={proj.imgs[0]} title={proj.title}
-                icon={proj.icon} color={proj.color}
-              />
-            )}
-          </BlurFade>
+          {proj.imgs.length > 0 && (
+            <BlurFade delay={isSmall ? 0.06 : 0.14}>
+              {proj.imgs.length > 1 ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center", justifyContent: "center", height: "100%" }}>
+                  {[
+                    { src: proj.imgs[0], label: "PADU Public Portal", imgFit: "cover" as const },
+                    { src: proj.imgs[1], label: "MyINFO Portal", imgFit: "contain" as const },
+                  ].map(({ src, label, imgFit }, si) => (
+                    <div key={si} style={{ width: "100%" }}>
+                      <div style={{
+                        fontSize: 10, fontWeight: 700, color: proj.color,
+                        letterSpacing: "0.1em", textTransform: "uppercase",
+                        fontFamily: "monospace", marginBottom: 6, textAlign: "center",
+                      }}>{label}</div>
+                      <ScreenshotMockup src={src} title={label} icon={proj.icon} color={proj.color} compact imgFit={imgFit} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ScreenshotMockup
+                  src={proj.imgs[0]} title={proj.title}
+                  icon={proj.icon} color={proj.color}
+                  imgFit={proj.imgFit ?? "cover"}
+                />
+              )}
+            </BlurFade>
+          )}
         </div>
-
-        {/* ── File tree ── */}
-        <BlurFade delay={0.2}>
-          <div className="proj-detail-tree-row" style={{
-            borderTop: `1px solid ${T.bdr}`,
-            paddingTop: 20,
-            display: "flex",
-            flexDirection: isSmall ? "column" : "row",
-            alignItems: "flex-start",
-            gap: isSmall ? 10 : 20,
-          }}>
-            <div style={{
-              fontSize: 10, fontWeight: 700, color: T.tx3,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              fontFamily: "monospace", flexShrink: 0,
-              paddingTop: isSmall ? 0 : 3,
-            }}>
-              {isSmall ? "File Structure" : "File\nStructure"}
-            </div>
-            <div style={{
-              flex: 1, width: "100%", background: T.card, borderRadius: 10,
-              border: `1px solid ${T.bdr}`, padding: "14px 16px",
-            }}>
-              <TreeNode node={{
-                name: proj.id === "awam" ? "padu-portal-awam-v2"
-                  : proj.id === "panduan" ? "portal-panduan"
-                  : proj.id === "analitik" ? "portal-analitik"
-                  : "chatbot-widget",
-                type: "folder", children: proj.tree,
-              }} depth={0} />
-            </div>
-          </div>
-        </BlurFade>
 
       </div>
     </div>
@@ -726,6 +671,8 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
    PROJECT INDEX SECTION
 ════════════════════════════════════════════ */
 function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
   const [hovIdx, setHovIdx] = useState<number | null>(null);
 
   return (
@@ -752,11 +699,11 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
                 fontWeight: 800, color: T.tx,
                 letterSpacing: "-0.03em", lineHeight: 1,
               }}>
-                Semua <span className="gtext">Projek</span>
+                All <span className="gtext">Projects</span>
               </h2>
             </div>
             <p style={{ fontSize: 13, color: T.tx3, maxWidth: 240, textAlign: "right", lineHeight: 1.7 }}>
-              Klik mana-mana projek untuk lihat detail penuh, screenshots, dan codebase.
+              Click any project to view full details, screenshots, and codebase.
             </p>
           </div>
         </BlurFade>
@@ -772,8 +719,8 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
                 onMouseLeave={() => setHovIdx(null)}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "56px 1fr auto auto 40px",
-                  alignItems: "center", gap: 24,
+                  gridTemplateColumns: isMobile ? "1fr 36px" : "56px 1fr auto auto 40px",
+                  alignItems: "center", gap: isMobile ? 12 : 24,
                   padding: "28px 20px",
                   borderBottom: `1px solid ${T.bdr}`,
                   borderLeft: hovIdx === i ? `3px solid ${p.color}` : "3px solid transparent",
@@ -784,14 +731,16 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
                 }}
               >
                 {/* Index number */}
-                <div style={{
-                  fontSize: 32, fontWeight: 900,
-                  color: hovIdx === i ? p.color : `rgba(${p.colorRaw},.18)`,
-                  fontFamily: "'Georgia','Times New Roman',serif",
-                  lineHeight: 1, transition: "color .18s",
-                }}>
-                  {p.idx}
-                </div>
+                {!isMobile && (
+                  <div style={{
+                    fontSize: 32, fontWeight: 900,
+                    color: hovIdx === i ? p.color : `rgba(${p.colorRaw},.18)`,
+                    fontFamily: "'Georgia','Times New Roman',serif",
+                    lineHeight: 1, transition: "color .18s",
+                  }}>
+                    {p.idx}
+                  </div>
+                )}
 
                 {/* Project info */}
                 <div>
@@ -819,21 +768,23 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
 
 
                 {/* Tech pills — compact */}
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
-                  {p.techs.slice(0, 3).map((t, ti) => (
-                    <span key={ti} style={{
-                      fontSize: 10, padding: "2px 8px", borderRadius: 999,
-                      border: `1px solid ${T.bdr2}`,
-                      background: T.bg2, color: T.tx3,
-                      display: "flex", alignItems: "center", gap: 4,
-                    }}>
-                      <img src={t.img} alt={t.n} width={10} height={10}
-                        style={{ objectFit: "contain", flexShrink: 0 }}
-                        onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      {t.n}
-                    </span>
-                  ))}
-                </div>
+                {!isMobile && (
+                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end", maxWidth: 200 }}>
+                    {p.techs.slice(0, 3).map((t, ti) => (
+                      <span key={ti} style={{
+                        fontSize: 10, padding: "2px 8px", borderRadius: 999,
+                        border: `1px solid ${T.bdr2}`,
+                        background: T.bg2, color: T.tx3,
+                        display: "flex", alignItems: "center", gap: 4,
+                      }}>
+                        <img src={t.img} alt={t.n} width={10} height={10}
+                          style={{ objectFit: "contain", flexShrink: 0 }}
+                          onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        {t.n}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Arrow */}
                 <div className="idx-arrow" style={{
@@ -851,108 +802,14 @@ function ProjectIndex({ onNav }: { onNav: (id: string) => void }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   CODEBASE SECTION — responsive
-════════════════════════════════════════════ */
-function CodebaseSection() {
-  const bp       = useBreakpoint();
-  const isMobile = bp === "mobile";
-  const isTablet = bp === "tablet";
-  const isSmall  = isMobile || isTablet;
-
-  return (
-    <section style={{ background: T.bg2, padding: isMobile ? "56px 16px 64px" : "88px 24px" }}>
-      <div style={{ maxWidth: 960, marginLeft: "auto", marginRight: "auto" }}>
-        <BlurFade>
-          <div style={{
-            display: "flex", alignItems: isSmall ? "flex-start" : "flex-end",
-            flexDirection: isSmall ? "column" : "row",
-            justifyContent: "space-between", gap: 16, marginBottom: 32,
-          }}>
-            <div>
-              <div style={{
-                fontSize: 10, fontWeight: 700, color: T.ind,
-                letterSpacing: "0.14em", textTransform: "uppercase",
-                fontFamily: "monospace", marginBottom: 10,
-              }}>
-                Dev Setup
-              </div>
-              <h2 style={{
-                fontSize: isMobile ? "clamp(20px,5.5vw,26px)" : "clamp(22px,3.2vw,32px)",
-                fontWeight: 800, color: T.tx, letterSpacing: "-0.025em",
-              }}>
-                Codebase &amp; <span className="gtext">Environment</span>
-              </h2>
-            </div>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "8px 16px", borderRadius: 999,
-              background: T.card, border: `1px solid ${T.bdr2}`,
-              fontSize: 12, color: T.tx3, fontFamily: "monospace",
-              flexShrink: 0,
-            }}>
-              <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e" }} />
-              Next.js 15 + Turbopack
-            </div>
-          </div>
-        </BlurFade>
-
-        <div className="codebase-grid" style={{
-          display: "grid",
-          gridTemplateColumns: isSmall ? "1fr" : "1fr 1fr",
-          gap: 16,
-        }}>
-          <BlurFade delay={0}>
-            <Terminal lines={TERM_LINES} />
-          </BlurFade>
-          <BlurFade delay={0.1}>
-            <div style={{
-              background: T.card, borderRadius: 14,
-              border: `1px solid ${T.bdr2}`, padding: "20px 22px",
-            }}>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                marginBottom: 14, paddingBottom: 12, borderBottom: `1px solid ${T.bdr}`,
-              }}>
-                <FolderOpen size={14} color="#f59e0b" />
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: T.tx, fontFamily: "monospace" }}>
-                  padu-portal-awam-v2
-                </span>
-              </div>
-              <TreeNode node={{ name: "padu-portal-awam-v2", type: "folder", children: [
-                {name:"app",type:"folder",children:[
-                  {name:"(pages)",type:"folder",children:[
-                    {name:"beranda",type:"folder",children:[{name:"page.tsx",type:"file"}]},
-                    {name:"perkhidmatan",type:"folder",children:[{name:"page.tsx",type:"file"}]},
-                    {name:"panduan",type:"folder",children:[{name:"page.tsx",type:"file"}]},
-                  ]},
-                  {name:"api",type:"folder",children:[
-                    {name:"auth",type:"folder",children:[{name:"route.ts",type:"file"}]},
-                    {name:"content",type:"folder",children:[{name:"route.ts",type:"file"}]},
-                  ]},
-                  {name:"layout.tsx",type:"file"},{name:"page.tsx",type:"file"},
-                ]},
-                {name:"components",type:"folder",children:[
-                  {name:"chatbot",type:"folder",children:[{name:"AIRAWidget.tsx",type:"file"}]},
-                  {name:"sections",type:"folder",children:[{name:"PADUServices.tsx",type:"file"},{name:"SejarahPage.tsx",type:"file"}]},
-                  {name:"ui",type:"folder",children:[{name:"Navbar.tsx",type:"file"},{name:"Footer.tsx",type:"file"}]},
-                ]},
-                {name:"lib",type:"folder",children:[{name:"strapi.ts",type:"file"},{name:"vertex-ai.ts",type:"file"},{name:"auth.ts",type:"file"}]},
-                {name:"next.config.ts",type:"file"},{name:"tailwind.config.ts",type:"file"},
-              ]}} depth={0} />
-            </div>
-          </BlurFade>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ════════════════════════════════════════════
    PAGE
 ════════════════════════════════════════════ */
 export default function PaduPage() {
   const [activeProj, setActiveProj] = useState("awam");
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
 
   const navTo = (id: string) => {
     setActiveProj(id);
@@ -975,43 +832,45 @@ export default function PaduPage() {
           textAlign: "center", background: T.bg,
         }}>
           {/* Right arrow — navigate to FYP project */}
-          <button
-            onClick={() => window.location.href = "/projects/fyp-project"}
-            style={{
-              position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)",
-              zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-              background: T.card, border: `1px solid ${T.bdr2}`, borderRadius: 16,
-              padding: "20px 14px", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.08)",
-              color: T.tx3, fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
-              textTransform: "uppercase", transition: "all .2s ease",
-            }}
-            onMouseEnter={e => { const b = e.currentTarget; b.style.color = T.ind; b.style.borderColor = T.ind; b.style.boxShadow = "0 8px 28px rgba(79,70,229,.15)"; }}
-            onMouseLeave={e => { const b = e.currentTarget; b.style.color = T.tx3; b.style.borderColor = T.bdr2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.08)"; }}
-          >
-            <ArrowRight size={24} />
-            <span style={{ writingMode: "vertical-rl" }}>FYP</span>
-          </button>
+          {!isMobile && (
+            <button
+              onClick={() => window.location.href = "/projects/fyp-project"}
+              style={{
+                position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)",
+                zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                background: T.card, border: `1px solid ${T.bdr2}`, borderRadius: 16,
+                padding: "20px 14px", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.08)",
+                color: T.tx3, fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+                textTransform: "uppercase", transition: "all .2s ease",
+              }}
+              onMouseEnter={e => { const b = e.currentTarget; b.style.color = T.ind; b.style.borderColor = T.ind; b.style.boxShadow = "0 8px 28px rgba(79,70,229,.15)"; }}
+              onMouseLeave={e => { const b = e.currentTarget; b.style.color = T.tx3; b.style.borderColor = T.bdr2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.08)"; }}
+            >
+              <ArrowRight size={24} />
+              <span style={{ writingMode: "vertical-rl" }}>FYP</span>
+            </button>
+          )}
           <RetroGrid />
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 50% 50%,rgba(79,70,229,.07) 0%,transparent 65%)", zIndex: 1, pointerEvents: "none" }} />
           <div style={{ position: "relative", zIndex: 10, maxWidth: 760, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
             <BlurFade delay={0}>
               <button onClick={() => window.history.back()} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: T.tx3, background: "none", border: `1px solid ${T.bdr2}`, borderRadius: 999, padding: "6px 14px", cursor: "pointer", marginBottom: 4 }}>
-                <ArrowLeft size={13} />Kembali ke Portfolio
+                <ArrowLeft size={13} />Back to Portfolio
               </button>
             </BlurFade>
             <BlurFade delay={0.05}>
-              <ShinyBadge>Kementerian Ekonomi Malaysia</ShinyBadge>
+              <ShinyBadge>Ministry of Economy Malaysia</ShinyBadge>
             </BlurFade>
             <BlurFade delay={0.1}>
               <h1 style={{ fontSize: "clamp(32px,6.5vw,72px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.06, color: T.tx }}>
-                Projek <span className="aurora-text">PADU</span>
+                PADU <span className="aurora-text">Projects</span>
               </h1>
             </BlurFade>
             <BlurFade delay={0.15}>
               <p style={{ maxWidth: 520, fontSize: "clamp(13px,3.5vw,14.5px)", color: T.tx3, lineHeight: 1.88 }}>
-                Tiga produk digital gov-tech yang saya bangunkan di{" "}
-                <span style={{ color: T.ind, fontWeight: 600 }}>Unit PADU, Kementerian Ekonomi Malaysia</span>{" "}
-                — Portal Awam, Portal Panduan Pengguna, dan AI Chatbot.
+                Four gov-tech digital products I built at{" "}
+                <span style={{ color: T.ind, fontWeight: 600 }}>PADU Unit, Ministry of Economy Malaysia</span>{" "}
+                — Public Portal, User Guide Portal, Analytics Portal, and AI Chatbot.
               </p>
             </BlurFade>
             <BlurFade delay={0.25}>
@@ -1050,10 +909,28 @@ export default function PaduPage() {
           <ProjectDetail key={proj.id} proj={proj} even={idx % 2 === 0} />
         ))}
 
-        {/* ══ CODEBASE ════════════════════════════════════════════════ */}
-        <CodebaseSection />
-
       </div>
+        {/* ── Mobile Project Nav ── */}
+        {isMobile && (
+          <div style={{
+            background: T.card, borderTop: `1px solid ${T.bdr2}`,
+            padding: "14px 20px",
+            display: "flex", alignItems: "center", justifyContent: "flex-end",
+          }}>
+            <button
+              onClick={() => window.location.href = "/projects/fyp-project"}
+              style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "10px 20px", borderRadius: 999,
+                border: `1.5px solid ${T.bdr2}`, background: T.card,
+                color: T.tx3, fontSize: 13, fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              FYP <ArrowRight size={15} />
+            </button>
+          </div>
+        )}
     </>
   );
 }

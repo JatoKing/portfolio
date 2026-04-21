@@ -24,6 +24,16 @@ const C = {
   muted2:  "rgba(248,250,252,0.3)",
 };
 
+function useBreakpoint() {
+  const [bp, setBp] = useState<"mobile"|"tablet"|"desktop">("desktop");
+  useEffect(() => {
+    const check = () => { const w = window.innerWidth; setBp(w < 640 ? "mobile" : w < 1024 ? "tablet" : "desktop"); };
+    check(); window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return bp;
+}
+
 /* ─── Pitch SVG — Hero (balanced, meet) ─────────────────────────── */
 function PitchLinesHero() {
   return (
@@ -794,6 +804,8 @@ export default function SmartTicketPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const [modal, setModal] = useState<ModalData | null>(null);
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
 
   useEffect(() => {
     const fn = () => setScrollY(window.scrollY);
@@ -891,11 +903,12 @@ export default function SmartTicketPage() {
         style={{
           position: "relative", minHeight: "100vh",
           display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          overflow: "hidden", padding: "120px 24px 60px",
+          alignItems: "center", justifyContent: isMobile ? "flex-start" : "center",
+          overflow: "hidden", padding: isMobile ? "100px 20px 40px" : "120px 24px 60px",
         }}
       >
         {/* Left arrow — navigate to PADU project */}
+        {!isMobile && (
         <a
           href="/projects/padu"
           style={{
@@ -913,6 +926,7 @@ export default function SmartTicketPage() {
           <ArrowLeft size={24} />
           <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>PADU</span>
         </a>
+        )}
 
         <div style={{ position: "absolute", inset: 0 }}>
           <div style={{
@@ -975,7 +989,7 @@ export default function SmartTicketPage() {
 
         <div style={{
           position: "relative", zIndex: 2,
-          display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center",
+          display: "flex", gap: isMobile ? 12 : 20, flexWrap: "wrap", justifyContent: "center",
           animation: "fadeUp 0.8s ease 0.4s both",
         }}>
           {[
@@ -1137,6 +1151,33 @@ export default function SmartTicketPage() {
         </div>
       </section>
 
+      {/* ── Mobile Project Nav ── */}
+      {isMobile && (
+        <div style={{
+          background: C.bg2, borderTop: `1px solid rgba(22,163,74,0.2)`,
+          padding: "14px 20px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <a href="/projects/padu" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 999,
+            border: `1px solid ${C.border2}`, background: "rgba(22,163,74,0.06)",
+            color: C.muted, fontSize: 13, fontWeight: 600,
+            textDecoration: "none",
+          }}>
+            <ArrowLeft size={15} /> PADU
+          </a>
+          <a href="/" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 999,
+            border: `1px solid ${C.border2}`, background: "rgba(255,255,255,0.04)",
+            color: C.muted2, fontSize: 13, fontWeight: 600,
+            textDecoration: "none",
+          }}>
+            Portfolio
+          </a>
+        </div>
+      )}
     </div>
   );
 }

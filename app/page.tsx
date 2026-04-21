@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
-interface TypingAnimProps { words: string[]; spd?: number; del?: number; pause?: number; }
 interface MCardProps { children: React.ReactNode; style?: React.CSSProperties; glow?: string; className?: string; }
 interface SBtnProps { children: React.ReactNode; onClick?: () => void; outline?: boolean; style?: React.CSSProperties; }
 interface TickerProps { to: number; sfx?: string; }
@@ -96,21 +95,6 @@ function smoothScrollTo(id: string) {
   requestAnimationFrame(step);
 }
 
-function TypingAnim({ words, spd = 80, del = 45, pause = 2400 }: TypingAnimProps) {
-  const [txt, setTxt] = useState("");
-  const [wi,  setWi]  = useState(0);
-  const [dlg, setDlg] = useState(false);
-  useEffect(() => {
-    const w = words[wi];
-    if (!w) { setWi(0); return; }
-    let t: ReturnType<typeof setTimeout>;
-    if (!dlg && txt === w) t = setTimeout(() => setDlg(true), pause);
-    else if (dlg && txt === "") { setDlg(false); setWi(i => (i + 1) % words.length); }
-    else { const n = dlg ? txt.slice(0, -1) : w.slice(0, txt.length + 1); t = setTimeout(() => setTxt(n), dlg ? del : spd); }
-    return () => clearTimeout(t);
-  }, [txt, dlg, wi, words, spd, del, pause]);
-  return <span>{txt}<span style={{ animation: "cblink .9s step-start infinite", color: T.indigo2 }}>|</span></span>;
-}
 
 function MCard({ children, style = {}, glow = "rgba(79,70,229,.06)", className = "" }: MCardProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -296,7 +280,6 @@ function Hero() {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
   const isTablet = bp === "tablet";
-  const roles    = ["Web & Frontend Developer", "Full Stack Developer"];
 
   return (
     <section id="hero" style={{
@@ -326,7 +309,7 @@ function Hero() {
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a" }} />
             <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#16a34a", animation: "pulsering 1.5s ease-out infinite" }} />
           </span>
-          Open for Work · Unit PADU, Kementerian Ekonomi
+          {isMobile ? "Open for Work · PADU" : "Open for Work · Unit PADU, Kementerian Ekonomi"}
         </div>
 
         {/* Name — satu line, tanpa <br /> */}
@@ -341,20 +324,20 @@ function Hero() {
             letterSpacing: "-0.04em",
             lineHeight: 1.06,
             color: T.text,
-            whiteSpace: "nowrap",
+            whiteSpace: isMobile ? "normal" : "nowrap",
           }}>
             Muhammad Izzat <span className="gtext">Imran</span>
           </h1>
         </div>
 
-        {/* Typing role */}
+        {/* Role */}
         <div style={{ fontFamily: "monospace", fontSize: isMobile ? 13 : isTablet ? 14 : 15, color: T.text2, animation: "fadeup .65s ease .16s both" }}>
-          <TypingAnim words={roles} />
+          Web &amp; Front End Developer
         </div>
 
         {/* Description */}
         <p style={{ fontSize: isMobile ? 13 : 14, color: T.text3, lineHeight: 1.88, maxWidth: isMobile ? 320 : 520, animation: "fadeup .65s ease .24s both" }}>
-          CS graduate dari <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> dalam Netcentric Computing. Membangun government portals, AI chatbot, dan dashboard analytics untuk <span style={{ color: T.indigo, fontWeight: 500 }}>Kementerian Ekonomi Malaysia</span>.
+          CS graduate from <span style={{ color: T.indigo, fontWeight: 500 }}>UiTM</span> in Netcentric Computing. Building government portals, AI chatbots, and analytics dashboards for <span style={{ color: T.indigo, fontWeight: 500 }}>Kementerian Ekonomi Malaysia</span>.
         </p>
 
         {/* CTA */}
@@ -574,7 +557,7 @@ function Skills() {
           <h2 style={{ fontSize: "clamp(22px,6vw,30px)", fontWeight: 700, color: T.text }}>My <span className="gtext">Tech Stack</span></h2>
           <p style={{ fontSize: 13, color: T.text3, marginTop: 10 }}>Tools &amp; technologies I use to build digital products</p>
         </div>
-        <div style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
+        <div style={{ maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
             {ALL_TECH.map(t => <TechIconCard key={t.n} t={t} />)}
           </div>
@@ -1060,7 +1043,7 @@ function Contact() {
               <div>
                 <div style={{ fontWeight: 600, color: "#ffffff", fontSize: isMobile ? 14 : 15, marginBottom: 3 }}>Drop me an email</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>+6012-296 7752 · Kajang, Selangor</div>
-                <code style={{ fontSize: isMobile ? 11.5 : 13, color: "#818cf8", marginTop: 6, display: "block" }}>{email}</code>
+                <code style={{ fontSize: isMobile ? 11.5 : 13, color: "#818cf8", marginTop: 6, display: "block", wordBreak: "break-all" }}>{email}</code>
               </div>
             </div>
             <SBtn onClick={copy} style={isMobile ? { width: "100%" } : {}}>{copied ? <>✓ Copied!</> : <><Send size={13} />Copy Email</>}</SBtn>
