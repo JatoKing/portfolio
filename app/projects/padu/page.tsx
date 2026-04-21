@@ -191,6 +191,7 @@ function Marquee({ items, rev=false }: { items:{n:string;img:string}[]; rev?:boo
 const PROJECTS: {
   id:string; idx:string; icon:string; title:string; imgs:string[]; sub:string;
   color:string; colorRaw:string; desc:string; url?:string; imgFit?:"cover"|"contain";
+  internal?:boolean;
   stats:{v:number;sfx:string;l:string}[];
   features:string[];
   techs:{n:string;img:string}[];
@@ -236,6 +237,7 @@ const PROJECTS: {
     id:"panduan", idx:"02", icon:"📖", title:"User Guide Portal",
     imgs:["/homepanduan.png"],
     sub:"User Guide Portal · Strapi CMS",
+    internal:true,
     color:T.vio, colorRaw:"124,58,237",
     desc:"Official user guide portal with a headless CMS powered by Strapi. Enables dynamic content management by admins without writing code, paired with secure Google OAuth 2.0 authentication for government staff access control.",
     stats:[{v:3,sfx:"",l:"CMS Modules"},{v:100,sfx:"%",l:"Dynamic Content"},{v:1,sfx:"",l:"OAuth Provider"}],
@@ -269,6 +271,7 @@ const PROJECTS: {
     id:"analitik", idx:"03", icon:"📊", title:"Analytics Portal",
     imgs:["/homeanalitik.jpeg"],
     sub:"Analytics Portal · Ministry of Economy",
+    internal:true,
     color:T.grn, colorRaw:"22,163,74",
     desc:"Government data analytics portal for KPI monitoring and policy planning. Built with interactive chart dashboards, advanced data filtering, and real-time KPI monitoring panels for policy analysts with REST API integration.",
     stats:[{v:10,sfx:"+",l:"Chart Modules"},{v:100,sfx:"%",l:"Real-time"},{v:3,sfx:"",l:"KPI Panels"}],
@@ -309,6 +312,7 @@ const PROJECTS: {
     imgs:["/chatbotmyinfo.jpeg"],
     imgFit:"contain",
     sub:"Vertex AI · Conversational Agent",
+    internal:true,
     color:T.cyn, colorRaw:"8,145,178",
     desc:"AI-powered chatbot built using Google Vertex AI Conversational Agents for MyINFO and the PADU Portal. Enhances user interaction and information accessibility with sophisticated NLU and custom Lottie animations.",
     stats:[{v:2,sfx:"",l:"Portals"},{v:24,sfx:"/7",l:"Uptime"},{v:100,sfx:"%",l:"AI Powered"}],
@@ -522,19 +526,17 @@ function ProjectDetail({ proj, even }: { proj: typeof PROJECTS[0]; even: boolean
                   }}>
                     Active
                   </span>
-                  {proj.url && (
-                    <a href={proj.url} target="_blank" rel="noopener noreferrer" style={{
+                  {proj.internal && (
+                    <span style={{
                       display: "inline-flex", alignItems: "center", gap: 4,
                       fontSize: 10, padding: "2px 8px", borderRadius: 999,
-                      background: `rgba(${cr},.08)`,
-                      border: `1px solid rgba(${cr},.2)`,
-                      color: proj.color, fontWeight: 600,
-                      fontFamily: "sans-serif", textDecoration: "none",
-                      transition: "background .15s",
+                      background: "rgba(107,114,128,.09)",
+                      border: "1px solid rgba(107,114,128,.22)",
+                      color: "#6b7280", fontWeight: 600,
+                      fontFamily: "sans-serif",
                     }}>
-                      <ArrowUpRight size={10} />
-                      padu.gov.my
-                    </a>
+                      🔒 Internal Use
+                    </span>
                   )}
                 </div>
               </div>
