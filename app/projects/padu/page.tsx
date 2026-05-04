@@ -199,7 +199,7 @@ const PROJECTS: {
 }[] = [
   {
     id:"awam", idx:"01", icon:"🇲🇾", title:"PADU Public Portal",
-    imgs:["/herosectionpadu.png"],
+    imgs:["/newbannerpadu.png"],
     sub:"Public Portal · padu-portal-awam-v2",
     url:"https://www.padu.gov.my",
     color:T.ind, colorRaw:"79,70,229",
