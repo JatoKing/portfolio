@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
   Github, Linkedin, Mail, ExternalLink, Code2, Zap,
-  ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap,
+  ArrowRight, MapPin, Briefcase, User, Send, Home, Layers, Globe2, GraduationCap, Trophy, Star,
 } from "lucide-react";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
@@ -229,6 +229,7 @@ function Dock({ active, goto }: DockProps) {
     { id: "hero",    Icon: Home,   lbl: "Home" },
     { id: "about",   Icon: User,   lbl: "About" },
     { id: "skills",  Icon: Zap,    lbl: "Skills" },
+    { id: "compete", Icon: Trophy, lbl: "Hackathons" },
     { id: "proj",    Icon: Layers, lbl: "Projects" },
     { id: "contact", Icon: Mail,   lbl: "Contact" },
   ];
@@ -366,8 +367,9 @@ function Hero() {
             {[
               { id: "about",   label: "About",    n: "01" },
               { id: "skills",  label: "Skills",   n: "02" },
-              { id: "proj",    label: "Projects", n: "03" },
-              { id: "contact", label: "Contact",  n: "04" },
+              { id: "compete", label: "Compete",  n: "03" },
+              { id: "proj",    label: "Projects", n: "04" },
+              { id: "contact", label: "Contact",  n: "05" },
             ].map(s => (
               <button key={s.id} onClick={() => smoothScrollTo(s.id)}
                 style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
@@ -503,8 +505,10 @@ function Skills() {
   const cRef = useRef<HTMLDivElement>(null);
   const l1Ref = useRef<HTMLDivElement>(null), l2Ref = useRef<HTMLDivElement>(null), l3Ref = useRef<HTMLDivElement>(null), l4Ref = useRef<HTMLDivElement>(null);
   const l5Ref = useRef<HTMLDivElement>(null), l6Ref = useRef<HTMLDivElement>(null), l7Ref = useRef<HTMLDivElement>(null), l8Ref = useRef<HTMLDivElement>(null);
+  const l9Ref = useRef<HTMLDivElement>(null);
   const r1Ref = useRef<HTMLDivElement>(null), r2Ref = useRef<HTMLDivElement>(null), r3Ref = useRef<HTMLDivElement>(null), r4Ref = useRef<HTMLDivElement>(null);
   const r5Ref = useRef<HTMLDivElement>(null), r6Ref = useRef<HTMLDivElement>(null), r7Ref = useRef<HTMLDivElement>(null), r8Ref = useRef<HTMLDivElement>(null);
+  const r9Ref = useRef<HTMLDivElement>(null);
   const [beams, setBeams] = useState<{ d: string; delay: number }[]>([]);
 
   useEffect(() => {
@@ -518,8 +522,8 @@ function Skills() {
         return { x: b.left - box.left + b.width / 2, y: b.top - box.top + b.height / 2 };
       };
       const c = mid(cRef); if (!c) return;
-      const lRefs = [l1Ref, l2Ref, l3Ref, l4Ref, l5Ref, l6Ref, l7Ref, l8Ref];
-      const rRefs = [r1Ref, r2Ref, r3Ref, r4Ref, r5Ref, r6Ref, r7Ref, r8Ref];
+      const lRefs = [l1Ref, l2Ref, l3Ref, l4Ref, l5Ref, l6Ref, l7Ref, l8Ref, l9Ref];
+      const rRefs = [r1Ref, r2Ref, r3Ref, r4Ref, r5Ref, r6Ref, r7Ref, r8Ref, r9Ref];
       const result: { d: string; delay: number }[] = [];
       lRefs.forEach((ref, i) => { const p = mid(ref); if (!p) return; const cx = (p.x + c.x) / 2; result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38) }); });
       rRefs.forEach((ref, i) => { const p = mid(ref); if (!p) return; const cx = (c.x + p.x) / 2; result.push({ d: `M${p.x},${p.y} C${cx},${p.y} ${cx},${c.y} ${c.x},${c.y}`, delay: -(i * 0.38 + 0.19) }); });
@@ -533,12 +537,14 @@ function Skills() {
   const ALL_TECH = [
     { n: "Next.js 15",   img: "https://cdn.simpleicons.org/nextdotjs/111111" },
     { n: "React",        img: "https://cdn.simpleicons.org/react" },
+    { n: "React Native", img: "https://cdn.simpleicons.org/react" },
     { n: "TypeScript",   img: "https://cdn.simpleicons.org/typescript" },
     { n: "Tailwind CSS", img: "https://cdn.simpleicons.org/tailwindcss" },
     { n: "JavaScript",   img: "https://cdn.simpleicons.org/javascript" },
     { n: "Laravel",      img: "https://cdn.simpleicons.org/laravel" },
     { n: "PHP",          img: "https://cdn.simpleicons.org/php" },
     { n: "MySQL",        img: "https://cdn.simpleicons.org/mysql" },
+    { n: "PostgreSQL",   img: "https://cdn.simpleicons.org/postgresql" },
     { n: "Strapi",       img: "https://cdn.simpleicons.org/strapi" },
     { n: "Vertex AI",    img: "https://cdn.simpleicons.org/googlecloud" },
     { n: "Google OAuth", img: "https://cdn.simpleicons.org/google" },
@@ -575,6 +581,7 @@ function Skills() {
     { n: "JavaScript",  img: "https://cdn.simpleicons.org/javascript",        ref: l6Ref },
     { n: "HeroUI",      img: "https://cdn.simpleicons.org/heroui/111111",     ref: l7Ref },
     { n: "Figma",       img: "https://cdn.simpleicons.org/figma",             ref: l8Ref },
+    { n: "React Native", img: "https://cdn.simpleicons.org/react",           ref: l9Ref },
   ];
   const RTECH = [
     { n: "React",        img: "https://cdn.simpleicons.org/react",            ref: r1Ref },
@@ -585,6 +592,7 @@ function Skills() {
     { n: "Google OAuth", img: "https://cdn.simpleicons.org/google",           ref: r6Ref },
     { n: "LottieFiles",  img: "https://cdn.simpleicons.org/lottiefiles",      ref: r7Ref },
     { n: "ASP.NET",      img: "https://cdn.simpleicons.org/dotnet",           ref: r8Ref },
+    { n: "PostgreSQL",   img: "https://cdn.simpleicons.org/postgresql",       ref: r9Ref },
   ];
   const circleStyle: React.CSSProperties = { width: 46, height: 46, borderRadius: "50%", background: T.card, border: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,.07)", flexShrink: 0, position: "relative", overflow: "hidden" };
   const TechIcon = ({ img, name }: { img: string; name: string }) => {
@@ -649,7 +657,7 @@ function Experience() {
   const isMobile = bp === "mobile";
   const isTablet = bp === "tablet";
   const jobs = [
-    { role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi", loc: "Putrajaya", period: "2025 – Present", accent: T.indigo, accentRaw: "79,70,229", current: true, points: ["Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS", "Integrated Strapi headless CMS with RESTful APIs for dynamic content", "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI", "Implemented Google OAuth 2.0 for secure authentication", "Managed source code via Git (OSDEC)"] },
+    { role: "Web & Frontend Developer", company: "Unit PADU, Kementerian Ekonomi", loc: "Putrajaya", period: "2025 – Present", accent: T.indigo, accentRaw: "79,70,229", current: true, points: ["Built Portal Analitik, Portal PADU & Portal Panduan Pengguna with Next.js & Tailwind CSS", "Integrated Strapi headless CMS with RESTful APIs for dynamic content", "Developed AI chatbot for MyINFO & Portal PADU using Vertex AI", "Implemented Google OAuth 2.0 for secure authentication", "Built an internal Unit PADU system with Next.js, PostgreSQL & Prisma ORM", "Collaborated with designers & stakeholders on UI/UX consistency", "Managed source code via Git (OSDEC)"] },
     { role: "IT Development Intern", company: "SB Tape Group Sdn Bhd", loc: "Seri Kembangan, Selangor", period: "2025", accent: T.violet, accentRaw: "124,58,237", current: false, points: ["Developed IOSS, ICAR & SCAR modules using VB.Net & ASP.NET", "Built weblogin, CRUD operations & report generation", "Designed system flowcharts using Draw.io", "Participated in user requirement meetings"] },
     { role: "IT Development Intern", company: "MAP2U Sdn Bhd", loc: "Nilai, Negeri Sembilan", period: "2023", accent: T.cyan, accentRaw: "8,145,178", current: false, points: ["Customised template-based websites & built system components", "Developed data tables & filters for E-idaman project", "Supported UI/UX design for Jabatan Pengaliran Saliran (JPS)"] },
   ];
@@ -735,12 +743,21 @@ function Experience() {
   );
 }
 
-const PROJECTS_DATA = [
+const WORK_PROJECTS_DATA = [
   { title: "Portal PADU", org: "Kementerian Ekonomi Malaysia", period: "2025 – Present", role: "Lead Frontend Dev", desc: "Lead frontend development for Malaysia's national socioeconomic portal. Built 20+ animated pages including infographic dashboards, 3D carousel timelines, and AI-powered chatbot via Vertex AI.", highlights: ["20+ animated page modules","3D carousel timeline (SejarahPaduPage)","PADUServices animated infographics","KolaborasiStrategik agency grid 14+","Media & press release pages","Responsive across all breakpoints","Framer Motion entrance animations","HeroUI component library"], tags: ["Next.js 15","Tailwind CSS","Vertex AI","HeroUI","Framer Motion"], icon: "🇲🇾", accent: T.indigo, accentRaw: "79,70,229", status: "Live", statusColor: "#16a34a", href: "/projects/padu" },
   { title: "MyINFO & PADU Chatbot", org: "Unit PADU, Kementerian Ekonomi", period: "2025 – Present", role: "AI Integration Developer", desc: "AI-powered chatbot built using Google Vertex AI Conversational Agents for both MyINFO and Portal PADU. Features sophisticated NLU, custom Lottie robot animation, shadow DOM CSS injection, and auto-refresh on session close.", highlights: ["Google Vertex AI Conversational Agents","Natural language understanding (NLU)","Deployed on MyINFO & Portal PADU","Custom Lottie robot animation icon","Shadow DOM CSS injection","Auto-refresh on chat session close","Dialogflow intent routing","Chip text display & welcome intent"], tags: ["Vertex AI","Dialogflow","LottieFiles","TypeScript","Next.js"], icon: "🤖", accent: "#0891b2", accentRaw: "8,145,178", status: "Live", statusColor: "#16a34a", internal: true, href: "/projects/padu" },
   { title: "Portal Analitik", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer", desc: "Analytics portal for government data insights. Developed interactive chart dashboards, advanced data filtering system, and real-time KPI monitoring panels for policy analysts with REST API integration.", highlights: ["Interactive chart dashboards","KPI monitoring panels","Advanced data filtering system","REST API integration","Policy analyst-focused UI","Real-time data rendering"], tags: ["Next.js","React","Tailwind CSS","REST API"], icon: "📊", accent: T.violet, accentRaw: "124,58,237", status: "Live", statusColor: "#16a34a", internal: true, href: "/projects/padu" },
   { title: "Portal Panduan Pengguna", org: "Kementerian Ekonomi", period: "2025", role: "Frontend Developer", desc: "Government staff portal with dynamic content management via Strapi headless CMS. Implemented secure Google OAuth 2.0 authentication and RESTful API integration for structured user guide delivery.", highlights: ["Strapi headless CMS integration","Google OAuth 2.0 authentication","Dynamic content per slug","Staff role-based access control","RESTful API content fetching","SEO optimized URL structure"], tags: ["Next.js","Strapi CMS","Google OAuth","REST API"], icon: "📖", accent: T.cyan, accentRaw: "8,145,178", status: "Live", statusColor: "#16a34a", internal: true, href: "/projects/padu" },
+  { title: "Unit PADU Internal System", org: "Unit PADU, Kementerian Ekonomi", period: "2025 – Present", role: "Full-Stack Developer", desc: "Internal workflow management system for Unit PADU, integrating a responsive Next.js front-end with structured PostgreSQL data models via Prisma ORM to support daily operational efficiency.", highlights: ["Next.js + Prisma ORM stack","PostgreSQL structured data models","Internal workflow management","Operational efficiency tooling","Responsive internal dashboard UI","Role-based internal access"], tags: ["Next.js","PostgreSQL","Prisma ORM","Tailwind CSS"], icon: "🗂️", accent: T.indigo, accentRaw: "79,70,229", status: "Live", statusColor: "#16a34a", internal: true, href: "/projects/padu" },
+];
+
+const PERSONAL_PROJECTS_DATA = [
   { title: "Smart Ticket System", org: "Final Year Project · UiTM", period: "2025", role: "Full-Stack Developer", desc: "Full-stack national football ticket booking system with a custom real-time seat allocation algorithm for Bukit Jalil National Stadium. Built with Laravel, deployed on InfinityFree hosting.", highlights: ["Real-time seat allocation algorithm","Interactive Bukit Jalil SVG map","Full-stack Laravel + MySQL","CSRF protection & secure checkout","Admin CRUD dashboard","E-ticket generation with QR code","Mobile-first responsive design","Deployed on InfinityFree hosting"], tags: ["Laravel","MySQL","PHP","InfinityFree"], icon: "🏟️", accent: "#d97706", accentRaw: "217,119,6", status: "Completed", statusColor: "#0891b2", href: "/projects/fyp-project" },
+  { title: "JEJAK", org: "ASEAN GeoAI Fusion 2026 · Hackathon", period: "2026", role: "Contributor", desc: "GeoAI platform that predicts communication dead zones along hiking trails using terrain, vegetation & telecom data — giving hikers offline connectivity awareness, guiding LoRa gateway deployment, and equipping SAR teams with connectivity intelligence during emergencies.", highlights: ["Predictive dead-zone mapping (GeoAI)","LoRa gateway placement recommendations","Offline-ready mobile app & maps","Pre-gap connectivity warnings","GPS trajectory recording & sync","SAR connectivity intelligence"], tags: ["GeoAI","Earth Observation","Telecom Analytics","Search & Rescue"], icon: "🧭", accent: "#0d9488", accentRaw: "13,148,136", status: "Hackathon", statusColor: "#0d9488", href: "/projects/jejak" },
+];
+
+const COMPETITIONS_DATA = [
+  { title: "JEJAK", event: "ASEAN GeoAI Fusion 2026", org: "GeoAI-Powered Hiking Connectivity Intelligence Platform", period: "2026", role: "Contributor", desc: "GeoAI platform that predicts communication dead zones along hiking trails using terrain, vegetation & telecom data — giving hikers offline connectivity awareness, guiding LoRa gateway deployment, and equipping SAR teams with connectivity intelligence during emergencies.", tags: ["GeoAI", "Earth Observation", "Telecom Analytics", "Search & Rescue"], icon: "🧭", accent: "#d97706", accentRaw: "217,119,6", href: "/projects/jejak" },
 ];
 
 function FeatureGrid({ highlights, accent, accentRaw }: { highlights: string[]; accent: string; accentRaw: string }) {
@@ -759,7 +776,7 @@ function FeatureGrid({ highlights, accent, accentRaw }: { highlights: string[]; 
   );
 }
 
-function ProjectsCards() {
+function ProjectsCards({ data }: { data: typeof WORK_PROJECTS_DATA }) {
   const bp       = useBreakpoint();
   const isMobile = bp === "mobile";
   const [expandIdx, setExpandIdx] = useState<number | null>(null);
@@ -775,7 +792,7 @@ function ProjectsCards() {
   }, []);
   return (
     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
-      {PROJECTS_DATA.map((p, i) => {
+      {data.map((p, i) => {
         const isOpen = expandIdx === i;
         return (
           <MCard key={i} glow={`rgba(${p.accentRaw},.05)`} className="">
@@ -826,7 +843,7 @@ function ProjectsCards() {
   );
 }
 
-function ProjectsTable() {
+function ProjectsTable({ data }: { data: typeof WORK_PROJECTS_DATA }) {
   const rowRefs   = useRef<(HTMLTableRowElement | null)[]>([]);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [expandIdx, setExpandIdx] = useState<number | null>(null);
@@ -877,10 +894,10 @@ function ProjectsTable() {
             </tr>
           </thead>
           <tbody>
-            {PROJECTS_DATA.map((p, i) => {
+            {data.map((p, i) => {
               const isOpen = expandIdx === i;
               const rowBg  = i % 2 === 0 ? T.card : "#fafaf8";
-              const bdClr  = i < PROJECTS_DATA.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
+              const bdClr  = i < data.length - 1 && !isOpen ? `1px solid ${T.border}` : "none";
               return (
                 <React.Fragment key={i}>
                   <tr ref={el => { rowRefs.current[i] = el; }} className={`o-row ${isOpen ? "open-row" : ""}`} onMouseEnter={() => setHovIdx(i)} onMouseLeave={() => setHovIdx(null)} onClick={() => toggle(i)}>
@@ -958,9 +975,9 @@ function ProjectsTable() {
           </tbody>
         </table>
         <div style={{ padding: "11px 18px", background: T.bg3, borderTop: `1px solid ${T.border2}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: 11, color: T.text3 }}>{PROJECTS_DATA.length} projects · 2025</span>
+          <span style={{ fontSize: 11, color: T.text3 }}>{data.length} project{data.length === 1 ? "" : "s"}</span>
           <div style={{ display: "flex", gap: 5 }}>
-            {PROJECTS_DATA.map((p, i) => <div key={i} onClick={() => toggle(i)} style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }} />)}
+            {data.map((p, i) => <div key={i} onClick={() => toggle(i)} style={{ width: expandIdx === i ? 22 : 8, height: 8, borderRadius: 99, background: expandIdx === i ? p.accent : `rgba(${p.accentRaw},.3)`, cursor: "pointer", transition: "all .3s ease" }} />)}
           </div>
         </div>
       </div>
@@ -975,16 +992,18 @@ function Projects() {
   return (
     <section id="proj" style={{ background: T.bg2, padding: `${isMobile ? 64 : 96}px ${isMobile ? 16 : 24}px` }}>
       <div style={{ maxWidth: isMobile || isTablet ? 760 : 1040, marginLeft: "auto", marginRight: "auto" }}>
+
+        {/* ── Work Projects ── */}
         <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", marginBottom: isMobile ? 24 : 32, gap: 14 }}>
           <div>
             <SBadge><Layers size={11} />Work</SBadge>
-            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>Featured <span className="gtext">Projects</span></h2>
+            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>Work <span className="gtext">Projects</span></h2>
           </div>
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <p style={{ fontSize: 12.5, color: T.text3 }}>{isTablet ? "Tap to expand ↓" : "Click any row to read more ↓"}</p>
               <div style={{ display: "flex", gap: 8 }}>
-                {[{ color: T.indigo, label: "Gov Portal" }, { color: "#0891b2", label: "AI / Bot" }, { color: "#d97706", label: "Academic" }].map(l => (
+                {[{ color: T.indigo, label: "Gov Portal" }, { color: "#0891b2", label: "AI / Bot" }].map(l => (
                   <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
                     <div style={{ width: 9, height: 9, borderRadius: 3, background: l.color }} />{l.label}
                   </div>
@@ -993,7 +1012,28 @@ function Projects() {
             </div>
           )}
         </div>
-        {isMobile || isTablet ? <ProjectsCards /> : <ProjectsTable />}
+        {isMobile || isTablet ? <ProjectsCards data={WORK_PROJECTS_DATA} /> : <ProjectsTable data={WORK_PROJECTS_DATA} />}
+
+        {/* ── Personal Projects ── */}
+        <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "flex-end", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", margin: `${isMobile ? 40 : 56}px 0 ${isMobile ? 24 : 32}px`, gap: 14 }}>
+          <div>
+            <SBadge><Star size={11} />Personal</SBadge>
+            <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>Personal <span className="gtext">Projects</span></h2>
+          </div>
+          {!isMobile && (
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <p style={{ fontSize: 12.5, color: T.text3 }}>{isTablet ? "Tap to expand ↓" : "Click any row to read more ↓"}</p>
+              <div style={{ display: "flex", gap: 8 }}>
+                {[{ color: "#d97706", label: "Academic" }, { color: "#0d9488", label: "Hackathon" }].map(l => (
+                  <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, color: T.text3 }}>
+                    <div style={{ width: 9, height: 9, borderRadius: 3, background: l.color }} />{l.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        {isMobile || isTablet ? <ProjectsCards data={PERSONAL_PROJECTS_DATA} /> : <ProjectsTable data={PERSONAL_PROJECTS_DATA} />}
       </div>
     </section>
   );
@@ -1080,6 +1120,98 @@ function Contact() {
   );
 }
 
+function CompetitionBanner({ c, i }: { c: typeof COMPETITIONS_DATA[number]; i: number }) {
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [hov, setHov] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); io.disconnect(); } }, { threshold: 0.15 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      onClick={() => window.location.href = c.href}
+      style={{
+        position: "relative", borderRadius: 24, overflow: "hidden", cursor: "pointer",
+        border: `1px solid rgba(${c.accentRaw},.3)`,
+        background: `radial-gradient(120% 140% at 15% 15%, rgba(${c.accentRaw},.22), #ffffff 62%)`,
+        padding: isMobile ? "36px 22px" : "56px 60px",
+        boxShadow: hov ? `0 24px 64px rgba(${c.accentRaw},.28)` : "0 12px 40px rgba(0,0,0,.18)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: `opacity .6s ease ${i * 0.1}s, transform .6s ease ${i * 0.1}s, box-shadow .3s ease, border-color .3s ease`,
+      }}
+    >
+      <div style={{ position: "absolute", inset: 0, opacity: 0.32, pointerEvents: "none" }}>
+        <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
+          {[0, 1, 2, 3].map(li => (
+            <path key={li} d={`M -50,${60 + li * 90} C 150,${10 + li * 90} 300,${110 + li * 90} 450,${50 + li * 90} S 750,${0 + li * 90} 950,${70 + li * 90}`}
+              fill="none" stroke={c.accent} strokeWidth="1.5" />
+          ))}
+        </svg>
+      </div>
+      <div style={{ position: "relative", display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", justifyContent: "space-between", gap: isMobile ? 24 : 32 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 14px", borderRadius: 999,
+            border: `1px solid rgba(${c.accentRaw},.4)`, background: `rgba(${c.accentRaw},.14)`,
+            color: c.accent, fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" as const,
+            marginBottom: 18,
+          }}>
+            <Trophy size={12} /> Hackathon
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 14 }}>
+            <span style={{ fontSize: isMobile ? 44 : 60, lineHeight: 1, filter: `drop-shadow(0 0 20px rgba(${c.accentRaw},.5))` }}>{c.icon}</span>
+            <h3 style={{ fontSize: "clamp(28px,4.5vw,46px)", fontWeight: 900, letterSpacing: "-0.03em", color: T.text, margin: 0, lineHeight: 1.02 }}>{c.title}</h3>
+          </div>
+          <div style={{ fontSize: 13.5, color: c.accent, fontWeight: 700, marginBottom: 4 }}>{c.event}</div>
+          <div style={{ fontSize: 12, color: T.text3, marginBottom: 18 }}>{c.org} · {c.period} · {c.role}</div>
+          <p style={{ fontSize: 13.5, color: T.text2, lineHeight: 1.8, maxWidth: 560, marginBottom: 20 }}>{c.desc}</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 26 }}>
+            {c.tags.map(t => (
+              <span key={t} style={{ fontSize: 10.5, padding: "3px 10px", borderRadius: 999, border: `1px solid rgba(${c.accentRaw},.3)`, background: `rgba(${c.accentRaw},.1)`, color: c.accent, fontWeight: 600 }}>{t}</span>
+            ))}
+          </div>
+          <button onClick={e => { e.stopPropagation(); window.location.href = c.href; }} style={{
+            display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 24px", borderRadius: 999,
+            background: `linear-gradient(135deg, rgba(${c.accentRaw},1), rgba(${c.accentRaw},.75))`,
+            color: "#fff", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13,
+            boxShadow: `0 8px 24px rgba(${c.accentRaw},.3)`,
+          }}>
+            View Project <ExternalLink size={13} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Competitions() {
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
+  return (
+    <section id="compete" style={{ background: T.bg, padding: `${isMobile ? 64 : 96}px ${isMobile ? 16 : 24}px` }}>
+      <div style={{ maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
+        <div style={{ marginBottom: isMobile ? 24 : 32 }}>
+          <SBadge><Trophy size={11} />Hackathons</SBadge>
+          <h2 style={{ fontSize: `clamp(${isMobile ? 22 : 26}px,4.5vw,42px)`, fontWeight: 800, color: T.text, letterSpacing: "-0.03em", lineHeight: 1 }}>Featured <span className="gtext">Hackathons</span></h2>
+          <p style={{ fontSize: 13, color: T.text3, marginTop: 10 }}>Separate from client work — projects built under hackathon or bootcamp settings.</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {COMPETITIONS_DATA.map((c, i) => <CompetitionBanner key={c.title} c={c} i={i} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Portfolio() {
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState("hero");
@@ -1087,7 +1219,7 @@ export default function Portfolio() {
   const goto = useCallback((id: string) => { smoothScrollTo(id); setActive(id); }, []);
   useEffect(() => {
     const fn = () => {
-      for (const id of ["hero","about","skills","exp","proj","contact"]) {
+      for (const id of ["hero","about","skills","exp","compete","proj","contact"]) {
         const el = document.getElementById(id);
         if (el) { const r = el.getBoundingClientRect(); if (r.top <= 180 && r.bottom >= 180) { setActive(id); break; } }
       }
@@ -1105,6 +1237,7 @@ export default function Portfolio() {
         <About />
         <Skills />
         <Experience />
+        <Competitions />
         <Projects />
         <Contact />
         <Dock active={active} goto={goto} />
