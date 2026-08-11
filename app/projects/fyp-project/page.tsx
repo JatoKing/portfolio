@@ -8,17 +8,17 @@ import {
 
 /* ─── Colour Tokens ──────────────────────────────────────────────── */
 const C = {
-  bg:      "#070c0f",
-  bg2:     "#0d1518",
-  bg3:     "#111b1f",
-  card:    "#0f1c21",
+  bg:      "#0a0a0a",
+  bg2:     "#131313",
+  bg3:     "#1a1a1a",
+  card:    "#161616",
   border:  "rgba(255,255,255,0.07)",
   border2: "rgba(255,255,255,0.11)",
-  green:   "#16a34a",
-  green2:  "#22c55e",
-  green3:  "#4ade80",
-  lime:    "#a3e635",
-  gold:    "#f59e0b",
+  yellow:  "#ca8a04",
+  yellow2:  "#eab308",
+  yellow3:  "#facc15",
+  lime:    "#fde047",
+  gold:    "#f5c518",
   white:   "#f8fafc",
   muted:   "rgba(248,250,252,0.55)",
   muted2:  "rgba(248,250,252,0.3)",
@@ -48,24 +48,24 @@ function PitchLinesHero() {
     >
       {Array.from({ length: 14 }, (_, i) => (
         <rect key={i} x={50 + i * 57} y="35" width="28.5" height="490"
-          fill={C.green2} opacity={i % 2 === 0 ? 0.25 : 0} />
+          fill={C.yellow2} opacity={i % 2 === 0 ? 0.25 : 0} />
       ))}
-      <rect x="50" y="35" width="800" height="490" fill="none" stroke={C.green2} strokeWidth="2" />
-      <line x1="450" y1="35" x2="450" y2="525" stroke={C.green2} strokeWidth="1.5" />
-      <circle cx="450" cy="280" r="90" fill="none" stroke={C.green2} strokeWidth="1.5" />
-      <circle cx="450" cy="280" r="4" fill={C.green2} />
-      <rect x="50" y="165" width="145" height="230" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <rect x="50" y="215" width="55" height="130" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <path d="M195,248 A62,62 0 0,1 195,312" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <circle cx="160" cy="280" r="3" fill={C.green2} />
-      <rect x="705" y="165" width="145" height="230" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <rect x="795" y="215" width="55" height="130" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <path d="M705,248 A62,62 0 0,0 705,312" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <circle cx="740" cy="280" r="3" fill={C.green2} />
-      <path d="M50,47 A14,14 0 0,1 62,35"    fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M838,35 A14,14 0 0,1 850,47"  fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M50,513 A14,14 0 0,0 62,525"  fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M838,525 A14,14 0 0,0 850,513" fill="none" stroke={C.green2} strokeWidth="1" />
+      <rect x="50" y="35" width="800" height="490" fill="none" stroke={C.yellow2} strokeWidth="2" />
+      <line x1="450" y1="35" x2="450" y2="525" stroke={C.yellow2} strokeWidth="1.5" />
+      <circle cx="450" cy="280" r="90" fill="none" stroke={C.yellow2} strokeWidth="1.5" />
+      <circle cx="450" cy="280" r="4" fill={C.yellow2} />
+      <rect x="50" y="165" width="145" height="230" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <rect x="50" y="215" width="55" height="130" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <path d="M195,248 A62,62 0 0,1 195,312" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <circle cx="160" cy="280" r="3" fill={C.yellow2} />
+      <rect x="705" y="165" width="145" height="230" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <rect x="795" y="215" width="55" height="130" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <path d="M705,248 A62,62 0 0,0 705,312" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <circle cx="740" cy="280" r="3" fill={C.yellow2} />
+      <path d="M50,47 A14,14 0 0,1 62,35"    fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M838,35 A14,14 0 0,1 850,47"  fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M50,513 A14,14 0 0,0 62,525"  fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M838,525 A14,14 0 0,0 850,513" fill="none" stroke={C.yellow2} strokeWidth="1" />
     </svg>
   );
 }
@@ -82,23 +82,23 @@ function PitchLines() {
       }}
       preserveAspectRatio="xMidYMid slice"
     >
-      <rect x="40" y="30" width="720" height="440" fill="none" stroke={C.green2} strokeWidth="2" />
-      <circle cx="400" cy="250" r="80" fill="none" stroke={C.green2} strokeWidth="1.5" />
-      <circle cx="400" cy="250" r="4" fill={C.green2} />
-      <line x1="400" y1="30" x2="400" y2="470" stroke={C.green2} strokeWidth="1.5" />
-      <rect x="40" y="145" width="130" height="210" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <rect x="40" y="195" width="50" height="110" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <path d="M170,218 A55,55 0 0,1 170,282" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <rect x="630" y="145" width="130" height="210" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <rect x="710" y="195" width="50" height="110" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <path d="M630,218 A55,55 0 0,0 630,282" fill="none" stroke={C.green2} strokeWidth="1.2" />
-      <path d="M40,42 A14,14 0 0,1 54,30"    fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M746,30 A14,14 0 0,1 760,42"  fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M40,458 A14,14 0 0,0 54,470"  fill="none" stroke={C.green2} strokeWidth="1" />
-      <path d="M746,470 A14,14 0 0,0 760,458" fill="none" stroke={C.green2} strokeWidth="1" />
+      <rect x="40" y="30" width="720" height="440" fill="none" stroke={C.yellow2} strokeWidth="2" />
+      <circle cx="400" cy="250" r="80" fill="none" stroke={C.yellow2} strokeWidth="1.5" />
+      <circle cx="400" cy="250" r="4" fill={C.yellow2} />
+      <line x1="400" y1="30" x2="400" y2="470" stroke={C.yellow2} strokeWidth="1.5" />
+      <rect x="40" y="145" width="130" height="210" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <rect x="40" y="195" width="50" height="110" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <path d="M170,218 A55,55 0 0,1 170,282" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <rect x="630" y="145" width="130" height="210" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <rect x="710" y="195" width="50" height="110" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <path d="M630,218 A55,55 0 0,0 630,282" fill="none" stroke={C.yellow2} strokeWidth="1.2" />
+      <path d="M40,42 A14,14 0 0,1 54,30"    fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M746,30 A14,14 0 0,1 760,42"  fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M40,458 A14,14 0 0,0 54,470"  fill="none" stroke={C.yellow2} strokeWidth="1" />
+      <path d="M746,470 A14,14 0 0,0 760,458" fill="none" stroke={C.yellow2} strokeWidth="1" />
       {Array.from({ length: 12 }, (_, i) => (
         <rect key={i} x={40 + i * 60} y="30" width="30" height="440"
-          fill={C.green2} opacity={i % 2 === 0 ? 0.3 : 0} />
+          fill={C.yellow2} opacity={i % 2 === 0 ? 0.3 : 0} />
       ))}
     </svg>
   );
@@ -118,15 +118,15 @@ function ScoreTicker() {
   return (
     <div style={{
       overflow: "hidden",
-      borderTop: `1px solid rgba(22,163,74,0.3)`,
-      borderBottom: `1px solid rgba(22,163,74,0.3)`,
-      background: "rgba(22,163,74,0.06)", padding: "10px 0",
+      borderTop: `1px solid rgba(250,204,21,0.3)`,
+      borderBottom: `1px solid rgba(250,204,21,0.3)`,
+      background: "rgba(250,204,21,0.06)", padding: "10px 0",
     }}>
       <div style={{
         display: "flex", gap: 56, width: "max-content",
         animation: "tickerMove 28s linear infinite",
         fontFamily: "'JetBrains Mono','Fira Code',monospace",
-        fontSize: 12, color: C.green3, fontWeight: 600, letterSpacing: "0.04em",
+        fontSize: 12, color: C.yellow3, fontWeight: 600, letterSpacing: "0.04em",
       }}>
         {doubled.map((item, i) => (
           <span key={i} style={{ whiteSpace: "nowrap" }}>{item}</span>
@@ -142,16 +142,16 @@ function JerseyBadge({ num, label }: { num: string; label: string }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
       <div style={{
         width: 88, height: 72, borderRadius: 14,
-        background: `linear-gradient(135deg, rgba(22,163,74,0.25), rgba(22,163,74,0.08))`,
-        border: `1.5px solid rgba(22,163,74,0.35)`,
+        background: `linear-gradient(135deg, rgba(250,204,21,0.25), rgba(250,204,21,0.08))`,
+        border: `1.5px solid rgba(250,204,21,0.35)`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 0 24px rgba(22,163,74,0.12)",
+        boxShadow: "0 0 24px rgba(250,204,21,0.12)",
         padding: "0 8px",
       }}>
         <span style={{
           fontFamily: "'JetBrains Mono',monospace",
           fontSize: num.length > 5 ? 14 : num.length > 3 ? 17 : 22,
-          fontWeight: 900, color: C.green3, letterSpacing: "-0.03em",
+          fontWeight: 900, color: C.yellow3, letterSpacing: "-0.03em",
           textAlign: "center", lineHeight: 1,
         }}>{num}</span>
       </div>
@@ -170,9 +170,9 @@ function TechTag({ label, icon }: { label: string; icon?: string }) {
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 6,
       padding: "5px 12px", borderRadius: 999,
-      border: `1px solid rgba(22,163,74,0.25)`,
-      background: "rgba(22,163,74,0.08)",
-      color: C.green3, fontSize: 11.5, fontWeight: 600, letterSpacing: "0.02em",
+      border: `1px solid rgba(250,204,21,0.25)`,
+      background: "rgba(250,204,21,0.08)",
+      color: C.yellow3, fontSize: 11.5, fontWeight: 600, letterSpacing: "0.02em",
     }}>
       {icon && <span style={{ fontSize: 12 }}>{icon}</span>}
       {label}
@@ -186,9 +186,9 @@ function SectionBadge({ icon, label }: { icon: React.ReactNode; label: string })
     <div style={{
       display: "inline-flex", alignItems: "center", gap: 7,
       padding: "5px 14px", borderRadius: 999,
-      border: "1px solid rgba(22,163,74,0.3)",
-      background: "rgba(22,163,74,0.08)",
-      color: C.green3, fontSize: 11, fontWeight: 700,
+      border: "1px solid rgba(250,204,21,0.3)",
+      background: "rgba(250,204,21,0.08)",
+      color: C.yellow3, fontSize: 11, fontWeight: 700,
       letterSpacing: "0.09em", textTransform: "uppercase" as const,
       marginBottom: 14,
     }}>
@@ -241,8 +241,8 @@ function ObjectiveCard({
       style={{
         display: "flex", alignItems: "flex-start", gap: 20,
         padding: "20px 24px", borderRadius: 16,
-        background: hov ? "rgba(22,163,74,0.07)" : C.card,
-        border: `1px solid ${hov ? "rgba(22,163,74,0.28)" : C.border2}`,
+        background: hov ? "rgba(250,204,21,0.07)" : C.card,
+        border: `1px solid ${hov ? "rgba(250,204,21,0.28)" : C.border2}`,
         transition: "all 0.25s ease", cursor: "default",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateX(0)" : "translateX(-16px)",
@@ -254,14 +254,14 @@ function ObjectiveCard({
       {/* Number node */}
       <div style={{
         width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-        background: hov ? "rgba(22,163,74,0.2)" : "rgba(22,163,74,0.1)",
-        border: `1.5px solid ${hov ? "rgba(22,163,74,0.5)" : "rgba(22,163,74,0.25)"}`,
+        background: hov ? "rgba(250,204,21,0.2)" : "rgba(250,204,21,0.1)",
+        border: `1.5px solid ${hov ? "rgba(250,204,21,0.5)" : "rgba(250,204,21,0.25)"}`,
         display: "flex", alignItems: "center", justifyContent: "center",
         transition: "all 0.25s ease",
       }}>
         <span style={{
           fontFamily: "'JetBrains Mono',monospace",
-          fontSize: 15, fontWeight: 900, color: C.green3,
+          fontSize: 15, fontWeight: 900, color: C.yellow3,
         }}>{num}</span>
       </div>
       {/* Content */}
@@ -269,7 +269,7 @@ function ObjectiveCard({
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
           <CheckCircle2
             size={13}
-            color={hov ? C.green3 : "rgba(74,222,128,0.4)"}
+            color={hov ? C.yellow3 : "rgba(250,204,21,0.4)"}
             style={{ transition: "color 0.25s ease", flexShrink: 0 }}
           />
           <span style={{ fontSize: 13, fontWeight: 800, color: C.white, letterSpacing: "-0.01em" }}>
@@ -453,11 +453,11 @@ function ProblemObjectivesSection() {
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
             <div style={{
               width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-              background: "rgba(22,163,74,0.12)",
-              border: "1px solid rgba(22,163,74,0.28)",
+              background: "rgba(250,204,21,0.12)",
+              border: "1px solid rgba(250,204,21,0.28)",
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              <Target size={16} color={C.green3} />
+              <Target size={16} color={C.yellow3} />
             </div>
             <div>
               <div style={{
@@ -470,7 +470,7 @@ function ProblemObjectivesSection() {
             </div>
             <div style={{
               flex: 1, height: 1,
-              background: "linear-gradient(90deg, rgba(22,163,74,0.25), transparent)",
+              background: "linear-gradient(90deg, rgba(250,204,21,0.25), transparent)",
             }} />
           </div>
 
@@ -478,7 +478,7 @@ function ProblemObjectivesSection() {
           <div style={{ position: "relative" }}>
             <div style={{
               position: "absolute", left: 48, top: 48, bottom: 48, width: 1,
-              background: "linear-gradient(180deg, rgba(22,163,74,0.4), rgba(22,163,74,0.06))",
+              background: "linear-gradient(180deg, rgba(250,204,21,0.4), rgba(250,204,21,0.06))",
               pointerEvents: "none",
             }} />
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -534,8 +534,8 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
         style={{
           width: "100%", maxWidth: 880,
           background: C.card, borderRadius: 24,
-          border: `1px solid rgba(22,163,74,0.25)`,
-          boxShadow: "0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(22,163,74,0.15)",
+          border: `1px solid rgba(250,204,21,0.25)`,
+          boxShadow: "0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(250,204,21,0.15)",
           overflow: "hidden",
           animation: "modalSlideUp 0.3s cubic-bezier(.22,1,.36,1)",
         }}
@@ -556,16 +556,16 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
             background: "rgba(255,255,255,0.05)", border: `1px solid ${C.border}`,
             display: "flex", alignItems: "center", paddingLeft: 10, gap: 6, margin: "0 16px",
           }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.green, opacity: 0.7 }} />
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.yellow, opacity: 0.7 }} />
             <span style={{ fontSize: 11, color: C.muted2, fontFamily: "monospace" }}>
               localhost:8000/smart-ticket
             </span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{
-              fontSize: 11, color: C.green3, fontFamily: "monospace",
-              background: "rgba(22,163,74,0.1)", padding: "3px 10px", borderRadius: 5,
-              border: `1px solid rgba(22,163,74,0.2)`,
+              fontSize: 11, color: C.yellow3, fontFamily: "monospace",
+              background: "rgba(250,204,21,0.1)", padding: "3px 10px", borderRadius: 5,
+              border: `1px solid rgba(250,204,21,0.2)`,
             }}>#{data.num + 1}</span>
             <button
               onClick={onClose}
@@ -598,7 +598,7 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
             <div style={{
               position: "absolute", inset: 0,
               display: "flex", alignItems: "center", justifyContent: "center",
-              background: `linear-gradient(135deg, ${C.bg3}, #0a1a10)`,
+              background: `linear-gradient(135deg, ${C.bg3}, #1a1608)`,
             }}>
               <PitchLines />
               <div style={{ position: "relative", zIndex: 2, fontSize: 40 }}>⚽</div>
@@ -620,8 +620,8 @@ function ScreenshotModal({ data, onClose }: { data: ModalData; onClose: () => vo
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 6,
             padding: "3px 10px", borderRadius: 999,
-            background: "rgba(22,163,74,0.1)", border: "1px solid rgba(22,163,74,0.25)",
-            color: C.green3, fontSize: 10.5, fontWeight: 700,
+            background: "rgba(250,204,21,0.1)", border: "1px solid rgba(250,204,21,0.25)",
+            color: C.yellow3, fontSize: 10.5, fontWeight: 700,
             letterSpacing: "0.07em", textTransform: "uppercase" as const, marginBottom: 10,
           }}>
             Screen {data.num + 1} of 3
@@ -673,10 +673,10 @@ function ScreenshotCard({
       onMouseLeave={() => setHov(false)}
       style={{
         borderRadius: 20, overflow: "hidden",
-        border: `1px solid ${hov ? "rgba(22,163,74,0.45)" : C.border2}`,
+        border: `1px solid ${hov ? "rgba(250,204,21,0.45)" : C.border2}`,
         background: C.card, cursor: "pointer",
         boxShadow: hov
-          ? "0 24px 64px rgba(0,0,0,0.6), 0 0 32px rgba(22,163,74,0.1)"
+          ? "0 24px 64px rgba(0,0,0,0.6), 0 0 32px rgba(250,204,21,0.1)"
           : "0 8px 32px rgba(0,0,0,0.4)",
         transform: visible
           ? hov ? "translateY(-8px) scale(1.015)" : "translateY(0)"
@@ -700,14 +700,14 @@ function ScreenshotCard({
           background: "rgba(255,255,255,0.05)", border: `1px solid ${C.border}`,
           display: "flex", alignItems: "center", paddingLeft: 10, gap: 5,
         }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.green, opacity: 0.6 }} />
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.yellow, opacity: 0.6 }} />
           <span style={{ fontSize: 10, color: C.muted2, fontFamily: "monospace" }}>
             localhost:8000/smart-ticket
           </span>
         </div>
         <div style={{
           fontSize: 10, color: C.muted2, fontFamily: "monospace",
-          background: "rgba(22,163,74,0.1)", padding: "2px 8px", borderRadius: 4,
+          background: "rgba(250,204,21,0.1)", padding: "2px 8px", borderRadius: 4,
         }}>#{num + 1}</div>
       </div>
 
@@ -717,14 +717,14 @@ function ScreenshotCard({
           <div style={{
             position: "absolute", inset: 0,
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,
-            background: `linear-gradient(135deg, ${C.bg3}, #0a1a10)`,
+            background: `linear-gradient(135deg, ${C.bg3}, #1a1608)`,
           }}>
             <PitchLines />
             <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
               <div style={{ fontSize: 36 }}>⚽</div>
               <div style={{
                 width: 36, height: 3, borderRadius: 99,
-                background: `linear-gradient(90deg, transparent, ${C.green2}, transparent)`,
+                background: `linear-gradient(90deg, transparent, ${C.yellow2}, transparent)`,
                 animation: "shimmerLine 1.4s ease-in-out infinite",
               }} />
             </div>
@@ -749,14 +749,14 @@ function ScreenshotCard({
         }}>
           <div style={{
             width: 48, height: 48, borderRadius: 999,
-            background: "rgba(22,163,74,0.2)", border: `1.5px solid rgba(22,163,74,0.5)`,
+            background: "rgba(250,204,21,0.2)", border: `1.5px solid rgba(250,204,21,0.5)`,
             backdropFilter: "blur(8px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             transform: hov ? "scale(1)" : "scale(0.7)",
             opacity: hov ? 1 : 0,
             transition: "all 0.3s cubic-bezier(.22,1,.36,1)",
           }}>
-            <ZoomIn size={20} color={C.green3} />
+            <ZoomIn size={20} color={C.yellow3} />
           </div>
         </div>
       </div>
@@ -766,12 +766,12 @@ function ScreenshotCard({
         <span style={{ fontSize: 12.5, color: C.muted, fontWeight: 500 }}>{caption}</span>
         <div style={{
           width: 28, height: 28, borderRadius: 8,
-          background: hov ? "rgba(22,163,74,0.2)" : "rgba(255,255,255,0.05)",
-          border: `1px solid ${hov ? "rgba(22,163,74,0.4)" : C.border}`,
+          background: hov ? "rgba(250,204,21,0.2)" : "rgba(255,255,255,0.05)",
+          border: `1px solid ${hov ? "rgba(250,204,21,0.4)" : C.border}`,
           display: "flex", alignItems: "center", justifyContent: "center",
           transition: "all 0.2s ease",
         }}>
-          <ExternalLink size={12} color={hov ? C.green3 : "rgba(255,255,255,0.3)"} />
+          <ExternalLink size={12} color={hov ? C.yellow3 : "rgba(255,255,255,0.3)"} />
         </div>
       </div>
     </div>
@@ -787,8 +787,8 @@ function FeatureChip({ icon, title, desc }: { icon: string; title: string; desc:
       onMouseLeave={() => setHov(false)}
       style={{
         padding: "18px 20px", borderRadius: 16,
-        background: hov ? "rgba(22,163,74,0.08)" : "rgba(255,255,255,0.03)",
-        border: `1px solid ${hov ? "rgba(22,163,74,0.3)" : C.border}`,
+        background: hov ? "rgba(250,204,21,0.08)" : "rgba(255,255,255,0.03)",
+        border: `1px solid ${hov ? "rgba(250,204,21,0.3)" : C.border}`,
         transition: "all 0.25s ease", cursor: "default",
       }}
     >
@@ -862,8 +862,8 @@ export default function SmartTicketPage() {
         @keyframes glowPulse    { 0%,100%{opacity:.5;} 50%{opacity:1;} }
         @keyframes fadeIn       { from{opacity:0;} to{opacity:1;} }
         @keyframes modalSlideUp { from{opacity:0;transform:translateY(32px) scale(0.97);} to{opacity:1;transform:translateY(0) scale(1);} }
-        .back-btn:hover { border-color:rgba(22,163,74,0.5)!important; color:#4ade80!important; background:rgba(22,163,74,0.1)!important; }
-        .cta-btn:hover  { transform:translateY(-2px)!important; box-shadow:0 12px 36px rgba(22,163,74,0.35)!important; }
+        .back-btn:hover { border-color:rgba(250,204,21,0.5)!important; color:#facc15!important; background:rgba(250,204,21,0.1)!important; }
+        .cta-btn:hover  { transform:translateY(-2px)!important; box-shadow:0 12px 36px rgba(250,204,21,0.35)!important; }
       `}</style>
 
       {modal && <ScreenshotModal data={modal} onClose={closeModal} />}
@@ -874,7 +874,7 @@ export default function SmartTicketPage() {
         padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
         background: scrollY > 60 ? "rgba(7,12,15,0.92)" : "transparent",
         backdropFilter: scrollY > 60 ? "blur(20px)" : "none",
-        borderBottom: scrollY > 60 ? "1px solid rgba(22,163,74,0.12)" : "1px solid transparent",
+        borderBottom: scrollY > 60 ? "1px solid rgba(250,204,21,0.12)" : "1px solid transparent",
         transition: "all 0.35s ease",
       }}>
         <a href="/" className="back-btn" style={{
@@ -887,10 +887,10 @@ export default function SmartTicketPage() {
           <ArrowLeft size={14} /> Back to Portfolio
         </a>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, position: "relative" }}>
+          <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.yellow, position: "relative" }}>
             <div style={{
               position: "absolute", inset: 0, borderRadius: "50%",
-              background: C.green, animation: "pulsering 1.5s ease-out infinite",
+              background: C.yellow, animation: "pulsering 1.5s ease-out infinite",
             }} />
           </div>
           <span style={{ fontSize: 12, color: C.muted2, fontWeight: 600 }}>FYP · 2025</span>
@@ -920,7 +920,7 @@ export default function SmartTicketPage() {
             textTransform: "uppercase", textDecoration: "none", transition: "all .2s ease",
             backdropFilter: "blur(12px)",
           }}
-          onMouseEnter={e => { const b = e.currentTarget; b.style.color = C.green3; b.style.borderColor = "rgba(74,222,128,0.4)"; b.style.boxShadow = "0 8px 28px rgba(22,163,74,.2)"; }}
+          onMouseEnter={e => { const b = e.currentTarget; b.style.color = C.yellow3; b.style.borderColor = "rgba(250,204,21,0.4)"; b.style.boxShadow = "0 8px 28px rgba(250,204,21,.2)"; }}
           onMouseLeave={e => { const b = e.currentTarget; b.style.color = C.muted; b.style.borderColor = C.border2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.3)"; }}
         >
           <ArrowLeft size={24} />
@@ -931,14 +931,14 @@ export default function SmartTicketPage() {
         <div style={{ position: "absolute", inset: 0 }}>
           <div style={{
             position: "absolute", inset: 0, zIndex: 1,
-            background: `radial-gradient(ellipse 75% 65% at 50% 42%, rgba(6,20,12,0.55) 0%, ${C.bg} 72%)`,
+            background: `radial-gradient(ellipse 75% 65% at 50% 42%, rgba(20,16,2,0.6) 0%, ${C.bg} 72%)`,
           }} />
           <PitchLinesHero />
         </div>
         <div style={{
           position: "absolute", width: 500, height: 500, zIndex: 1,
           top: "10%", left: "50%", transform: "translateX(-50%)",
-          borderRadius: "50%", background: "rgba(22,163,74,0.07)",
+          borderRadius: "50%", background: "rgba(250,204,21,0.07)",
           filter: "blur(120px)", pointerEvents: "none",
           animation: "glowPulse 4s ease-in-out infinite",
         }} />
@@ -946,15 +946,15 @@ export default function SmartTicketPage() {
         <div style={{
           position: "relative", zIndex: 2, fontSize: 72, lineHeight: 1, marginBottom: 28,
           animation: "fadeUp 0.7s ease 0.1s both, spinSlow 8s linear 0.7s infinite",
-          filter: "drop-shadow(0 0 24px rgba(22,163,74,0.4))",
+          filter: "drop-shadow(0 0 24px rgba(250,204,21,0.4))",
         }}>⚽</div>
 
         <div style={{
           position: "relative", zIndex: 2,
           display: "inline-flex", alignItems: "center", gap: 8,
           padding: "5px 14px", borderRadius: 999,
-          border: "1px solid rgba(22,163,74,0.3)", background: "rgba(22,163,74,0.1)",
-          color: C.green3, fontSize: 11, fontWeight: 700,
+          border: "1px solid rgba(250,204,21,0.3)", background: "rgba(250,204,21,0.1)",
+          color: C.yellow3, fontSize: 11, fontWeight: 700,
           letterSpacing: "0.1em", textTransform: "uppercase",
           marginBottom: 20, animation: "fadeUp 0.7s ease 0.15s both",
         }}>
@@ -968,7 +968,7 @@ export default function SmartTicketPage() {
           }}>
             <span style={{ color: C.white }}>Smart</span><br />
             <span style={{
-              background: `linear-gradient(135deg, ${C.green2}, ${C.lime})`,
+              background: `linear-gradient(135deg, ${C.yellow2}, ${C.lime})`,
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
             }}>Ticket</span>
             <span style={{ color: C.white }}> System</span>
@@ -983,7 +983,7 @@ export default function SmartTicketPage() {
           animation: "fadeUp 0.8s ease 0.3s both",
         }}>
           A full-stack national football ticket booking system featuring a real-time seat allocation
-          algorithm for <strong style={{ color: C.green3 }}>Bukit Jalil National Stadium</strong>.
+          algorithm for <strong style={{ color: C.yellow3 }}>Bukit Jalil National Stadium</strong>.
           Built with Laravel &amp; deployed on InfinityFree.
         </p>
 
@@ -1009,11 +1009,11 @@ export default function SmartTicketPage() {
         }}>
           <div style={{
             width: 22, height: 36, borderRadius: 99,
-            border: `1.5px solid rgba(22,163,74,0.3)`,
+            border: `1.5px solid rgba(250,204,21,0.3)`,
             display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "5px 0",
           }}>
             <div style={{
-              width: 4, height: 8, borderRadius: 99, background: C.green3,
+              width: 4, height: 8, borderRadius: 99, background: C.yellow3,
               animation: "shimmerLine 1.6s ease-in-out infinite",
             }} />
           </div>
@@ -1031,7 +1031,7 @@ export default function SmartTicketPage() {
       <div style={{
         maxWidth: 960, margin: "0 auto", padding: "0 24px",
         height: 1,
-        background: "linear-gradient(90deg, transparent, rgba(22,163,74,0.15), transparent)",
+        background: "linear-gradient(90deg, transparent, rgba(250,204,21,0.15), transparent)",
       }} />
 
       {/* ── Screenshots ── */}
@@ -1083,10 +1083,10 @@ export default function SmartTicketPage() {
         <div style={{ maxWidth: 960, margin: "0 auto" }}>
           <div style={{
             borderRadius: 24, overflow: "hidden",
-            border: `1px solid rgba(22,163,74,0.18)`,
-            background: `linear-gradient(135deg, rgba(10,26,16,0.8), ${C.bg3})`,
+            border: `1px solid rgba(250,204,21,0.18)`,
+            background: `linear-gradient(135deg, rgba(26,20,4,0.8), ${C.bg3})`,
           }}>
-            <div style={{ height: 3, background: `linear-gradient(90deg, ${C.green}, ${C.lime}, transparent)` }} />
+            <div style={{ height: 3, background: `linear-gradient(90deg, ${C.yellow}, ${C.lime}, transparent)` }} />
             <div style={{
               display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px,1fr))",
               gap: 0, padding: "36px 36px 32px",
@@ -1095,10 +1095,10 @@ export default function SmartTicketPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 20 }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: 10,
-                    background: "rgba(22,163,74,0.15)", border: "1px solid rgba(22,163,74,0.3)",
+                    background: "rgba(250,204,21,0.15)", border: "1px solid rgba(250,204,21,0.3)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <Code2 size={15} color={C.green3} />
+                    <Code2 size={15} color={C.yellow3} />
                   </div>
                   <span style={{ fontSize: 14, fontWeight: 700, color: C.white }}>Tech Stack</span>
                 </div>
@@ -1118,10 +1118,10 @@ export default function SmartTicketPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 20 }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: 10,
-                    background: "rgba(22,163,74,0.15)", border: "1px solid rgba(22,163,74,0.3)",
+                    background: "rgba(250,204,21,0.15)", border: "1px solid rgba(250,204,21,0.3)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <Users size={15} color={C.green3} />
+                    <Users size={15} color={C.yellow3} />
                   </div>
                   <span style={{ fontSize: 14, fontWeight: 700, color: C.white }}>Project Info</span>
                 </div>
@@ -1154,14 +1154,14 @@ export default function SmartTicketPage() {
       {/* ── Mobile Project Nav ── */}
       {isMobile && (
         <div style={{
-          background: C.bg2, borderTop: `1px solid rgba(22,163,74,0.2)`,
+          background: C.bg2, borderTop: `1px solid rgba(250,204,21,0.2)`,
           padding: "14px 20px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <a href="/projects/padu" style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 18px", borderRadius: 999,
-            border: `1px solid ${C.border2}`, background: "rgba(22,163,74,0.06)",
+            border: `1px solid ${C.border2}`, background: "rgba(250,204,21,0.06)",
             color: C.muted, fontSize: 13, fontWeight: 600,
             textDecoration: "none",
           }}>
