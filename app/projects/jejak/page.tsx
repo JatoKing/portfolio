@@ -1,8 +1,8 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ArrowLeft, Calendar, MapPin, Users, Code2, Trophy, Star, Zap,
-  AlertTriangle, Target, Compass, Radio, Satellite, Quote, X, ZoomIn, CheckCircle2,
+  ArrowLeft, Calendar, MapPin, Users, Code2, Trophy,
+  AlertTriangle, Radio, Satellite, Quote, X, ZoomIn, CheckCircle2,
 } from "lucide-react";
 
 /* ─── Colour Tokens ──────────────────────────────────────────────── */
@@ -57,58 +57,28 @@ function ContourLines({ opacity = 0.08 }: { opacity?: number }) {
   );
 }
 
-/* ─── Info Ticker ─────────────────────────────────────────────────── */
-function InfoTicker() {
-  const items = [
-    "🧭  Predictive Dead-Zone Warnings",
-    "📲  Offline Trail Packs",
-    "📍  Background GPS Recording",
-    "🔁  Retry-Safe Sync",
-    "🧪  86 Automated Tests",
-    "🏆  ASEAN GeoAI Fusion 2026",
-  ];
-  const doubled = [...items, ...items];
-  return (
-    <div style={{
-      overflow: "hidden",
-      borderTop: `1px solid rgba(22,163,74,0.3)`,
-      borderBottom: `1px solid rgba(22,163,74,0.3)`,
-      background: "rgba(22,163,74,0.06)", padding: "10px 0",
-    }}>
-      <div style={{
-        display: "flex", gap: 56, width: "max-content",
-        animation: "tickerMove 28s linear infinite",
-        fontFamily: "'JetBrains Mono','Fira Code',monospace",
-        fontSize: 12, color: C.green3, fontWeight: 600, letterSpacing: "0.04em",
-      }}>
-        {doubled.map((item, i) => <span key={i} style={{ whiteSpace: "nowrap" }}>{item}</span>)}
-      </div>
-    </div>
-  );
-}
-
 /* ─── Stat Badge ──────────────────────────────────────────────────── */
 function StatBadge({ val, label }: { val: string; label: string }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
       <div style={{
-        width: 88, height: 72, borderRadius: 14,
-        background: `linear-gradient(135deg, rgba(22,163,74,0.25), rgba(22,163,74,0.08))`,
-        border: `1.5px solid rgba(22,163,74,0.35)`,
+        width: 132, height: 96, borderRadius: 18,
+        background: "rgba(255,255,255,0.08)", backdropFilter: "blur(10px)",
+        border: "1.5px solid rgba(255,255,255,0.22)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 0 24px rgba(22,163,74,0.12)", padding: "0 8px",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.25)", padding: "0 10px",
       }}>
         <span style={{
           fontFamily: "'JetBrains Mono',monospace",
-          fontSize: val.length > 5 ? 14 : val.length > 3 ? 17 : 22,
-          fontWeight: 900, color: C.green3, letterSpacing: "-0.03em",
+          fontSize: val.length > 5 ? 19 : val.length > 3 ? 23 : 28,
+          fontWeight: 900, color: C.green2, letterSpacing: "-0.03em",
           textAlign: "center", lineHeight: 1,
         }}>{val}</span>
       </div>
       <span style={{
-        fontSize: 10, color: C.muted2, fontWeight: 600,
+        fontSize: 11, color: "rgba(255,255,255,0.8)", fontWeight: 600,
         letterSpacing: "0.08em", textTransform: "uppercase",
-        textAlign: "center", maxWidth: 88,
+        textAlign: "center", maxWidth: 132,
       }}>{label}</span>
     </div>
   );
@@ -130,86 +100,32 @@ function TechTag({ label, icon }: { label: string; icon?: string }) {
   );
 }
 
-/* ─── Section Badge ──────────────────────────────────────────────── */
-function SectionBadge({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div style={{
-      display: "inline-flex", alignItems: "center", gap: 7,
-      padding: "5px 14px", borderRadius: 999,
-      border: "1px solid rgba(22,163,74,0.3)",
-      background: "rgba(22,163,74,0.08)",
-      color: C.green3, fontSize: 11, fontWeight: 700,
-      letterSpacing: "0.09em", textTransform: "uppercase" as const,
-      marginBottom: 14,
-    }}>
-      {icon}{label}
-    </div>
-  );
-}
-
 /* ─── Problem Card ────────────────────────────────────────────────── */
-function ProblemCard({ icon, title, desc, delay, visible }: { icon: string; title: string; desc: string; delay: number; visible: boolean }) {
+function FlowNode({
+  icon, title, desc, delay, visible,
+}: { icon: string; title: string; desc: string; delay: number; visible: boolean }) {
   const [hov, setHov] = useState(false);
   return (
     <div
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        padding: "18px 20px", borderRadius: 14,
-        background: hov ? "rgba(239,68,68,0.07)" : "rgba(0,0,0,0.02)",
-        border: `1px solid ${hov ? "rgba(239,68,68,0.3)" : "rgba(239,68,68,0.1)"}`,
-        transition: "all 0.25s ease", cursor: "default",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(16px)",
-        transitionDelay: `${0.35 + delay}s`,
-        transitionProperty: "opacity, transform, background, border-color",
-        transitionDuration: "0.55s, 0.55s, 0.25s, 0.25s",
+        flex: 1, minWidth: 0, textAlign: "center", cursor: "default",
+        opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(16px)",
+        transitionDelay: `${delay}s`, transitionProperty: "opacity, transform",
+        transitionDuration: "0.55s, 0.55s",
       }}
     >
-      <div style={{ fontSize: 26, marginBottom: 10 }}>{icon}</div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 6 }}>{title}</div>
-      <div style={{ fontSize: 12, color: C.muted2, lineHeight: 1.75 }}>{desc}</div>
-    </div>
-  );
-}
-
-/* ─── Objective Card ─────────────────────────────────────────────── */
-function ObjectiveCard({ num, icon, title, desc, delay, visible }: { num: string; icon: string; title: string; desc: string; delay: number; visible: boolean }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        position: "relative", overflow: "hidden",
-        padding: "26px 24px", borderRadius: 18, textAlign: "center",
-        background: hov ? "rgba(22,163,74,0.06)" : C.card,
-        border: `1px solid ${hov ? "rgba(22,163,74,0.3)" : C.border2}`,
-        boxShadow: hov ? "0 16px 40px rgba(22,163,74,0.12)" : "0 4px 16px rgba(0,0,0,0.03)",
-        transition: "all 0.25s ease", cursor: "default",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transitionDelay: `${0.45 + delay}s`,
-        transitionProperty: "opacity, transform, background, border-color, box-shadow",
-        transitionDuration: "0.55s, 0.55s, 0.25s, 0.25s, 0.25s",
-      }}
-    >
-      <span style={{
-        position: "absolute", top: -18, right: -6, zIndex: 0,
-        fontFamily: "'JetBrains Mono',monospace", fontSize: 96, fontWeight: 900,
-        lineHeight: 1, letterSpacing: "-0.05em", pointerEvents: "none", userSelect: "none",
-        color: hov ? "rgba(22,163,74,0.16)" : "rgba(17,17,17,0.05)",
-        transition: "color 0.3s ease",
-      }}>{num}</span>
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <div style={{
-          width: 60, height: 60, borderRadius: "50%", margin: "0 auto 16px",
-          background: hov ? "rgba(22,163,74,0.18)" : "rgba(22,163,74,0.1)",
-          border: `1.5px solid ${hov ? "rgba(22,163,74,0.5)" : "rgba(22,163,74,0.22)"}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 26, transform: hov ? "scale(1.08)" : "scale(1)",
-          transition: "all 0.25s ease",
-        }}>{icon}</div>
+      <div style={{
+        position: "relative", zIndex: 1, width: 64, height: 64, borderRadius: "50%", margin: "0 auto 18px",
+        background: hov ? "rgba(22,163,74,0.16)" : C.card,
+        border: `1.5px solid ${hov ? "rgba(22,163,74,0.5)" : "rgba(22,163,74,0.28)"}`,
+        boxShadow: hov ? "0 8px 28px rgba(22,163,74,0.2)" : "0 4px 14px rgba(0,0,0,0.05)",
+        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26,
+        transform: hov ? "scale(1.08)" : "scale(1)", transition: "all 0.25s ease",
+      }}>{icon}</div>
+      <div>
         <div style={{ fontSize: 15, fontWeight: 800, color: C.text, letterSpacing: "-0.01em", marginBottom: 8 }}>{title}</div>
-        <p style={{ fontSize: 12.5, color: C.muted2, lineHeight: 1.75, margin: 0 }}>{desc}</p>
+        <p style={{ fontSize: 12.5, color: C.muted2, lineHeight: 1.7, margin: "0 auto", maxWidth: 210 }}>{desc}</p>
       </div>
     </div>
   );
@@ -219,6 +135,8 @@ function ObjectiveCard({ num, icon, title, desc, delay, visible }: { num: string
 function ChallengeSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const bp = useBreakpoint();
+  const isMobile = bp === "mobile";
 
   useEffect(() => {
     const el = ref.current;
@@ -228,66 +146,84 @@ function ChallengeSection() {
     return () => io.disconnect();
   }, []);
 
-  const problems = [
-    { icon: "📵", title: "Unpredictable Dead Zones", desc: "Hikers have no way of knowing where mobile coverage will drop along a trail until it's too late — leaving them unable to call for help in an emergency." },
-    { icon: "🔎", title: "Wide, Slow SAR Searches", desc: "Without last-known-connectivity data, search and rescue teams must comb through unnecessarily large search areas, costing critical time during a rescue." },
-    { icon: "📶", title: "Undirected Infrastructure Planning", desc: "Authorities lack a data-driven way to decide where new LoRa gateways would most improve coverage across remote recreational areas." },
-  ];
+  const tags = ["No coverage warning", "Oversized search areas", "Blind infrastructure planning"];
 
   const objectives = [
-    { num: "01", icon: "🎯", title: "Predict", desc: "Use GeoAI to classify every trail segment — combining terrain, vegetation, and telecommunications data — as likely_covered, uncertain, or predicted_gap." },
-    { num: "02", icon: "🥾", title: "Empower", desc: "Give hikers offline connectivity awareness: downloadable routes, offline maps, and warnings before they enter a predicted dead zone." },
-    { num: "03", icon: "🚁", title: "Assist", desc: "Record GPS trajectories in the background and sync the last-known location the moment coverage returns, so SAR teams get real connectivity intelligence, not guesswork." },
+    { icon: "🎯", title: "Predict", desc: "Classify every trail segment — terrain, vegetation, telecom data — as likely_covered, uncertain, or predicted_gap." },
+    { icon: "🥾", title: "Empower", desc: "Downloadable routes, offline maps, and a warning before hikers enter a predicted dead zone." },
+    { icon: "🚁", title: "Assist", desc: "Background GPS + sync the last-known location the moment coverage returns, for real SAR intelligence." },
   ];
 
   return (
     <section ref={ref} style={{ padding: "96px 24px", background: C.bg, position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, opacity: 0.03, pointerEvents: "none" }}><ContourLines /></div>
-      <div style={{ maxWidth: 960, margin: "0 auto", position: "relative" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
         <div style={{
-          textAlign: "center", marginBottom: 64,
+          textAlign: "center", marginBottom: 56,
           opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)",
           transition: "opacity 0.6s ease, transform 0.6s ease",
         }}>
-          <SectionBadge icon={<Compass size={11} />} label="Hackathon Brief" />
           <h2 style={{ fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.03em", color: C.text, margin: 0 }}>
             Challenge &amp; Mission
           </h2>
-          <p style={{ fontSize: 14, color: C.muted2, marginTop: 10, maxWidth: 520, margin: "10px auto 0" }}>
-            The connectivity gap that shaped JEJAK, and the goals we set to close it during ASEAN GeoAI Fusion 2026.
-          </p>
         </div>
 
-        <div style={{ marginBottom: 64, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(28px)", transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.28)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <AlertTriangle size={16} color="#ef4444" />
+        {/* ── Problem: narrative statement ── */}
+        <div style={{
+          maxWidth: 880, margin: "0 auto",
+          display: "flex", flexDirection: isMobile ? "column" : "row",
+          alignItems: "center", gap: isMobile ? 20 : 36,
+          opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
+        }}>
+          <AlertTriangle
+            size={isMobile ? 64 : 108} color="#ef4444" strokeWidth={1.5}
+            style={{ flexShrink: 0, animation: "blinkWarn 1.6s ease-in-out infinite" }}
+          />
+          <div style={{ textAlign: "center" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+              <span style={{ fontSize: 11, color: "#ef4444", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>The Problem</span>
             </div>
-            <div>
-              <div style={{ fontSize: 10, color: C.muted2, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: 2 }}>The Problem</div>
-              <div style={{ fontSize: 16, fontWeight: 800, color: C.text, letterSpacing: "-0.02em" }}>Communication Dead Zones</div>
+            <p style={{ fontSize: "clamp(19px,2.6vw,27px)", fontWeight: 700, color: C.text, lineHeight: 1.5, letterSpacing: "-0.01em", margin: 0 }}>
+              Hikers lose signal <span style={{ color: "#ef4444" }}>without warning</span>. SAR teams comb{" "}
+              <span style={{ color: "#ef4444" }}>oversized search areas</span> hunting for a last-known location. And
+              authorities plan new infrastructure <span style={{ color: "#ef4444" }}>completely blind</span>.
+            </p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginTop: 20 }}>
+              {tags.map(t => (
+                <span key={t} style={{ fontSize: 11.5, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(239,68,68,0.22)", background: "rgba(239,68,68,0.06)", color: "#dc2626", fontWeight: 600 }}>{t}</span>
+              ))}
             </div>
-            <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(239,68,68,0.25), transparent)" }} />
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: 14 }}>
-            {problems.map((p, i) => <ProblemCard key={i} icon={p.icon} title={p.title} desc={p.desc} delay={i * 0.08} visible={visible} />)}
           </div>
         </div>
 
-        <div style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(28px)", transition: "opacity 0.6s ease 0.22s, transform 0.6s ease 0.22s" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: "rgba(22,163,74,0.12)", border: "1px solid rgba(22,163,74,0.28)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Target size={16} color={C.green3} />
-            </div>
-            <div>
-              <div style={{ fontSize: 10, color: C.muted2, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, marginBottom: 2 }}>Our Mission</div>
-              <div style={{ fontSize: 16, fontWeight: 800, color: C.text, letterSpacing: "-0.02em" }}>Objectives</div>
-            </div>
-            <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(22,163,74,0.25), transparent)" }} />
+        <div style={{
+          width: 80, height: 1, background: `linear-gradient(90deg, transparent, ${C.border2}, transparent)`,
+          margin: "56px auto",
+        }} />
+
+        {/* ── Mission: flow diagram ── */}
+        <div style={{
+          textAlign: "center", marginBottom: 40,
+          opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+        }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, color: C.green3, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>Our Mission</span>
+            <span style={{ fontSize: 15 }}>🎯</span>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))", gap: 16 }}>
-            {objectives.map((o, i) => <ObjectiveCard key={i} num={o.num} icon={o.icon} title={o.title} desc={o.desc} delay={i * 0.1} visible={visible} />)}
-          </div>
+        </div>
+
+        <div style={{ position: "relative", display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 36 : 0 }}>
+          {!isMobile && (
+            <div style={{ position: "absolute", top: 32, left: "16.6%", right: "16.6%", height: 2, zIndex: 0, overflow: "hidden" }}>
+              <div style={{ position: "absolute", inset: 0, background: "rgba(22,163,74,0.15)" }} />
+              <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: `linear-gradient(90deg, transparent, ${C.green3}, transparent)`, animation: "flowMove 3.2s linear infinite" }} />
+            </div>
+          )}
+          {objectives.map((o, i) => (
+            <FlowNode key={i} icon={o.icon} title={o.title} desc={o.desc} delay={0.3 + i * 0.12} visible={visible} />
+          ))}
         </div>
       </div>
     </section>
@@ -360,7 +296,6 @@ function WorkPlanSection() {
           opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)",
           transition: "opacity 0.6s ease, transform 0.6s ease",
         }}>
-          <SectionBadge icon={<Zap size={11} />} label="Work Plan" />
           <h2 style={{ fontSize: "clamp(24px,4vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", color: C.text }}>
             5-Phase Agenda
           </h2>
@@ -564,11 +499,10 @@ export default function JejakPage() {
   return (
     <div style={{ fontFamily: "'Inter',system-ui,-apple-system,sans-serif", background: C.bg, minHeight: "100vh", color: C.text, overflowX: "hidden" }}>
       <style>{`
-        @keyframes tickerMove   { from { transform:translateX(0);       } to { transform:translateX(-50%); } }
         @keyframes fadeUp       { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
         @keyframes pulsering    { 0%{transform:scale(1);opacity:.7;} 100%{transform:scale(2.4);opacity:0;} }
-        @keyframes glowPulse    { 0%,100%{opacity:.5;} 50%{opacity:1;} }
-        @keyframes shimmerLine  { 0%,100%{opacity:.3;transform:scaleX(0.4);} 50%{opacity:1;transform:scaleX(1);} }
+        @keyframes flowMove     { from{left:-30%;} to{left:100%;} }
+        @keyframes blinkWarn    { 0%,100%{opacity:1;} 50%{opacity:.35;} }
         @keyframes fadeIn       { from{opacity:0;} to{opacity:1;} }
         @keyframes modalSlideUp { from{opacity:0;transform:translateY(32px) scale(0.97);} to{opacity:1;transform:translateY(0) scale(1);} }
         .back-btn:hover { border-color:rgba(22,163,74,0.5)!important; color:#15803d!important; background:rgba(22,163,74,0.1)!important; }
@@ -603,8 +537,10 @@ export default function JejakPage() {
         <a href="/" className="back-btn" style={{
           display: "inline-flex", alignItems: "center", gap: 8,
           padding: "8px 16px", borderRadius: 999,
-          border: `1px solid ${C.border2}`, background: "rgba(0,0,0,0.04)",
-          color: C.muted, fontSize: 13, fontWeight: 500,
+          border: `1px solid ${scrollY > 60 ? C.border2 : "rgba(255,255,255,0.28)"}`,
+          background: scrollY > 60 ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.14)",
+          backdropFilter: scrollY > 60 ? "none" : "blur(6px)",
+          color: scrollY > 60 ? C.muted : "rgba(255,255,255,0.9)", fontSize: 13, fontWeight: 500,
           textDecoration: "none", transition: "all 0.2s ease",
         }}>
           <ArrowLeft size={14} /> Back to Portfolio
@@ -613,95 +549,78 @@ export default function JejakPage() {
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, position: "relative" }}>
             <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.green, animation: "pulsering 1.5s ease-out infinite" }} />
           </div>
-          <span style={{ fontSize: 12, color: C.muted2, fontWeight: 600 }}>Hackathon · 2026</span>
+          <span style={{ fontSize: 12, color: scrollY > 60 ? C.muted2 : "rgba(255,255,255,0.85)", fontWeight: 600 }}>Hackathon · 2026</span>
         </div>
       </nav>
 
       {/* ── Hero ── */}
       <section ref={heroRef} style={{
-        position: "relative", minHeight: "100vh",
+        position: "relative", minHeight: isMobile ? "auto" : "72vh",
         display: "flex", flexDirection: "column", alignItems: "center",
-        justifyContent: isMobile ? "flex-start" : "center",
-        overflow: "hidden", padding: isMobile ? `${100 + OGB_H}px 20px 40px` : `${120 + OGB_H}px 24px 60px`,
+        justifyContent: "center",
+        overflow: "hidden", padding: isMobile ? `${100 + OGB_H}px 20px 56px` : `${140 + OGB_H}px 24px 100px`,
       }}>
-        <div style={{ position: "absolute", inset: 0 }}>
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 1,
-            background: `radial-gradient(ellipse 75% 65% at 50% 42%, rgba(22,163,74,0.16) 0%, ${C.bg} 72%)`,
-          }} />
-          <ContourLines opacity={0.09} />
-        </div>
         <div style={{
-          position: "absolute", width: 500, height: 500, zIndex: 1,
-          top: "10%", left: "50%", transform: "translateX(-50%)",
-          borderRadius: "50%", background: "rgba(22,163,74,0.07)",
-          filter: "blur(120px)", pointerEvents: "none",
-          animation: "glowPulse 4s ease-in-out infinite",
+          position: "absolute", inset: 0, zIndex: 0,
+          backgroundImage: "url(/herosectiontrails.jpg)",
+          backgroundSize: "cover", backgroundPosition: "center 30%",
+        }} />
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 1,
+          background: "linear-gradient(115deg, rgba(6,12,8,0.82) 0%, rgba(6,12,8,0.62) 42%, rgba(6,12,8,0.38) 68%, rgba(6,12,8,0.55) 100%)",
         }} />
 
         <div style={{
-          position: "relative", zIndex: 2, fontSize: 72, lineHeight: 1, marginBottom: 28,
-          animation: "fadeUp 0.7s ease 0.1s both",
-          filter: "drop-shadow(0 0 24px rgba(22,163,74,0.4))",
-        }}>🧭</div>
-
-        <div style={{
-          position: "relative", zIndex: 2,
-          display: "inline-flex", alignItems: "center", gap: 8,
-          padding: "5px 14px", borderRadius: 999,
-          border: "1px solid rgba(22,163,74,0.3)", background: "rgba(22,163,74,0.1)",
-          color: C.green3, fontSize: 11, fontWeight: 700,
-          letterSpacing: "0.1em", textTransform: "uppercase",
-          marginBottom: 20, animation: "fadeUp 0.7s ease 0.15s both",
+          position: "relative", zIndex: 2, width: "100%", maxWidth: 880,
+          display: "flex", flexDirection: isMobile ? "column" : "row",
+          alignItems: "center", justifyContent: "flex-start", gap: isMobile ? 36 : 72,
         }}>
-          <Trophy size={11} /> ASEAN GeoAI Fusion 2026
-        </div>
+          <div style={{ flex: "0 1 auto", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "5px 14px", borderRadius: 999,
+              border: "1px solid rgba(74,222,128,0.4)", background: "rgba(255,255,255,0.1)",
+              color: C.green2, fontSize: 11, fontWeight: 700,
+              letterSpacing: "0.1em", textTransform: "uppercase",
+              marginBottom: 20, animation: "fadeUp 0.7s ease 0.15s both",
+            }}>
+              <Trophy size={11} /> ASEAN GeoAI Fusion 2026
+            </div>
 
-        <div style={{ position: "relative", zIndex: 2, textAlign: "center", animation: "fadeUp 0.8s ease 0.2s both" }}>
-          <h1 style={{ fontSize: "clamp(40px,9vw,96px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 0.95, marginBottom: 14 }}>
-            <span style={{ background: `linear-gradient(135deg, ${C.green2}, ${C.green3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>JEJAK</span>
-          </h1>
-          <div style={{ fontSize: "clamp(14px,2vw,19px)", color: C.muted, fontWeight: 500, letterSpacing: "-0.01em" }}>
-            GeoAI-Powered Hiking Safety App — React Native &amp; Expo
+            <div style={{ animation: "fadeUp 0.8s ease 0.2s both" }}>
+              <h1 style={{ fontSize: "clamp(40px,7vw,84px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 0.95, marginBottom: 14 }}>
+                <span style={{ background: `linear-gradient(135deg, ${C.green2}, ${C.green3})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>JEJAK</span>
+              </h1>
+              <div style={{ fontSize: "clamp(14px,2vw,19px)", color: "rgba(255,255,255,0.85)", fontWeight: 500, letterSpacing: "-0.01em" }}>
+                GeoAI-Powered Hiking Safety App — React Native &amp; Expo
+              </div>
+            </div>
+
+            <p style={{
+              fontSize: "clamp(13px,1.6vw,16px)", color: "rgba(255,255,255,0.78)",
+              maxWidth: 560, lineHeight: 1.8, marginTop: 22, marginBottom: 0,
+              marginLeft: isMobile ? "auto" : 0, marginRight: isMobile ? "auto" : 0,
+              animation: "fadeUp 0.8s ease 0.3s both",
+            }}>
+              JEJAK is a React Native mobile app that predicts <strong style={{ color: C.green2 }}>communication dead zones</strong> along
+              hiking trails, lets hikers download offline trail packs before setting off, and records GPS trajectories in the
+              background so search-and-rescue teams get a real last-known location once coverage returns.
+            </p>
           </div>
-        </div>
 
-        <p style={{
-          position: "relative", zIndex: 2, fontSize: "clamp(13px,1.6vw,16px)", color: C.muted,
-          maxWidth: 620, textAlign: "center", lineHeight: 1.8, marginTop: 22, marginBottom: 36,
-          animation: "fadeUp 0.8s ease 0.3s both",
-        }}>
-          JEJAK is a React Native mobile app that predicts <strong style={{ color: C.green3 }}>communication dead zones</strong> along
-          hiking trails, lets hikers download offline trail packs before setting off, and records GPS trajectories in the
-          background so search-and-rescue teams get a real last-known location once coverage returns.
-        </p>
-
-        <div style={{
-          position: "relative", zIndex: 2, display: "flex", gap: isMobile ? 12 : 20,
-          flexWrap: "wrap", justifyContent: "center", animation: "fadeUp 0.8s ease 0.4s both",
-        }}>
-          {[
-            { val: "GeoAI", label: "Core Tech" },
-            { val: "Offline", label: "Trail Packs" },
-            { val: "86", label: "Tests Passing" },
-            { val: "2026", label: "Event Year" },
-          ].map(({ val, label }) => <StatBadge key={label} val={val} label={label} />)}
-        </div>
-
-        <div style={{
-          position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-          color: C.muted2, fontSize: 11, zIndex: 2, animation: "fadeUp 1s ease 0.8s both",
-        }}>
-          <div style={{ width: 22, height: 36, borderRadius: 99, border: `1.5px solid rgba(22,163,74,0.3)`, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "5px 0" }}>
-            <div style={{ width: 4, height: 8, borderRadius: 99, background: C.green3, animation: "shimmerLine 1.6s ease-in-out infinite" }} />
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: isMobile ? 12 : 20,
+            flexShrink: 0, animation: "fadeUp 0.8s ease 0.4s both",
+          }}>
+            {[
+              { val: "GeoAI", label: "Core Tech" },
+              { val: "Offline", label: "Trail Packs" },
+              { val: "86", label: "Tests Passing" },
+              { val: "2026", label: "Event Year" },
+            ].map(({ val, label }) => <StatBadge key={label} val={val} label={label} />)}
           </div>
-          Scroll
         </div>
       </section>
-
-      {/* ── Ticker ── */}
-      <InfoTicker />
 
       {/* ── Challenge & Objectives ── */}
       <ChallengeSection />
@@ -717,7 +636,6 @@ export default function JejakPage() {
         <div style={{ position: "absolute", inset: 0, opacity: 0.04, pointerEvents: "none" }}><ContourLines /></div>
         <div style={{ maxWidth: 1000, margin: "0 auto", position: "relative" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <SectionBadge icon={<Zap size={11} />} label="React Native · Expo" />
             <h2 style={{ fontSize: "clamp(24px,4vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", color: C.text }}>
               See It In Action
             </h2>
@@ -741,7 +659,6 @@ export default function JejakPage() {
         <div style={{ position: "absolute", inset: 0, opacity: 0.03, pointerEvents: "none" }}><ContourLines /></div>
         <div style={{ maxWidth: 960, margin: "0 auto", position: "relative" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <SectionBadge icon={<Star size={11} />} label="Platform Capabilities" />
             <h2 style={{ fontSize: "clamp(24px,4vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", color: C.text }}>
               What JEJAK Delivers
             </h2>
