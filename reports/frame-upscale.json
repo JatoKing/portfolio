@@ -1,0 +1,1333 @@
+{
+  "pipeline": {
+    "scale": 2,
+    "resize": {
+      "kernel": "cubic",
+      "fit": "inside",
+      "withoutEnlargement": false
+    },
+    "sharpen": {
+      "sigma": 1,
+      "m1": 0.25,
+      "m2": 0.75,
+      "x1": 2,
+      "y2": 2,
+      "y3": 2
+    },
+    "denoise": false,
+    "colourAdjustments": false,
+    "png": {
+      "compressionLevel": 9,
+      "palette": false,
+      "adaptiveFiltering": true
+    },
+    "jpeg": {
+      "quality": 95,
+      "chromaSubsampling": "4:4:4",
+      "mozjpeg": true,
+      "progressive": true
+    }
+  },
+  "pipelineFingerprint": "7f61c65214b56f1d4a954c521450a14667115f1d447666da9bd0a3358568c1d6",
+  "versions": {
+    "aom": "3.13.1",
+    "archive": "3.8.2",
+    "cairo": "1.18.4",
+    "cgif": "0.5.0",
+    "exif": "0.6.25",
+    "expat": "2.7.3",
+    "ffi": "3.5.2",
+    "fontconfig": "2.17.1",
+    "freetype": "2.14.1",
+    "fribidi": "1.0.16",
+    "glib": "2.86.1",
+    "harfbuzz": "12.1.0",
+    "heif": "1.20.2",
+    "highway": "1.3.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.17",
+    "mozjpeg": "0826579",
+    "pango": "1.57.0",
+    "pixman": "0.46.4",
+    "png": "1.6.50",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.61.2",
+    "spng": "0.7.4",
+    "tiff": "4.7.1",
+    "vips": "8.17.3",
+    "webp": "1.6.0",
+    "xml2": "2.15.1",
+    "zlib-ng": "2.2.5",
+    "sharp": "0.34.5"
+  },
+  "timelineSha256": "96cbb0b12d73165a827f76597cc5e9f847dd4701409ce58c9d3ca12eedbb4b01",
+  "frames": [
+    {
+      "name": "ezgif-frame-001.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 211954,
+      "sha256": "fb678f1c678b6bef2722188feb0dae7972b79b1b861349fac050bc2ea828b74a",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 551725,
+      "outputSha256": "b1dd656c373efc2b5fe6df994e9cfb0ee79556bb49fb687a27ebfea2007bb7c0",
+      "channelMeanShift": [
+        -0.04217013888888889,
+        -0.04206597222222222,
+        -0.03770833333333334
+      ],
+      "thumbnailMAE": 0.2965277777777778
+    },
+    {
+      "name": "ezgif-frame-002.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 231952,
+      "sha256": "6ae4f0d7d688680bc5a2ebb38a88f1007ef3bd6993bd7ba0e17cfeeb9da57b8e",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 585092,
+      "outputSha256": "fabfcaf94f30050ac00b73036f69524f9843e0dd547d5595d081198fca8dc6e9",
+      "channelMeanShift": [
+        -0.04753472222222222,
+        -0.04626736111111111,
+        -0.04527777777777778
+      ],
+      "thumbnailMAE": 0.3020891203703704
+    },
+    {
+      "name": "ezgif-frame-003.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 230594,
+      "sha256": "85f758b5b4247e573c7633787fc8c666436fa874c0cbc901ea384d03ccaf4739",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 586741,
+      "outputSha256": "ddd25fa2c2f5e2b7a1ddad5403f4f6c43199baea351563d15f7e88e4942f954a",
+      "channelMeanShift": [
+        -0.04684027777777778,
+        -0.04680555555555556,
+        -0.044305555555555556
+      ],
+      "thumbnailMAE": 0.30018518518518517
+    },
+    {
+      "name": "ezgif-frame-004.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 259634,
+      "sha256": "4feff9de9eefa8a992af7859073fd793ad869b95f3d941276ad8765ae2243406",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 641732,
+      "outputSha256": "f488e3263ced2dc1c760ea1ed196070870fe3468dffe3ec0fb7a0d4c211705a8",
+      "channelMeanShift": [
+        -0.05350694444444445,
+        -0.054427083333333334,
+        -0.051284722222222225
+      ],
+      "thumbnailMAE": 0.30605902777777777
+    },
+    {
+      "name": "ezgif-frame-005.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 270823,
+      "sha256": "0f4835e3319c34ee66ab3d90bcbd9fe5f53935771201e28fc7b0750b6cf9e906",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 665546,
+      "outputSha256": "d7793f39a5e38762b863b703a314ad3ec0f771da4d97e9acff43c0d4de8edec5",
+      "channelMeanShift": [
+        -0.05579861111111111,
+        -0.05564236111111111,
+        -0.054982638888888886
+      ],
+      "thumbnailMAE": 0.3099884259259259
+    },
+    {
+      "name": "ezgif-frame-006.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 283361,
+      "sha256": "e5f13694e2a6efc29dd34accd78c7cd10d858f13e30e1c16b6e7d5672a9955e0",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 695079,
+      "outputSha256": "73c2da5723ea59e0dc28bf180866cbd497b7790847f9d32a028627f08c221e96",
+      "channelMeanShift": [
+        -0.059479166666666666,
+        -0.058125,
+        -0.05633680555555556
+      ],
+      "thumbnailMAE": 0.31004050925925924
+    },
+    {
+      "name": "ezgif-frame-007.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 293181,
+      "sha256": "18fd3efe49520e9da692b23b08add16ed7d20d8fe0af1d47b5cebc9a036d5e70",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 714541,
+      "outputSha256": "5ebdceda4eab42a586aa5e802824504379638ee57ed6f12ffc331434bb6819ae",
+      "channelMeanShift": [
+        -0.059409722222222225,
+        -0.06034722222222222,
+        -0.058993055555555556
+      ],
+      "thumbnailMAE": 0.3093518518518519
+    },
+    {
+      "name": "ezgif-frame-008.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 298632,
+      "sha256": "3405625e53627da0178651e25fbe1820d30dfb97db7a6ad68caf607188ff8cc7",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 734033,
+      "outputSha256": "5c35248bde0ac7fddddbc33f2eebdc5ae426e5a30ddbb350abc71f83ec1a5401",
+      "channelMeanShift": [
+        -0.05998263888888889,
+        -0.05897569444444444,
+        -0.05730902777777778
+      ],
+      "thumbnailMAE": 0.30808449074074074
+    },
+    {
+      "name": "ezgif-frame-009.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 311004,
+      "sha256": "0f3eb4ccd719256590ae7e828a03284aa9d774e3fcd5e377b403910292352bf0",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 750161,
+      "outputSha256": "35666722d3e93767aaaa93790adafbbc83ae194007a313ada0d39e40c3734d4f",
+      "channelMeanShift": [
+        -0.06600694444444444,
+        -0.06585069444444444,
+        -0.06317708333333333
+      ],
+      "thumbnailMAE": 0.3204976851851852
+    },
+    {
+      "name": "ezgif-frame-010.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 321591,
+      "sha256": "902048b0e0c14be69fada59defb146f9a8c4d198b79cf1d402c6e0da4fcc7314",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 774692,
+      "outputSha256": "f671d2acfd0a14bf0376a746de647dbdb19a2e046ee3f9198c5eb84dea3c00d9",
+      "channelMeanShift": [
+        -0.0634375,
+        -0.06394097222222223,
+        -0.06239583333333333
+      ],
+      "thumbnailMAE": 0.32991319444444445
+    },
+    {
+      "name": "ezgif-frame-011.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 324511,
+      "sha256": "014a0999fe5779edf1e24d905a9f39e82870283cc76f391e00d27ac1f3caf0a9",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 780739,
+      "outputSha256": "1461c813172d5ae429a09ee922f86f7ced464c5e4f735abd7745ccb5d88aeabb",
+      "channelMeanShift": [
+        -0.06598958333333334,
+        -0.06552083333333333,
+        -0.06446180555555556
+      ],
+      "thumbnailMAE": 0.31526620370370373
+    },
+    {
+      "name": "ezgif-frame-012.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 335237,
+      "sha256": "7b120efa05a0abc8f6827086db28979e8da8a460400bbb88d416d0edd438aad6",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 797794,
+      "outputSha256": "2a37a280d07780c63e95592117b80dee13c1ae71f35f21c9ce5fe3777e56c151",
+      "channelMeanShift": [
+        -0.06664930555555555,
+        -0.06430555555555556,
+        -0.06390625
+      ],
+      "thumbnailMAE": 0.3104050925925926
+    },
+    {
+      "name": "ezgif-frame-013.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 338595,
+      "sha256": "31fb8300d0a8eb1f046097dcfe1d663b5256645b5ec80609a011ebf316ac0811",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 814006,
+      "outputSha256": "2f3ed2cd514f34c5999b3b5d33626e0c3d05a8afc7f540f27078a9c118d5b5fe",
+      "channelMeanShift": [
+        -0.06685763888888889,
+        -0.06586805555555555,
+        -0.06392361111111111
+      ],
+      "thumbnailMAE": 0.30972800925925925
+    },
+    {
+      "name": "ezgif-frame-014.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 344463,
+      "sha256": "e7238dab5724840148199b8f3fa335b6f32e4dd1ecad4d8265c9c57f7264e2d4",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 823596,
+      "outputSha256": "ac1143261008ac34139f2b0195de014ed71dcbcdcc99cb2e6b26192e78873e25",
+      "channelMeanShift": [
+        -0.06713541666666667,
+        -0.06614583333333333,
+        -0.06449652777777778
+      ],
+      "thumbnailMAE": 0.3228935185185185
+    },
+    {
+      "name": "ezgif-frame-015.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 348179,
+      "sha256": "f39603433d00592c35abc00bab1efad022d5f53e5cf676b2379dc9cf64cc4643",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 834817,
+      "outputSha256": "1c3717d1a376fad41c7f7bbdf3619c8b7bcabcdffcf9295d5dafd8d2ea1cce6c",
+      "channelMeanShift": [
+        -0.06760416666666667,
+        -0.06894097222222222,
+        -0.06710069444444444
+      ],
+      "thumbnailMAE": 0.31678240740740743
+    },
+    {
+      "name": "ezgif-frame-016.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 351729,
+      "sha256": "45f8d3540517998504e901c6453e25e207cf9fdb390075324b3d953c706a77a6",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 844334,
+      "outputSha256": "7a9b02779c33941b47ab370c81f331bf1eba482e4e51006ee0867c2b7483b991",
+      "channelMeanShift": [
+        -0.06807291666666666,
+        -0.06793402777777778,
+        -0.06734375
+      ],
+      "thumbnailMAE": 0.31764467592592593
+    },
+    {
+      "name": "ezgif-frame-017.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 353863,
+      "sha256": "f91c13bd98eeec7cf4f45c2aff2cb551d8ef66b581cf1b89f59d9e044d7fd1b0",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 843255,
+      "outputSha256": "58bd8916c90d37103e43e963065d04010f68f4e51d870020e030871be8d28955",
+      "channelMeanShift": [
+        -0.0673263888888889,
+        -0.06647569444444444,
+        -0.06605902777777778
+      ],
+      "thumbnailMAE": 0.3159490740740741
+    },
+    {
+      "name": "ezgif-frame-018.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 354058,
+      "sha256": "bfbcc3febd08512e17f0a75803ceb7c6f15b7d03cc5ab0a1305b4fc6fb8028b8",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 851942,
+      "outputSha256": "f53169a0313d8262ec3e7342ede5719eb80ddfe882eb6087ea90600087bcae20",
+      "channelMeanShift": [
+        -0.06484375,
+        -0.06263888888888888,
+        -0.06255208333333333
+      ],
+      "thumbnailMAE": 0.31854166666666667
+    },
+    {
+      "name": "ezgif-frame-019.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 362251,
+      "sha256": "ef24fc5114ce6a66248e6e8105beac469cffcfafc918751fa7110f4c8425976b",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 866670,
+      "outputSha256": "985fa17596c5736d9729bdc017d51c38e6fa1ba5312d46493b36623b61c876a5",
+      "channelMeanShift": [
+        -0.06949652777777778,
+        -0.06869791666666666,
+        -0.06829861111111112
+      ],
+      "thumbnailMAE": 0.34347222222222223
+    },
+    {
+      "name": "ezgif-frame-020.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 366217,
+      "sha256": "e2400f0d239dcaf2ed85ab3539d0779d773672a4fab8eb687276f1fbc9b80529",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 874693,
+      "outputSha256": "217fb00fd427e3605383ae0e776e25e20f1ba2e94f1f505f2134e72c14192ac1",
+      "channelMeanShift": [
+        -0.06871527777777778,
+        -0.06901041666666667,
+        -0.06711805555555556
+      ],
+      "thumbnailMAE": 0.3406423611111111
+    },
+    {
+      "name": "ezgif-frame-021.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 364713,
+      "sha256": "d84f003b13012b2351758c1af8610dcc20c602177ed1f85b9b1ffdce88440170",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 869282,
+      "outputSha256": "9dfca482109f147937cf2195bcb5a6118b3847aafba4e14a30fac042d015fed1",
+      "channelMeanShift": [
+        -0.0681423611111111,
+        -0.06770833333333333,
+        -0.06623263888888889
+      ],
+      "thumbnailMAE": 0.3223726851851852
+    },
+    {
+      "name": "ezgif-frame-022.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 370045,
+      "sha256": "938be863eebfd09a340e8d0f885451359f6b1d5e856e6384bad341279affb62c",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 881345,
+      "outputSha256": "5bb44ec67bf4fcead954f2047ddb8a376747391c4af076e18f08f89b9cd1b438",
+      "channelMeanShift": [
+        -0.07322916666666666,
+        -0.07019097222222222,
+        -0.06998263888888889
+      ],
+      "thumbnailMAE": 0.3246527777777778
+    },
+    {
+      "name": "ezgif-frame-023.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 369379,
+      "sha256": "0af5da4be2d35c4187240da7980fcb0bf57e795c11103c88c14073e2130d97cc",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 888687,
+      "outputSha256": "93a680fbd15f9b8447d07ab6933056a563e584e5dec6c15d8408318bbf6d1e64",
+      "channelMeanShift": [
+        -0.06534722222222222,
+        -0.06770833333333333,
+        -0.0652951388888889
+      ],
+      "thumbnailMAE": 0.31894097222222223
+    },
+    {
+      "name": "ezgif-frame-024.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 365076,
+      "sha256": "9d52f8d82cf38b4f55076135d994df80c4cace79613678460e74c8bb1bc87c05",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 869682,
+      "outputSha256": "38a142c16eace90cbb4c15e52f8906b80a27d360a38a27ceeb4b9e65aef7f347",
+      "channelMeanShift": [
+        -0.07010416666666666,
+        -0.06868055555555555,
+        -0.06791666666666667
+      ],
+      "thumbnailMAE": 0.3104050925925926
+    },
+    {
+      "name": "ezgif-frame-025.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 364590,
+      "sha256": "95b3d0f7579d6cff93625e32318d3377cd849ff6d70d887e48dced644b1bb4d7",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 864546,
+      "outputSha256": "00db67e683d8570f8c7d9a74b5bb11117c95f39a465496666b96101909252d53",
+      "channelMeanShift": [
+        -0.06664930555555555,
+        -0.06515625,
+        -0.06435763888888889
+      ],
+      "thumbnailMAE": 0.28728587962962965
+    },
+    {
+      "name": "ezgif-frame-026.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 364620,
+      "sha256": "23c72882ff2ebb7f44434c74fbb9ca0dcd18aa03bd90e25935c3c8ce8dcfbfec",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 867335,
+      "outputSha256": "ac5bd5e214ce4af488de8e768a4a81d656b8c2c34ea8c677346ab6f1a41cc787",
+      "channelMeanShift": [
+        -0.06371527777777777,
+        -0.06239583333333333,
+        -0.06274305555555555
+      ],
+      "thumbnailMAE": 0.2966087962962963
+    },
+    {
+      "name": "ezgif-frame-027.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 365747,
+      "sha256": "fb6501aa008d76af9e401e1797587add48f0c2c92b19e180ec792922912ddba6",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 862328,
+      "outputSha256": "6404e1d74118faf1ebff9fba7cd140e40f8af9dfe5e558d7ce121a33a3a8b054",
+      "channelMeanShift": [
+        -0.06847222222222223,
+        -0.06526041666666667,
+        -0.06739583333333334
+      ],
+      "thumbnailMAE": 0.29847800925925927
+    },
+    {
+      "name": "ezgif-frame-028.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 365737,
+      "sha256": "3427c86c6df716baa772d670b8a6cbfe714b79d525bf72b3b3ab6591aa68303a",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 871730,
+      "outputSha256": "3f1c0eb0569be1fcc6da135d952eecaca58d542e208d3d8a425da152b30d58ff",
+      "channelMeanShift": [
+        -0.0653125,
+        -0.06475694444444445,
+        -0.06375
+      ],
+      "thumbnailMAE": 0.2979976851851852
+    },
+    {
+      "name": "ezgif-frame-029.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 364326,
+      "sha256": "ff3d105832ab9313c150e75256933ab3a03b5f08e6a13401e07d20162412c012",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 858625,
+      "outputSha256": "1d1ba8b1b73305947c98f3208db419ec3d6a672e9ebe6e2105477fe1b8369903",
+      "channelMeanShift": [
+        -0.06618055555555556,
+        -0.0661111111111111,
+        -0.06588541666666667
+      ],
+      "thumbnailMAE": 0.3005729166666667
+    },
+    {
+      "name": "ezgif-frame-030.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 354692,
+      "sha256": "509f454e8015c7f060347b424c3af7e75d6db94df7a7c1bf5644222d022caa60",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 825766,
+      "outputSha256": "7c3a3e59084435b6a0ecc64d845d00e37169e9582b115fc751c9e3067d5f0abb",
+      "channelMeanShift": [
+        -0.06519097222222223,
+        -0.06371527777777777,
+        -0.06317708333333333
+      ],
+      "thumbnailMAE": 0.2855902777777778
+    },
+    {
+      "name": "ezgif-frame-031.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 345215,
+      "sha256": "4b1a8dde4e2d1a03766e798af2be2b2f751de6efbc81075415ffc05088bddfe9",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 802050,
+      "outputSha256": "27e7d86d8f741183375b149564ba2a482d198ae1a80b53db520805f277f60a8b",
+      "channelMeanShift": [
+        -0.06296875,
+        -0.062065972222222224,
+        -0.061684027777777775
+      ],
+      "thumbnailMAE": 0.26751736111111113
+    },
+    {
+      "name": "ezgif-frame-032.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 340489,
+      "sha256": "4078fe6b97d6a2162982dfb306f6aeadcc3c72c5a06a8d7af9942df82689f6a1",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 784138,
+      "outputSha256": "bc5863b0a135e1a1b189f2802ae56eb5bae5ab749800d2d27f5bdf977309b978",
+      "channelMeanShift": [
+        -0.06180555555555556,
+        -0.06184027777777778,
+        -0.06076388888888889
+      ],
+      "thumbnailMAE": 0.266875
+    },
+    {
+      "name": "ezgif-frame-033.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 334740,
+      "sha256": "f86e65facc18aaec64cc0d9b338a81421de5a2703826cb71920555121f59758b",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 780074,
+      "outputSha256": "5416c23f97c49994977eaf4fb959bc63dbfd1aaaf23f03e26e4c069b3851cbb6",
+      "channelMeanShift": [
+        -0.06362847222222222,
+        -0.06329861111111111,
+        -0.061510416666666665
+      ],
+      "thumbnailMAE": 0.2646412037037037
+    },
+    {
+      "name": "ezgif-frame-034.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 344151,
+      "sha256": "de16552d68ab6eb194ba7eb252b396fc9c2eab979288df8297ffd97cf2c42b86",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 799723,
+      "outputSha256": "3eb57eb50fc34e95471c6fe87b99e94049cccd3775a7722cda7ed9d601bea9a9",
+      "channelMeanShift": [
+        -0.06597222222222222,
+        -0.06397569444444444,
+        -0.0642361111111111
+      ],
+      "thumbnailMAE": 0.27186921296296296
+    },
+    {
+      "name": "ezgif-frame-035.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 274369,
+      "sha256": "a1b56f034b93b98335982aa73bd2bdb396d3a24170d82f2e22d2fda13337a17c",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 658505,
+      "outputSha256": "5ab0093681ed5de76954e50504ec1b016e5ad407d0096140237783e826cfd9af",
+      "channelMeanShift": [
+        -0.04833333333333333,
+        -0.04925347222222222,
+        -0.049114583333333336
+      ],
+      "thumbnailMAE": 0.2812037037037037
+    },
+    {
+      "name": "ezgif-frame-036.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 300209,
+      "sha256": "6e2d8e95f9b079a1885b8511eb75ab10276ee95578075a7bcf1a17831e3eb60a",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 724548,
+      "outputSha256": "970bb6fe7e78bb4d374e2cf5f574f8c66c53572770bcfb5531a3c5b13d495527",
+      "channelMeanShift": [
+        -0.05220486111111111,
+        -0.05137152777777778,
+        -0.04998263888888889
+      ],
+      "thumbnailMAE": 0.30343171296296295
+    },
+    {
+      "name": "ezgif-frame-037.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 316015,
+      "sha256": "b2189def700bdc545f2dd92e85430c165da2d6253bbd287a8618aeab49e26813",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 753058,
+      "outputSha256": "d5edc2d5b119dcd5bda039860a13134301c4c33959ce7634d6aa2577dbe80e07",
+      "channelMeanShift": [
+        -0.055225694444444445,
+        -0.057291666666666664,
+        -0.054184027777777775
+      ],
+      "thumbnailMAE": 0.30395833333333333
+    },
+    {
+      "name": "ezgif-frame-038.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 309013,
+      "sha256": "a61ec18653dff51d66e5155eaab19160981129a1af99bbd867a5a058494b57cc",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 740649,
+      "outputSha256": "28a213519947db6cbc7bfbab316081f896a66740ae7b6a3e1c2cf53c5f6f96d6",
+      "channelMeanShift": [
+        -0.05175347222222222,
+        -0.05347222222222222,
+        -0.051666666666666666
+      ],
+      "thumbnailMAE": 0.28728587962962965
+    },
+    {
+      "name": "ezgif-frame-039.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 332874,
+      "sha256": "f764afee4e64009310584c353ba249d03ef689426503c7fcedbc80584e0499e3",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 783742,
+      "outputSha256": "2cee0d0ac628c1ecd769650ba08a98288a0f17f94054187557c3135d3c84b539",
+      "channelMeanShift": [
+        -0.055434027777777777,
+        -0.055086805555555556,
+        -0.05399305555555556
+      ],
+      "thumbnailMAE": 0.29943287037037036
+    },
+    {
+      "name": "ezgif-frame-040.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 339705,
+      "sha256": "0707a9c73daa6eaadf67295e2ef2675970c78037f8d5305755526a18b1836443",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 799981,
+      "outputSha256": "8c7c525421047e954fc0c77c95f976e876502ab84799ecf8277b6dedbb4b491e",
+      "channelMeanShift": [
+        -0.06008680555555555,
+        -0.05835069444444444,
+        -0.057604166666666665
+      ],
+      "thumbnailMAE": 0.30443287037037037
+    },
+    {
+      "name": "ezgif-frame-041.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 351702,
+      "sha256": "72b8b630f1962fbcbb70416c47998e08314cac820db2c36a3780f136e0563001",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 832052,
+      "outputSha256": "b8242d2c7544a3c65d5c065d92956db886afa5fbb5561e5ce73e08ccd401ce33",
+      "channelMeanShift": [
+        -0.05907986111111111,
+        -0.05845486111111111,
+        -0.057951388888888886
+      ],
+      "thumbnailMAE": 0.3143287037037037
+    },
+    {
+      "name": "ezgif-frame-042.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 361376,
+      "sha256": "26685f9c543d09aaf681f0ccad61d7a886647af7ccf95934788edd4aed7644f7",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 855167,
+      "outputSha256": "0c2e3f69322cf3a3eef59f2f84c167aa6a1a219672a43c82e7c321061cd7b6f7",
+      "channelMeanShift": [
+        -0.0627951388888889,
+        -0.06190972222222222,
+        -0.06090277777777778
+      ],
+      "thumbnailMAE": 0.32675347222222223
+    },
+    {
+      "name": "ezgif-frame-043.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 363881,
+      "sha256": "69fbca7adad468d629ea37995e96c89b1dfca7cbad383738fc531834367d757b",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 875083,
+      "outputSha256": "6dce54936732b989ab6397ecc58543df8e3fcb00349e7e0cd57c54803ef89612",
+      "channelMeanShift": [
+        -0.05984375,
+        -0.06041666666666667,
+        -0.0584375
+      ],
+      "thumbnailMAE": 0.3233738425925926
+    },
+    {
+      "name": "ezgif-frame-044.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 364351,
+      "sha256": "db19dc1b6a8c13e5d507ae3594e8dee286cefe53f403e64948f5a5d7bb427b47",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 862013,
+      "outputSha256": "466e11df21dd3f3a016227bc6b530c786188b6b04c1b2d90492c7bedee9f6f40",
+      "channelMeanShift": [
+        -0.06291666666666666,
+        -0.06048611111111111,
+        -0.06125
+      ],
+      "thumbnailMAE": 0.3145833333333333
+    },
+    {
+      "name": "ezgif-frame-045.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 360086,
+      "sha256": "6d477bd3772b10bc79c78b8627038299de56dc576a2de3bfe17dd37751e81899",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 845300,
+      "outputSha256": "4a51d746199ffd88fbe18869f7600b2ba8d505fd21d2eb476a88e4ddf050c602",
+      "channelMeanShift": [
+        -0.06270833333333334,
+        -0.06262152777777778,
+        -0.061059027777777775
+      ],
+      "thumbnailMAE": 0.3020138888888889
+    },
+    {
+      "name": "ezgif-frame-046.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 361221,
+      "sha256": "2bce75deb90c4fc0046f1a3e94ef98ee5e9fc8b951b69febc94eb1bc4f11e665",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 846040,
+      "outputSha256": "7d25f22b1725eb855aef9d53a7c100b2c82c80f1b557090ef198027174210d4a",
+      "channelMeanShift": [
+        -0.06251736111111111,
+        -0.06350694444444445,
+        -0.06074652777777778
+      ],
+      "thumbnailMAE": 0.29041666666666666
+    },
+    {
+      "name": "ezgif-frame-047.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 375252,
+      "sha256": "936866aca24bcdcc3260733cacd3df591c522d81dced9a9be6a68fdbcc34b46a",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 884756,
+      "outputSha256": "168b6fc4b81defd2bfff5c0752415e654861e347f78953450b207a9b559c81b9",
+      "channelMeanShift": [
+        -0.06484375,
+        -0.06706597222222223,
+        -0.06668402777777778
+      ],
+      "thumbnailMAE": 0.30688078703703703
+    },
+    {
+      "name": "ezgif-frame-048.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 381717,
+      "sha256": "11cc5ce83d50c2718144e3e68d06910e32bbf6afe279b2a48ae5ac6ec7279971",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 914762,
+      "outputSha256": "1cc9fb6c48420edc014854084e97dce26c4a44b837e0afe07f1184d7c59dbdef",
+      "channelMeanShift": [
+        -0.06375,
+        -0.06538194444444445,
+        -0.06418402777777778
+      ],
+      "thumbnailMAE": 0.29919560185185184
+    },
+    {
+      "name": "ezgif-frame-049.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 385540,
+      "sha256": "65bdc808aa478d1bb75a600d2927928d9c79f8aa83ef24291fccf84f576a3073",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 918565,
+      "outputSha256": "846f7d23abe60b6a5cf168ef2606677e58276f8bb43b75549d4a7f00e2933d21",
+      "channelMeanShift": [
+        -0.06694444444444445,
+        -0.06802083333333334,
+        -0.06737847222222222
+      ],
+      "thumbnailMAE": 0.3063136574074074
+    },
+    {
+      "name": "ezgif-frame-050.png",
+      "width": 1280,
+      "height": 720,
+      "format": "png",
+      "bytes": 386980,
+      "sha256": "c6bee80a321dd7ecea1f0b2b1af5bbeab4454bc1a353b477c46209787ee8bf7e",
+      "outputWidth": 2560,
+      "outputHeight": 1440,
+      "outputBytes": 923107,
+      "outputSha256": "7a56566b9918248c00a363c151e2417a2233bcc3262efb14d44d03d7c813ef07",
+      "channelMeanShift": [
+        -0.06635416666666667,
+        -0.06657986111111111,
+        -0.0665625
+      ],
+      "thumbnailMAE": 0.30933449074074076
+    }
+  ],
+  "temporal": [
+    {
+      "from": "ezgif-frame-001.png",
+      "to": "ezgif-frame-002.png",
+      "originalMAD": 0.3266203703703704,
+      "upscaledMAD": 0.3273668981481481,
+      "processingResidualMAD": 0.09995949074074074
+    },
+    {
+      "from": "ezgif-frame-002.png",
+      "to": "ezgif-frame-003.png",
+      "originalMAD": 0.6332233796296296,
+      "upscaledMAD": 0.6367939814814815,
+      "processingResidualMAD": 0.12780671296296298
+    },
+    {
+      "from": "ezgif-frame-003.png",
+      "to": "ezgif-frame-004.png",
+      "originalMAD": 1.4807175925925926,
+      "upscaledMAD": 1.4850752314814815,
+      "processingResidualMAD": 0.23278356481481483
+    },
+    {
+      "from": "ezgif-frame-004.png",
+      "to": "ezgif-frame-005.png",
+      "originalMAD": 1.8800636574074074,
+      "upscaledMAD": 1.8859837962962962,
+      "processingResidualMAD": 0.2668460648148148
+    },
+    {
+      "from": "ezgif-frame-005.png",
+      "to": "ezgif-frame-006.png",
+      "originalMAD": 2.591342592592593,
+      "upscaledMAD": 2.5990104166666668,
+      "processingResidualMAD": 0.31146412037037036
+    },
+    {
+      "from": "ezgif-frame-006.png",
+      "to": "ezgif-frame-007.png",
+      "originalMAD": 1.7175289351851852,
+      "upscaledMAD": 1.7197685185185185,
+      "processingResidualMAD": 0.2512673611111111
+    },
+    {
+      "from": "ezgif-frame-007.png",
+      "to": "ezgif-frame-008.png",
+      "originalMAD": 2.7657349537037037,
+      "upscaledMAD": 2.7669212962962964,
+      "processingResidualMAD": 0.3236400462962963
+    },
+    {
+      "from": "ezgif-frame-008.png",
+      "to": "ezgif-frame-009.png",
+      "originalMAD": 4.108929398148148,
+      "upscaledMAD": 4.10974537037037,
+      "processingResidualMAD": 0.3663252314814815
+    },
+    {
+      "from": "ezgif-frame-009.png",
+      "to": "ezgif-frame-010.png",
+      "originalMAD": 3.7483043981481483,
+      "upscaledMAD": 3.7507291666666664,
+      "processingResidualMAD": 0.3938715277777778
+    },
+    {
+      "from": "ezgif-frame-010.png",
+      "to": "ezgif-frame-011.png",
+      "originalMAD": 4.409288194444445,
+      "upscaledMAD": 4.415254629629629,
+      "processingResidualMAD": 0.4095196759259259
+    },
+    {
+      "from": "ezgif-frame-011.png",
+      "to": "ezgif-frame-012.png",
+      "originalMAD": 3.443414351851852,
+      "upscaledMAD": 3.4434953703703703,
+      "processingResidualMAD": 0.39667824074074076
+    },
+    {
+      "from": "ezgif-frame-012.png",
+      "to": "ezgif-frame-013.png",
+      "originalMAD": 2.959369212962963,
+      "upscaledMAD": 2.9613657407407405,
+      "processingResidualMAD": 0.37278356481481484
+    },
+    {
+      "from": "ezgif-frame-013.png",
+      "to": "ezgif-frame-014.png",
+      "originalMAD": 4.032337962962963,
+      "upscaledMAD": 4.03296875,
+      "processingResidualMAD": 0.4015914351851852
+    },
+    {
+      "from": "ezgif-frame-014.png",
+      "to": "ezgif-frame-015.png",
+      "originalMAD": 4.301302083333334,
+      "upscaledMAD": 4.301116898148148,
+      "processingResidualMAD": 0.4051736111111111
+    },
+    {
+      "from": "ezgif-frame-015.png",
+      "to": "ezgif-frame-016.png",
+      "originalMAD": 4.968640046296296,
+      "upscaledMAD": 4.9684027777777775,
+      "processingResidualMAD": 0.43690393518518517
+    },
+    {
+      "from": "ezgif-frame-016.png",
+      "to": "ezgif-frame-017.png",
+      "originalMAD": 4.423778935185185,
+      "upscaledMAD": 4.425416666666667,
+      "processingResidualMAD": 0.4415104166666667
+    },
+    {
+      "from": "ezgif-frame-017.png",
+      "to": "ezgif-frame-018.png",
+      "originalMAD": 5.486255787037037,
+      "upscaledMAD": 5.4893576388888885,
+      "processingResidualMAD": 0.45519675925925923
+    },
+    {
+      "from": "ezgif-frame-018.png",
+      "to": "ezgif-frame-019.png",
+      "originalMAD": 5.7563252314814815,
+      "upscaledMAD": 5.764010416666666,
+      "processingResidualMAD": 0.4588773148148148
+    },
+    {
+      "from": "ezgif-frame-019.png",
+      "to": "ezgif-frame-020.png",
+      "originalMAD": 5.0256944444444445,
+      "upscaledMAD": 5.029322916666667,
+      "processingResidualMAD": 0.44188078703703704
+    },
+    {
+      "from": "ezgif-frame-020.png",
+      "to": "ezgif-frame-021.png",
+      "originalMAD": 4.586921296296296,
+      "upscaledMAD": 4.588153935185185,
+      "processingResidualMAD": 0.4467071759259259
+    },
+    {
+      "from": "ezgif-frame-021.png",
+      "to": "ezgif-frame-022.png",
+      "originalMAD": 4.305190972222222,
+      "upscaledMAD": 4.305920138888889,
+      "processingResidualMAD": 0.44947916666666665
+    },
+    {
+      "from": "ezgif-frame-022.png",
+      "to": "ezgif-frame-023.png",
+      "originalMAD": 4.782152777777778,
+      "upscaledMAD": 4.780063657407408,
+      "processingResidualMAD": 0.4591840277777778
+    },
+    {
+      "from": "ezgif-frame-023.png",
+      "to": "ezgif-frame-024.png",
+      "originalMAD": 5.10916087962963,
+      "upscaledMAD": 5.111284722222222,
+      "processingResidualMAD": 0.4391377314814815
+    },
+    {
+      "from": "ezgif-frame-024.png",
+      "to": "ezgif-frame-025.png",
+      "originalMAD": 4.6283564814814815,
+      "upscaledMAD": 4.630619212962963,
+      "processingResidualMAD": 0.4140914351851852
+    },
+    {
+      "from": "ezgif-frame-025.png",
+      "to": "ezgif-frame-026.png",
+      "originalMAD": 5.285474537037037,
+      "upscaledMAD": 5.287285879629629,
+      "processingResidualMAD": 0.43152199074074077
+    },
+    {
+      "from": "ezgif-frame-026.png",
+      "to": "ezgif-frame-027.png",
+      "originalMAD": 5.167071759259259,
+      "upscaledMAD": 5.1690914351851855,
+      "processingResidualMAD": 0.43647569444444445
+    },
+    {
+      "from": "ezgif-frame-027.png",
+      "to": "ezgif-frame-028.png",
+      "originalMAD": 5.015920138888889,
+      "upscaledMAD": 5.012662037037037,
+      "processingResidualMAD": 0.4347511574074074
+    },
+    {
+      "from": "ezgif-frame-028.png",
+      "to": "ezgif-frame-029.png",
+      "originalMAD": 4.8318055555555555,
+      "upscaledMAD": 4.832135416666667,
+      "processingResidualMAD": 0.4285011574074074
+    },
+    {
+      "from": "ezgif-frame-029.png",
+      "to": "ezgif-frame-030.png",
+      "originalMAD": 5.015914351851852,
+      "upscaledMAD": 5.02177662037037,
+      "processingResidualMAD": 0.41879050925925926
+    },
+    {
+      "from": "ezgif-frame-030.png",
+      "to": "ezgif-frame-031.png",
+      "originalMAD": 5.9844386574074075,
+      "upscaledMAD": 5.992118055555555,
+      "processingResidualMAD": 0.41234375
+    },
+    {
+      "from": "ezgif-frame-031.png",
+      "to": "ezgif-frame-032.png",
+      "originalMAD": 4.307928240740741,
+      "upscaledMAD": 4.30509837962963,
+      "processingResidualMAD": 0.37874421296296296
+    },
+    {
+      "from": "ezgif-frame-032.png",
+      "to": "ezgif-frame-033.png",
+      "originalMAD": 3.9017708333333334,
+      "upscaledMAD": 3.903287037037037,
+      "processingResidualMAD": 0.36668981481481483
+    },
+    {
+      "from": "ezgif-frame-033.png",
+      "to": "ezgif-frame-034.png",
+      "originalMAD": 4.10693287037037,
+      "upscaledMAD": 4.109114583333334,
+      "processingResidualMAD": 0.3666493055555556
+    },
+    {
+      "from": "ezgif-frame-034.png",
+      "to": "ezgif-frame-035.png",
+      "originalMAD": 7.209016203703704,
+      "upscaledMAD": 7.214369212962963,
+      "processingResidualMAD": 0.43388310185185186
+    },
+    {
+      "from": "ezgif-frame-035.png",
+      "to": "ezgif-frame-036.png",
+      "originalMAD": 6.2818402777777775,
+      "upscaledMAD": 6.2888368055555555,
+      "processingResidualMAD": 0.4394733796296296
+    },
+    {
+      "from": "ezgif-frame-036.png",
+      "to": "ezgif-frame-037.png",
+      "originalMAD": 6.935503472222222,
+      "upscaledMAD": 6.941655092592592,
+      "processingResidualMAD": 0.46671875
+    },
+    {
+      "from": "ezgif-frame-037.png",
+      "to": "ezgif-frame-038.png",
+      "originalMAD": 7.083304398148148,
+      "upscaledMAD": 7.085682870370371,
+      "processingResidualMAD": 0.44973958333333336
+    },
+    {
+      "from": "ezgif-frame-038.png",
+      "to": "ezgif-frame-039.png",
+      "originalMAD": 5.823217592592592,
+      "upscaledMAD": 5.827702546296297,
+      "processingResidualMAD": 0.4407696759259259
+    },
+    {
+      "from": "ezgif-frame-039.png",
+      "to": "ezgif-frame-040.png",
+      "originalMAD": 4.7521759259259255,
+      "upscaledMAD": 4.75224537037037,
+      "processingResidualMAD": 0.4383912037037037
+    },
+    {
+      "from": "ezgif-frame-040.png",
+      "to": "ezgif-frame-041.png",
+      "originalMAD": 6.372633101851852,
+      "upscaledMAD": 6.379230324074074,
+      "processingResidualMAD": 0.4796412037037037
+    },
+    {
+      "from": "ezgif-frame-041.png",
+      "to": "ezgif-frame-042.png",
+      "originalMAD": 5.222395833333334,
+      "upscaledMAD": 5.222922453703704,
+      "processingResidualMAD": 0.45171875
+    },
+    {
+      "from": "ezgif-frame-042.png",
+      "to": "ezgif-frame-043.png",
+      "originalMAD": 5.174056712962963,
+      "upscaledMAD": 5.176487268518518,
+      "processingResidualMAD": 0.47984953703703703
+    },
+    {
+      "from": "ezgif-frame-043.png",
+      "to": "ezgif-frame-044.png",
+      "originalMAD": 6.886707175925926,
+      "upscaledMAD": 6.888402777777777,
+      "processingResidualMAD": 0.48544560185185187
+    },
+    {
+      "from": "ezgif-frame-044.png",
+      "to": "ezgif-frame-045.png",
+      "originalMAD": 7.385086805555556,
+      "upscaledMAD": 7.3889756944444445,
+      "processingResidualMAD": 0.4768287037037037
+    },
+    {
+      "from": "ezgif-frame-045.png",
+      "to": "ezgif-frame-046.png",
+      "originalMAD": 7.829033564814814,
+      "upscaledMAD": 7.828825231481481,
+      "processingResidualMAD": 0.4681828703703704
+    },
+    {
+      "from": "ezgif-frame-046.png",
+      "to": "ezgif-frame-047.png",
+      "originalMAD": 6.510028935185185,
+      "upscaledMAD": 6.517673611111111,
+      "processingResidualMAD": 0.44755208333333335
+    },
+    {
+      "from": "ezgif-frame-047.png",
+      "to": "ezgif-frame-048.png",
+      "originalMAD": 3.684346064814815,
+      "upscaledMAD": 3.6868807870370373,
+      "processingResidualMAD": 0.4021412037037037
+    },
+    {
+      "from": "ezgif-frame-048.png",
+      "to": "ezgif-frame-049.png",
+      "originalMAD": 1.7810648148148147,
+      "upscaledMAD": 1.785,
+      "processingResidualMAD": 0.27642361111111113
+    },
+    {
+      "from": "ezgif-frame-049.png",
+      "to": "ezgif-frame-050.png",
+      "originalMAD": 1.2983391203703705,
+      "upscaledMAD": 1.2991724537037037,
+      "processingResidualMAD": 0.26336805555555554
+    }
+  ],
+  "summary": {
+    "frameCount": 50,
+    "sourceDimensions": [
+      1280,
+      720
+    ],
+    "outputDimensions": [
+      2560,
+      1440
+    ],
+    "aspectRatio": 1.7777777777777777,
+    "originalBytes": 16769640,
+    "upscaledBytes": 40073827,
+    "sourceDecodedRGBABytes": 184320000,
+    "upscaledDecodedRGBABytes": 737280000,
+    "meanThumbnailMAE": 0.3058162037037037,
+    "worstChannelMeanShift": 0.07322916666666666,
+    "worstTemporalResidualMAD": 0.48544560185185187,
+    "sourceHashesUnchanged": true,
+    "allOutputsFullyDecoded": true,
+    "filenamesAndOrderingPreserved": true
+  }
+}

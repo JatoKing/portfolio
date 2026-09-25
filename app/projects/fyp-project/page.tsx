@@ -1,7 +1,8 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
-  ArrowLeft, ExternalLink, Calendar, MapPin,
+  ArrowLeft, ArrowRight, ExternalLink, Calendar, MapPin,
   Users, Code2, Trophy, Star, Zap, X, ZoomIn,
   AlertTriangle, Target, CheckCircle2, FileText,
 } from "lucide-react";
@@ -417,11 +418,11 @@ function ProblemObjectivesSection() {
               fontSize: 14.5, color: C.muted, lineHeight: 1.85,
               fontStyle: "italic", margin: 0,
             }}>
-              "In recent years, there has often been confusion regarding seating arrangements in open seating areas,
+              &ldquo;In recent years, there has often been confusion regarding seating arrangements in open seating areas,
               raising questions about the purpose of seat numbers on tickets. Many spectators are forced to sit on
               stairs or cement due to seating problems, which not only causes discomfort but also obstructs movement
               within the venue. Despite the recurring nature of this issue, particularly in football matches, a clear
-              solution has yet to be implemented."
+              solution has yet to be implemented.&rdquo;
             </p>
             <div style={{ marginTop: 14, fontSize: 11.5, color: C.muted2, fontWeight: 600 }}>
               — Saiful, 2023
@@ -877,7 +878,7 @@ export default function SmartTicketPage() {
         borderBottom: scrollY > 60 ? "1px solid rgba(250,204,21,0.12)" : "1px solid transparent",
         transition: "all 0.35s ease",
       }}>
-        <a href="/" className="back-btn" style={{
+        <Link href="/" className="back-btn" style={{
           display: "inline-flex", alignItems: "center", gap: 8,
           padding: "8px 16px", borderRadius: 999,
           border: `1px solid ${C.border2}`, background: "rgba(255,255,255,0.04)",
@@ -885,7 +886,7 @@ export default function SmartTicketPage() {
           textDecoration: "none", transition: "all 0.2s ease",
         }}>
           <ArrowLeft size={14} /> Back to Portfolio
-        </a>
+        </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.yellow, position: "relative" }}>
             <div style={{
@@ -907,10 +908,10 @@ export default function SmartTicketPage() {
           overflow: "hidden", padding: isMobile ? "100px 20px 40px" : "120px 24px 60px",
         }}
       >
-        {/* Left arrow — navigate to PADU project */}
+        {/* Left arrow — navigate to JEJAK project */}
         {!isMobile && (
         <a
-          href="/projects/padu"
+          href="/projects/jejak"
           style={{
             position: "absolute", left: 20, top: "50%", transform: "translateY(-50%)",
             zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
@@ -924,7 +925,28 @@ export default function SmartTicketPage() {
           onMouseLeave={e => { const b = e.currentTarget; b.style.color = C.muted; b.style.borderColor = C.border2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.3)"; }}
         >
           <ArrowLeft size={24} />
-          <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>PADU</span>
+          <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>JEJAK</span>
+        </a>
+        )}
+
+        {/* Right arrow — navigate to PADU project */}
+        {!isMobile && (
+        <a
+          href="/projects/padu"
+          style={{
+            position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)",
+            zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+            background: "rgba(15,28,33,0.85)", border: `1px solid ${C.border2}`, borderRadius: 16,
+            padding: "20px 14px", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.3)",
+            color: C.muted, fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+            textTransform: "uppercase", textDecoration: "none", transition: "all .2s ease",
+            backdropFilter: "blur(12px)",
+          }}
+          onMouseEnter={e => { const b = e.currentTarget; b.style.color = C.yellow3; b.style.borderColor = "rgba(250,204,21,0.4)"; b.style.boxShadow = "0 8px 28px rgba(250,204,21,.2)"; }}
+          onMouseLeave={e => { const b = e.currentTarget; b.style.color = C.muted; b.style.borderColor = C.border2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.3)"; }}
+        >
+          <ArrowRight size={24} />
+          <span style={{ writingMode: "vertical-rl" }}>PADU</span>
         </a>
         )}
 
@@ -1158,16 +1180,16 @@ export default function SmartTicketPage() {
           padding: "14px 20px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
-          <a href="/projects/padu" style={{
+          <a href="/projects/jejak" style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 18px", borderRadius: 999,
             border: `1px solid ${C.border2}`, background: "rgba(250,204,21,0.06)",
             color: C.muted, fontSize: 13, fontWeight: 600,
             textDecoration: "none",
           }}>
-            <ArrowLeft size={15} /> PADU
+            <ArrowLeft size={15} /> JEJAK
           </a>
-          <a href="/" style={{
+          <Link href="/" style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 18px", borderRadius: 999,
             border: `1px solid ${C.border2}`, background: "rgba(255,255,255,0.04)",
@@ -1175,6 +1197,15 @@ export default function SmartTicketPage() {
             textDecoration: "none",
           }}>
             Portfolio
+          </Link>
+          <a href="/projects/padu" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 999,
+            border: `1px solid ${C.border2}`, background: "rgba(250,204,21,0.06)",
+            color: C.muted, fontSize: 13, fontWeight: 600,
+            textDecoration: "none",
+          }}>
+            PADU <ArrowRight size={15} />
           </a>
         </div>
       )}

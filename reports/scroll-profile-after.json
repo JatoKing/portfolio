@@ -1,0 +1,106 @@
+[
+  {
+    "variant": "normal",
+    "start": 2259.5,
+    "elapsed": 2996.10000000149,
+    "fps": 60.00200006666889,
+    "p95": 16.800000000000182,
+    "over25": 0,
+    "mutations": {
+      "style": 378,
+      "data-frame": 91,
+      "childList": 111,
+      "inert": 20,
+      "aria-hidden": 20,
+      "aria-current": 38,
+      "hidden": 96,
+      "aria-pressed": 96
+    },
+    "longTasks": [],
+    "decodesDuringScroll": 0,
+    "canvas": "2880x1800",
+    "metrics": {
+      "LayoutCount": 137,
+      "RecalcStyleCount": 321,
+      "LayoutDuration": 0.011527,
+      "RecalcStyleDuration": 0.027019,
+      "ScriptDuration": 0.015316,
+      "TaskDuration": 1.2872750000000002,
+      "JSHeapUsedSize": 1388832
+    },
+    "trace": {
+      "PrePaint": {
+        "count": 181,
+        "totalMs": 7.818999999999993,
+        "maxMs": 0.089
+      },
+      "UpdateLayoutTree": {
+        "count": 321,
+        "totalMs": 26.952000000000005,
+        "maxMs": 0.43
+      },
+      "Layout": {
+        "count": 137,
+        "totalMs": 11.125999999999996,
+        "maxMs": 0.254
+      },
+      "Paint": {
+        "count": 389,
+        "totalMs": 12.705000000000007,
+        "maxMs": 0.23
+      }
+    }
+  },
+  {
+    "variant": "normal",
+    "start": 2198,
+    "elapsed": 2991.800000000745,
+    "fps": 60.00200006666889,
+    "p95": 16.700000000000728,
+    "over25": 0,
+    "mutations": {
+      "style": 378,
+      "data-frame": 91,
+      "childList": 111,
+      "inert": 20,
+      "aria-hidden": 20,
+      "aria-current": 38,
+      "hidden": 96,
+      "aria-pressed": 96
+    },
+    "longTasks": [],
+    "decodesDuringScroll": 0,
+    "canvas": "2880x1800",
+    "metrics": {
+      "LayoutCount": 137,
+      "RecalcStyleCount": 322,
+      "LayoutDuration": 0.012505,
+      "RecalcStyleDuration": 0.028406,
+      "ScriptDuration": 0.016727,
+      "TaskDuration": 1.2932320000000002,
+      "JSHeapUsedSize": 1390424
+    },
+    "trace": {
+      "PrePaint": {
+        "count": 181,
+        "totalMs": 8.300000000000002,
+        "maxMs": 0.105
+      },
+      "UpdateLayoutTree": {
+        "count": 322,
+        "totalMs": 28.353999999999996,
+        "maxMs": 0.415
+      },
+      "Layout": {
+        "count": 137,
+        "totalMs": 12.065000000000003,
+        "maxMs": 0.278
+      },
+      "Paint": {
+        "count": 391,
+        "totalMs": 13.119,
+        "maxMs": 0.217
+      }
+    }
+  }
+]

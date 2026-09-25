@@ -1,9 +1,35 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ArrowLeft, Calendar, MapPin, Users, Code2, Trophy,
+  ArrowLeft, ArrowRight, Calendar, MapPin, Users, Code2, Trophy,
   AlertTriangle, Radio, Satellite, Quote, X, ZoomIn, CheckCircle2,
 } from "lucide-react";
+
+/* ─── Hero side navigation (PADU ← JEJAK → FYP) ─────────────────── */
+function HeroSideNav({ href, label, side }: { href: string; label: string; side: "left" | "right" }) {
+  const Arrow = side === "left" ? ArrowLeft : ArrowRight;
+  return (
+    <Link
+      href={href}
+      aria-label={`${side === "left" ? "Previous" : "Next"} project: ${label}`}
+      style={{
+        position: "absolute", [side]: 20, top: "50%", transform: "translateY(-50%)",
+        zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+        background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.22)", borderRadius: 16,
+        padding: "20px 14px", boxShadow: "0 4px 20px rgba(0,0,0,.25)",
+        color: "rgba(255,255,255,0.78)", fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
+        textTransform: "uppercase", textDecoration: "none", transition: "all .2s ease",
+        backdropFilter: "blur(12px)",
+      }}
+      onMouseEnter={e => { const b = e.currentTarget; b.style.color = "#4ade80"; b.style.borderColor = "rgba(74,222,128,0.5)"; b.style.boxShadow = "0 8px 28px rgba(74,222,128,.2)"; }}
+      onMouseLeave={e => { const b = e.currentTarget; b.style.color = "rgba(255,255,255,0.78)"; b.style.borderColor = "rgba(255,255,255,0.22)"; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.25)"; }}
+    >
+      <Arrow size={24} />
+      <span style={{ writingMode: "vertical-rl", transform: side === "left" ? "rotate(180deg)" : undefined }}>{label}</span>
+    </Link>
+  );
+}
 
 /* ─── Colour Tokens ──────────────────────────────────────────────── */
 const C = {
@@ -534,7 +560,7 @@ export default function JejakPage() {
         borderBottom: scrollY > 60 ? "1px solid rgba(22,163,74,0.12)" : "1px solid transparent",
         transition: "all 0.35s ease",
       }}>
-        <a href="/" className="back-btn" style={{
+        <Link href="/" className="back-btn" style={{
           display: "inline-flex", alignItems: "center", gap: 8,
           padding: "8px 16px", borderRadius: 999,
           border: `1px solid ${scrollY > 60 ? C.border2 : "rgba(255,255,255,0.28)"}`,
@@ -544,7 +570,7 @@ export default function JejakPage() {
           textDecoration: "none", transition: "all 0.2s ease",
         }}>
           <ArrowLeft size={14} /> Back to Portfolio
-        </a>
+        </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, position: "relative" }}>
             <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.green, animation: "pulsering 1.5s ease-out infinite" }} />
@@ -569,6 +595,8 @@ export default function JejakPage() {
           position: "absolute", inset: 0, zIndex: 1,
           background: "linear-gradient(115deg, rgba(6,12,8,0.82) 0%, rgba(6,12,8,0.62) 42%, rgba(6,12,8,0.38) 68%, rgba(6,12,8,0.55) 100%)",
         }} />
+        {!isMobile && <HeroSideNav href="/projects/padu" label="PADU" side="left" />}
+        {!isMobile && <HeroSideNav href="/projects/fyp-project" label="FYP" side="right" />}
 
         <div style={{
           position: "relative", zIndex: 2, width: "100%", maxWidth: 880,
@@ -681,7 +709,7 @@ export default function JejakPage() {
             <p style={{ fontSize: 14.5, color: C.muted, lineHeight: 1.9, margin: 0, fontStyle: "italic" }}>
               JEJAK gives hikers offline connectivity awareness — gated dead-zone warnings, downloadable trail packs, and
               background GPS recording that syncs a real last-known location back the moment coverage returns. The app is
-              honest about what's real: every trail pack is explicitly staged as route_only, fixture, or model_backed, so
+              honest about what&apos;s real: every trail pack is explicitly staged as route_only, fixture, or model_backed, so
               demo data never pretends to be a genuine GeoAI prediction.
             </p>
             <div style={{ marginTop: 16, fontSize: 11.5, color: C.muted2, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>
@@ -754,15 +782,31 @@ export default function JejakPage() {
 
       {/* ── Mobile Nav ── */}
       {isMobile && (
-        <div style={{ background: C.bg2, borderTop: `1px solid rgba(22,163,74,0.2)`, padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <a href="/" style={{
+        <div style={{ background: C.bg2, borderTop: `1px solid rgba(22,163,74,0.2)`, padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+          <Link href="/projects/padu" style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "10px 18px", borderRadius: 999,
             border: `1px solid ${C.border2}`, background: "rgba(0,0,0,0.04)",
             color: C.muted2, fontSize: 13, fontWeight: 600, textDecoration: "none",
           }}>
-            <ArrowLeft size={15} /> Back to Portfolio
-          </a>
+            <ArrowLeft size={15} /> PADU
+          </Link>
+          <Link href="/" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 999,
+            border: `1px solid ${C.border2}`, background: "rgba(0,0,0,0.04)",
+            color: C.muted2, fontSize: 13, fontWeight: 600, textDecoration: "none",
+          }}>
+            Portfolio
+          </Link>
+          <Link href="/projects/fyp-project" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 999,
+            border: `1px solid ${C.border2}`, background: "rgba(0,0,0,0.04)",
+            color: C.muted2, fontSize: 13, fontWeight: 600, textDecoration: "none",
+          }}>
+            FYP <ArrowRight size={15} />
+          </Link>
         </div>
       )}
     </div>

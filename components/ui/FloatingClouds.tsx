@@ -47,7 +47,10 @@ export function FloatingClouds({
   const [clouds, setClouds] = useState<Cloud[]>([]);
 
   useEffect(() => {
-    setClouds(generateClouds(number, minSize, maxSize, minSpeed, maxSpeed));
+    const frame = requestAnimationFrame(() => {
+      setClouds(generateClouds(number, minSize, maxSize, minSpeed, maxSpeed));
+    });
+    return () => cancelAnimationFrame(frame);
   }, [number, minSize, maxSize, minSpeed, maxSpeed]);
 
   return (

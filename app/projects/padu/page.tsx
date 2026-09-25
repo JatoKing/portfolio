@@ -341,6 +341,24 @@ const PROJECTS: {
       ]},
     ] as FileNode[],
   },
+  {
+    id:"api", idx:"05", icon:"🔌", title:"Agency Data Integration API",
+    imgs:[],
+    sub:"Backend API · NestJS & Prisma ORM",
+    internal:true,
+    color:T.amb, colorRaw:"217,119,6",
+    desc:"Developed and tested REST API endpoints for government agency data integration, including controller development, request DTOs, and role-based permission guards using NestJS and Prisma ORM. Conducted API testing via Postman to validate endpoint functionality, authentication, authorization, and response accuracy.",
+    stats:[],
+    features:["REST API endpoints for agency data integration","NestJS controller development","Request DTOs for input validation","Role-based permission guards","Prisma ORM data access","Postman API testing","Authentication & authorization checks","Response accuracy validation"],
+    techs:[
+      {n:"NestJS",img:"https://cdn.simpleicons.org/nestjs"},
+      {n:"Prisma",img:"https://cdn.simpleicons.org/prisma/111111"},
+      {n:"TypeScript",img:"https://cdn.simpleicons.org/typescript"},
+      {n:"Postman",img:"https://cdn.simpleicons.org/postman"},
+      {n:"REST API",img:"https://cdn.simpleicons.org/fastapi"},
+    ],
+    tree:[],
+  },
 ];
 
 
@@ -363,6 +381,9 @@ const STACK_BOT = [
   {n:"Dialogflow",img:"https://cdn.simpleicons.org/dialogflow"},
   {n:"React",img:"https://cdn.simpleicons.org/react"},
   {n:"Node.js",img:"https://cdn.simpleicons.org/nodedotjs"},
+  {n:"NestJS",img:"https://cdn.simpleicons.org/nestjs"},
+  {n:"Prisma",img:"https://cdn.simpleicons.org/prisma/111111"},
+  {n:"Postman",img:"https://cdn.simpleicons.org/postman"},
 ];
 
 /* ════════════════════════════════════════════
@@ -833,10 +854,10 @@ export default function PaduPage() {
           padding: "80px 20px 60px",
           textAlign: "center", background: T.bg,
         }}>
-          {/* Right arrow — navigate to FYP project */}
+          {/* Right arrow — navigate to JEJAK project */}
           {!isMobile && (
             <button
-              onClick={() => window.location.href = "/projects/fyp-project"}
+              onClick={() => window.location.href = "/projects/jejak"}
               style={{
                 position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)",
                 zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
@@ -849,7 +870,7 @@ export default function PaduPage() {
               onMouseLeave={e => { const b = e.currentTarget; b.style.color = T.tx3; b.style.borderColor = T.bdr2; b.style.boxShadow = "0 4px 20px rgba(0,0,0,.08)"; }}
             >
               <ArrowRight size={24} />
-              <span style={{ writingMode: "vertical-rl" }}>FYP</span>
+              <span style={{ writingMode: "vertical-rl" }}>JEJAK</span>
             </button>
           )}
           <RetroGrid />
@@ -870,9 +891,9 @@ export default function PaduPage() {
             </BlurFade>
             <BlurFade delay={0.15}>
               <p style={{ maxWidth: 520, fontSize: "clamp(13px,3.5vw,14.5px)", color: T.tx3, lineHeight: 1.88 }}>
-                Four gov-tech digital products I built at{" "}
+                Five gov-tech digital products I built at{" "}
                 <span style={{ color: T.ind, fontWeight: 600 }}>PADU Unit, Ministry of Economy Malaysia</span>{" "}
-                — Public Portal, User Guide Portal, Analytics Portal, and AI Chatbot.
+                — Public Portal, User Guide Portal, Analytics Portal, AI Chatbot, and Agency Data Integration API.
               </p>
             </BlurFade>
             <BlurFade delay={0.25}>
@@ -920,7 +941,7 @@ export default function PaduPage() {
             display: "flex", alignItems: "center", justifyContent: "flex-end",
           }}>
             <button
-              onClick={() => window.location.href = "/projects/fyp-project"}
+              onClick={() => window.location.href = "/projects/jejak"}
               style={{
                 display: "flex", alignItems: "center", gap: 8,
                 padding: "10px 20px", borderRadius: 999,
@@ -929,7 +950,7 @@ export default function PaduPage() {
                 cursor: "pointer",
               }}
             >
-              FYP <ArrowRight size={15} />
+              JEJAK <ArrowRight size={15} />
             </button>
           </div>
         )}
