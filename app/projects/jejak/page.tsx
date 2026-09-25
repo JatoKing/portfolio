@@ -48,7 +48,6 @@ const C = {
   muted2:  "rgba(17,17,17,0.4)",
 };
 
-const OGB_H = 36; // ongoing-project banner height (px)
 
 function useBreakpoint() {
   const [bp, setBp] = useState<"mobile" | "tablet" | "desktop">("desktop");
@@ -310,7 +309,7 @@ function WorkPlanSection() {
     { num: "02", title: "GeoAI Model Contract", desc: "Define a discriminated-union prediction contract (route_only / fixture / model_backed) so the app never confuses demo geometry with a real trained-model prediction, ready to plug in a GeoAI model once one exists." },
     { num: "03", title: "Platform Development", desc: "Build the React Native (Expo) app that lets hikers download routes, connectivity predictions, and offline maps before their hike — with gated gap warnings and background GPS trajectory recording when offline." },
     { num: "04", title: "System Integration", desc: "Sync the app to a backend via a switchable HTTP/fixture repository, with persisted retry backoff and real network-state stamping so sync survives spotty connectivity and app restarts." },
-    { num: "05", title: "Testing & Validation", desc: "86 automated tests (Jest + React Native Testing Library) gated by CI on every push. Physical-device validation of background GPS and MapLibre rendering is next, pending a development build." },
+    { num: "05", title: "Testing & Validation", desc: "86 automated tests (Jest + React Native Testing Library) gated by CI on every push." },
   ];
 
   return (
@@ -536,24 +535,9 @@ export default function JejakPage() {
 
       {modal && <ScreenshotModal data={modal} onClose={closeModal} />}
 
-      {/* ── Ongoing Project Banner ── */}
-      <div style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 101, height: OGB_H,
-        background: `linear-gradient(90deg, ${C.green}, ${C.green2})`,
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-        padding: "0 16px", overflow: "hidden",
-      }}>
-        <span style={{ position: "relative", width: 6, height: 6, borderRadius: "50%", background: "#fff", flexShrink: 0 }}>
-          <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#fff", animation: "pulsering 1.5s ease-out infinite" }} />
-        </span>
-        <span style={{ fontSize: isMobile ? 11 : 12, fontWeight: 700, color: "#fff", letterSpacing: "0.02em", textAlign: "center" }}>
-          🚧 Ongoing Project — JEJAK sedang dibangunkan secara aktif untuk ASEAN GeoAI Fusion 2026
-        </span>
-      </div>
-
       {/* ── Navigation ── */}
       <nav style={{
-        position: "fixed", top: OGB_H, left: 0, right: 0, zIndex: 100,
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
         background: scrollY > 60 ? "rgba(248,247,244,0.92)" : "transparent",
         backdropFilter: scrollY > 60 ? "blur(20px)" : "none",
@@ -584,7 +568,7 @@ export default function JejakPage() {
         position: "relative", minHeight: isMobile ? "auto" : "72vh",
         display: "flex", flexDirection: "column", alignItems: "center",
         justifyContent: "center",
-        overflow: "hidden", padding: isMobile ? `${100 + OGB_H}px 20px 56px` : `${140 + OGB_H}px 24px 100px`,
+        overflow: "hidden", padding: isMobile ? "100px 20px 56px" : "140px 24px 100px",
       }}>
         <div style={{
           position: "absolute", inset: 0, zIndex: 0,
@@ -763,7 +747,7 @@ export default function JejakPage() {
                     { Icon: Radio,    label: "Role",     val: "Contributor" },
                     { Icon: Satellite, label: "Platform", val: "React Native (Expo)" },
                     { Icon: CheckCircle2, label: "Tests", val: "86/86 passing (CI)" },
-                    { Icon: MapPin,   label: "Status",   val: "Ongoing — device test pending" },
+                    { Icon: MapPin,   label: "Status",   val: "Completed" },
                   ].map(({ Icon, label, val }) => (
                     <div key={label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: "rgba(0,0,0,0.04)", border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
