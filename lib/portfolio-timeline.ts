@@ -27,6 +27,18 @@ export const sourceCut = at(156.5);
 export const sourceFps = (kind: SourceKind) => kind === "video" ? frameConfig.video.fps : frameConfig.fps;
 export const sourceCount = (kind: SourceKind) => kind === "video" ? frameConfig.video.frames : frameConfig.count;
 
+// Horizontal centre of the character (source px, 1280 wide) every 0.25 s of video,
+// measured from the suit colour. Portrait screens use it to pan the full-bleed stage.
+export const subjectTrack = {
+  step: .25,
+  x: [502,500,495,488,485,496,515,529,533,530,523,523,531,544,561,575,576,571,569,576,588,599,607,618,629,632,632,619,628,639,655,668,668,664,646,621,603,596,594,593,594],
+} as const;
+export function getSubjectX(time: number) {
+  const position = clamp(time / subjectTrack.step, 0, subjectTrack.x.length - 1);
+  const lower = Math.floor(position), upper = Math.min(lower + 1, subjectTrack.x.length - 1);
+  return subjectTrack.x[lower] + (subjectTrack.x[upper] - subjectTrack.x[lower]) * (position - lower);
+}
+
 export const getFramePath = (index: number) =>
   `${frameConfig.directory}/${frameConfig.prefix}${String(index + 1).padStart(3, "0")}.${frameConfig.extension}`;
 

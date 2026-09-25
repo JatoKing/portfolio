@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   advanceMaster, chapters, chapterStyle, clamp, frameConfig, getActiveChapter,
-  getChapterDestination, getFramePath, getFrameSample, getVideoTime, itemIndex,
+  getChapterDestination, getFramePath, getFrameSample, getSubjectX, getVideoTime, itemIndex,
   sourceCount, sourceFps, type ChapterId, type MasterClock, type RenderMode, type SourceKind,
 } from "@/lib/portfolio-timeline";
 import { experience, projects } from "@/lib/portfolio-data";
@@ -76,7 +76,13 @@ export function useFrameSequence() {
     let fps = 0, fpsElapsed = 0, fpsSamples = 0, debugPaintTime = 0;
     let disposed = false, enabled = false;
     let width = 0, height = 0, dpr = 1, loaded = 0, failed = 0;
-    let geometry = { x: 0, y: 0, width: 0, height: 0 };
+    // `pan`: portrait screens show a full-bleed stage that follows the character.
+    let geometry = { x: 0, y: 0, width: 0, height: 0, scale: 1, pan: false };
+    function placed(time: number) {
+      if (!geometry.pan) return geometry;
+      const x = clamp(width / 2 - getSubjectX(time) * geometry.scale, width - geometry.width, 0);
+      return { ...geometry, x };
+    }
     let restoredScrollY: number | null = null;
     let renderMode: RenderMode = frameConfig.renderMode;
     let debugEnabled = false;
@@ -124,7 +130,7 @@ export function useFrameSequence() {
       context.fillRect(0, 0, width, height);
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = frameRendering.canvasSmoothing;
-      const { x, y, width: w, height: h } = geometry;
+      const { x, y, width: w, height: h } = placed((sample.lower + sample.mix) / frameConfig.fps);
       // Draw an opaque base, then the adjacent image on top. Two translucent
       // source-over draws would incorrectly leak the background and darken edges.
       context.drawImage(lower, x, y, w, h);
@@ -150,7 +156,7 @@ export function useFrameSequence() {
       context.fillRect(0, 0, width, height);
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = frameRendering.canvasSmoothing;
-      const { x, y, width: w, height: h } = geometry;
+      const { x, y, width: w, height: h } = placed(shownFrame / frameConfig.video.fps);
       context.drawImage(video, x, y, w, h);
       state.drawCount++;
       stage.dataset.frame = String(shownFrame + 1);
@@ -331,8 +337,6 @@ export function useFrameSequence() {
       width = window.innerWidth;
       height = window.innerHeight;
       state.maxScroll = Math.max(0, document.documentElement.scrollHeight - height);
-      const portraitHeight = Math.min(width / 760, height * (height < 700 ? .40 : .46) / frameConfig.height) * frameConfig.height;
-      container?.style.setProperty("--stage-top", `${height - portraitHeight - 56}px`);
       dpr = Math.min(window.devicePixelRatio || 1, width < 768 ? frameRendering.mobileDpr : frameRendering.desktopDpr);
       stage.width = Math.round(width * dpr);
       stage.height = Math.round(height * dpr);
@@ -341,15 +345,14 @@ export function useFrameSequence() {
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.fillStyle = frameConfig.background;
       context.fillRect(0, 0, width, height);
+      // Portrait: the animation becomes a full-screen background (cover) that pans
+      // with the character. Landscape: the whole frame stays visible (contain).
       const portrait = width / height <= 1.25;
       const scale = portrait
-        ? Math.min(width / 760, (height * (height < 700 ? .40 : .46)) / frameConfig.height)
+        ? Math.max(width / frameConfig.width, height / frameConfig.height)
         : Math.min(width / frameConfig.width, height / frameConfig.height);
       const w = frameConfig.width * scale, h = frameConfig.height * scale;
-      geometry = {
-        x: portrait && w >= width ? clamp(width / 2 - w * .55, width - w, 0) : (width - w) / 2,
-        y: portrait ? height - h - 56 : (height - h) / 2, width: w, height: h,
-      };
+      geometry = { x: (width - w) / 2, y: (height - h) / 2, width: w, height: h, scale, pan: portrait };
       if (enabled) {
         // Remap the same normalized target to the new physical track. Never
         // replace currentProgress with scrollY/newMax during a viewport change.

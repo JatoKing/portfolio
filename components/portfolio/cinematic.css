@@ -160,7 +160,7 @@ body:has(.cinematic)::-webkit-scrollbar { display: none; }
   .story-panel { width:28%; }
   .story-panel .eyebrow { font-size:8px; letter-spacing:.08em; }
 }
-/* Match the canvas portrait threshold; reserve the lower stage for the figure. */
+/* Match the canvas portrait threshold (the full-bleed background layout). */
 @media (max-aspect-ratio:5/4) {
   .portfolio-nav { left:6%; right:6%; top:max(24px,env(safe-area-inset-top)); }
   .desktop-nav { display:none; }
@@ -239,16 +239,23 @@ body:has(.cinematic)::-webkit-scrollbar { display: none; }
   .cinematic *, .sequence-loader { scroll-behavior:auto !important; transition:none !important; }
   .item-stack *, .item-stack > * { animation:none !important; }
 }
-/* Content bounds follow the actual canvas fitting, including short phones. */
+/* Portrait: the animation fills the screen as a background. Text sits in the lower
+   half over a soft veil, leaving the character's face and torso clear above. */
+.stage-scrim { display:none; }
 @media (max-aspect-ratio:5/4) {
-  .story-panel { max-height:calc(var(--stage-top, 54svh) - 133px); }
+  .stage-scrim { display:block; position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:
+      linear-gradient(to bottom, rgba(211,207,200,.75) 0, rgba(211,207,200,0) 120px),
+      linear-gradient(to top, rgba(211,207,200,.97) 0%, rgba(211,207,200,.93) 42%, rgba(211,207,200,.78) 52%, rgba(211,207,200,0) 68%); }
+  .story-panel { top:auto; bottom:calc(max(18px, env(safe-area-inset-bottom)) + 58px); max-height:min(52svh, calc(100svh - 190px)); }
   .hero-panel { overflow-y:auto; scrollbar-width:thin; }
 }
-@media (max-width:520px) and (max-aspect-ratio:5/4) {
-  .story-panel { max-height:calc(var(--stage-top, 54svh) - 120px); }
-}
 @media (max-height:700px) and (max-aspect-ratio:5/4) {
-  .story-panel { top:88px; max-height:calc(var(--stage-top, 60svh) - 103px); }
+  /* Short phones: cap the text so the face stays visible; long panels scroll inside. */
+  .story-panel { max-height:60svh; }
+  .stage-scrim { background:
+      linear-gradient(to bottom, rgba(211,207,200,.75) 0, rgba(211,207,200,0) 100px),
+      linear-gradient(to top, rgba(211,207,200,.97) 0%, rgba(211,207,200,.93) 55%, rgba(211,207,200,.75) 66%, rgba(211,207,200,0) 80%); }
   .hero-panel h1 { font-size:42px; margin-bottom:12px; }
   .hero-panel .eyebrow { margin-bottom:12px; }
   .hero-role { font-size:15px; margin-bottom:8px; }

@@ -49,6 +49,7 @@ export default function CinematicPortfolio() {
       <div className={`cinematic ${ready ? "is-ready" : ""}`} ref={root} tabIndex={-1} inert={!ready}>
         <a className="skip-link" href="#contact" onClick={event => navigate(event, "contact")}>Skip to contact</a>
         <canvas className="frame-canvas" ref={canvas} aria-hidden="true" />
+        <div className="stage-scrim" aria-hidden="true" />
         <div className="sequence-meter" ref={meter} aria-hidden="true" />
         <header className="portfolio-nav">
           <a className="wordmark" href="#hero" onClick={event => navigate(event, "hero")} aria-label="Izzat Imran, introduction">ii<span>.</span></a>
@@ -125,7 +126,7 @@ export default function CinematicPortfolio() {
           </section>
           <section id="contact" className="story-panel contact-panel" data-chapter="contact" aria-labelledby="contact-heading" inert aria-hidden="true">
             <p className="eyebrow">05 / THE NEXT CHAPTER</p>
-            <h2 id="contact-heading">Let&apos;s build<br />something<br /><span>great.</span></h2>
+            <h2 id="contact-heading">Let&apos;s build<br />something <br /><span>great.</span></h2>
             <div className="panel-scroll">
               <p className="body-copy">Have something in mind?<br />Let&apos;s make it happen.</p>
               <div className="email-row"><a href={`mailto:${email}`}>{email}<ArrowUpRight size={17} /></a><button onClick={copyEmail} aria-label="Copy email address">{copyStatus === "Email copied" ? <Check size={15} /> : <Copy size={15} />}</button></div>
