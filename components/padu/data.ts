@@ -24,7 +24,7 @@ export const PROJECTS: PaduProject[] = [
   {
     id:"awam", idx:"01", icon:"🇲🇾", title:"PADU Public Portal",
     imgs:["/newbannerpadu.png"],
-    sub:"Public Portal · padu-portal-awam-v2",
+    sub:"Public Portal · Portal PADU",
     url:"https://www.padu.gov.my",
     color:T.ind, colorRaw:"79,70,229",
     desc:"Official information website for Malaysia's Pangkalan Data Utama (PADU). I developed the front end of this official government portal — serving as the primary source for Malaysians to learn about the PADU system, featuring 20+ animated pages including infographics, a 3D carousel, and an AI chatbot.",

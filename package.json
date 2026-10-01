@@ -11,6 +11,7 @@
     "frames:verify": "node scripts/upscale-frames.cjs --verify-only"
   },
   "dependencies": {
+    "@designcodeio/threeui": "^1.2.0",
     "@lottiefiles/dotlottie-react": "^0.18.7",
     "@types/three": "^0.183.1",
     "animejs": "^4.3.6",

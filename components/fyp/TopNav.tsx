@@ -9,10 +9,12 @@ export function TopNav() {
   const root = useRef<HTMLElement>(null);
 
   useScrollScene(root, (_, el) => {
+    // Not onToggle: a trigger ending at "max" deactivates at the very bottom of the page.
     ScrollTrigger.create({
-      start: 60,
+      start: 0,
       end: "max",
-      onToggle: self => el.classList.toggle("is-solid", self.isActive),
+      onUpdate: self => el.classList.toggle("is-solid", self.scroll() > 60),
+      onRefresh: self => el.classList.toggle("is-solid", self.scroll() > 60),
     });
     gsap.to(".fy-nav__progress", {
       scaleX: 1, ease: "none",

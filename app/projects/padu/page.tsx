@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   BackgroundEffects, HeroSection, ProjectShowcase, Reveal, ScrollProgress, TechMarquee,
   PROJECTS, STACK_TOP, STACK_BOT,
@@ -47,12 +47,15 @@ export default function PaduPage() {
         </div>
       </section>
 
-      {/* Next case study (smaller screens) */}
-      <div className="pd-footnav">
+      {/* End of the page: back out, or on to the next case study */}
+      <nav className="pd-footnav" aria-label="More projects">
+        <Link href="/" className="pd-pill">
+          <ArrowLeft size={15} /> Back to Portfolio
+        </Link>
         <Link href="/projects/jejak" className="pd-pill">
           JEJAK <ArrowRight size={15} />
         </Link>
-      </div>
+      </nav>
     </div>
   );
 }

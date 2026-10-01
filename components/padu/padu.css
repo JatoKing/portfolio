@@ -749,6 +749,8 @@ button.pd-pill:hover, a.pd-pill:hover {
 .pd-reveal.is-in .pd-showcase-item { opacity: 1; transform: none; }
 
 .pd-showcase-cursor { display: none; }
+/* Positioned at every breakpoint: its images are `fill`, even while the preview is hidden. */
+.pd-showcase-cursor-card { position: absolute; inset: 0; }
 
 /* ─── Immersive: fine pointer, wide screen ────────────────────── */
 @media (hover: hover) and (pointer: fine) and (min-width: 900px) {
@@ -793,8 +795,10 @@ button.pd-pill:hover, a.pd-pill:hover {
 
 /* ─── Footer nav (mobile) ─────────────────────────────────── */
 .pd-footnav {
-  position: relative; z-index: 2; display: none;
-  justify-content: flex-end; padding: 16px 16px 28px;
+  position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: space-between; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+  padding: 20px 24px max(32px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--pd-line);
 }
 .pd-footnav .pd-pill { padding: 10px 20px; font-size: 13px; font-weight: 600; }
@@ -806,7 +810,6 @@ button.pd-pill:hover, a.pd-pill:hover {
 /* The side JEJAK tab would collide with the orbit below this width. */
 @media (max-width: 1279px) {
   .pd-sidenav { display: none; }
-  .pd-footnav { display: flex; }
 }
 
 /* Tablet: visual first, cards in a staggered two-column cluster */
@@ -884,4 +887,12 @@ button.pd-pill:hover, a.pd-pill:hover {
   /* Keep simple fades for the project image. */
   .pd .pd-showcase-cursor-card { transform: none !important; transition: opacity .2s ease !important; }
   .pd .pd-showcase-cursor-img, .pd .pd-showcase-row { transition: opacity .2s ease, color .2s ease !important; }
+}
+
+/* Touch screens: a tap shouldn't leave a card lifted or the marquee frozen. */
+@media (hover: none) {
+  .pd-glass--interactive:hover, .pd-shot:hover { transform: none; }
+  .pd-wcard:hover:not(:focus-visible) { --lift: 0px; --scale: 1; }
+  .pd-wcard:hover .pd-wcard-sheen { opacity: 0; }
+  .pd-marquee-band:hover .pd-marquee-track { animation-play-state: running; }
 }

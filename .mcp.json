@@ -3,6 +3,10 @@
     "motionsites": {
       "type": "http",
       "url": "https://xgdzyqfalbibzelpdpvr.supabase.co/functions/v1/mcp"
+    },
+    "threeui": {
+      "type": "http",
+      "url": "https://threeui.com/api/mcp"
     }
   }
 }

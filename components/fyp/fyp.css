@@ -33,7 +33,7 @@
   overflow-x: clip;
   background: var(--fy-ink);
   color: var(--fy-tx);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -134,7 +134,7 @@ body:has(.fy)::-webkit-scrollbar-thumb { background: rgba(245, 197, 24, 0.6); }
 .fy-nav {
   position: fixed; inset: 0 0 auto 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px var(--fy-gutter);
+  padding: max(14px, env(safe-area-inset-top)) var(--fy-gutter) 14px;
   border-bottom: 1px solid transparent;
   transition: background 0.35s ease, border-color 0.35s ease;
 }
