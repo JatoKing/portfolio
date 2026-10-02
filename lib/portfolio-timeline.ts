@@ -33,6 +33,14 @@ export const subjectTrack = {
   step: .25,
   x: [502,500,495,488,485,496,515,529,533,530,523,523,531,544,561,575,576,571,569,576,588,599,607,618,629,632,632,619,628,639,655,668,668,664,646,621,603,596,594,593,594],
 } as const;
+// How far a landscape stage may crop the source. Measured across the whole sequence: the
+// character never rises above 2.5% or drops below 96.5% of the frame height, so up to that
+// band can be cropped to fill a screen. `subjectX` is his opening position (source px);
+// `anchorX` is where it sits across the screen: .40 on 16:9, easing to .48 as the screen
+// squares up toward the portrait layout, so he grows into the empty right side rather than
+// into the text column on the left.
+export const frameFit = { safeTop: .025, safeBottom: .965, subjectX: 486, anchorX: [.4, .48], squareAspect: 1.25 } as const;
+
 export function getSubjectX(time: number) {
   const position = clamp(time / subjectTrack.step, 0, subjectTrack.x.length - 1);
   const lower = Math.floor(position), upper = Math.min(lower + 1, subjectTrack.x.length - 1);

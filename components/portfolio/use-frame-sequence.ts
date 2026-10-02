@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  advanceMaster, chapters, chapterStyle, clamp, frameConfig, getActiveChapter,
+  advanceMaster, chapters, chapterStyle, clamp, frameConfig, frameFit, getActiveChapter,
   getChapterDestination, getFramePath, getFrameSample, getSubjectX, getVideoTime, itemIndex,
   sourceCount, sourceFps, type ChapterId, type MasterClock, type RenderMode, type SourceKind,
 } from "@/lib/portfolio-timeline";
@@ -105,6 +105,20 @@ export function useFrameSequence() {
       }
     }
 
+    // Paint a frame at the stage geometry. Wherever it doesn't reach the canvas edge, its
+    // outermost pixels are stretched across the gap, so the wall and floor carry on to the
+    // edge of the screen instead of stopping at a flat band.
+    function paintFrame(image: CanvasImageSource, sourceWidth: number, sourceHeight: number, at: typeof geometry) {
+      if (!context) return;
+      const { x, y, width: w, height: h } = at;
+      const sx = Math.max(1, Math.round(sourceWidth * .004)), sy = Math.max(1, Math.round(sourceHeight * .004));
+      if (x > 0) context.drawImage(image, 1, 0, sx, sourceHeight, 0, y, x + 1, h);
+      if (x + w < width) context.drawImage(image, sourceWidth - sx - 1, 0, sx, sourceHeight, x + w - 1, y, width - x - w + 1, h);
+      if (y > 0) context.drawImage(image, 0, 1, sourceWidth, sy, x, 0, w, y + 1);
+      if (y + h < height) context.drawImage(image, 0, sourceHeight - sy - 1, sourceWidth, sy, x, y + h - 1, w, height - y - h + 1);
+      context.drawImage(image, x, y, w, h);
+    }
+
     function draw(request: FrameSample, force = false) {
       if (!context || !stage) return;
       let sample: FrameSample;
@@ -130,13 +144,13 @@ export function useFrameSequence() {
       context.fillRect(0, 0, width, height);
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = frameRendering.canvasSmoothing;
-      const { x, y, width: w, height: h } = placed((sample.lower + sample.mix) / frameConfig.fps);
+      const at = placed((sample.lower + sample.mix) / frameConfig.fps);
       // Draw an opaque base, then the adjacent image on top. Two translucent
       // source-over draws would incorrectly leak the background and darken edges.
-      context.drawImage(lower, x, y, w, h);
+      paintFrame(lower, lower.width, lower.height, at);
       if (sample.upper !== sample.lower && sample.mix > 0) {
         context.globalAlpha = sample.mix;
-        context.drawImage(upper, x, y, w, h);
+        paintFrame(upper, upper.width, upper.height, at);
       }
       context.globalAlpha = 1;
       state.lastValidSample = sample;
@@ -156,8 +170,7 @@ export function useFrameSequence() {
       context.fillRect(0, 0, width, height);
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = frameRendering.canvasSmoothing;
-      const { x, y, width: w, height: h } = placed(shownFrame / frameConfig.video.fps);
-      context.drawImage(video, x, y, w, h);
+      paintFrame(video, video.videoWidth || frameConfig.width, video.videoHeight || frameConfig.height, placed(shownFrame / frameConfig.video.fps));
       state.drawCount++;
       stage.dataset.frame = String(shownFrame + 1);
     }
@@ -346,13 +359,23 @@ export function useFrameSequence() {
       context.fillStyle = frameConfig.background;
       context.fillRect(0, 0, width, height);
       // Portrait: the animation becomes a full-screen background (cover) that pans
-      // with the character. Landscape: the whole frame stays visible (contain).
+      // with the character. Landscape: it scales toward cover too, so the stage fills
+      // the browser viewport whatever its shape, but never so far that the character's
+      // head or feet are cropped. He keeps his place beside the text column, and any
+      // strip still uncovered (very wide windows) is filled by paintFrame's edge bleed.
       const portrait = width / height <= 1.25;
-      const scale = portrait
-        ? Math.max(width / frameConfig.width, height / frameConfig.height)
-        : Math.min(width / frameConfig.width, height / frameConfig.height);
+      const cover = Math.max(width / frameConfig.width, height / frameConfig.height);
+      const contain = Math.min(width / frameConfig.width, height / frameConfig.height);
+      const safe = height / ((frameFit.safeBottom - frameFit.safeTop) * frameConfig.height);
+      const scale = portrait ? cover : Math.max(contain, Math.min(cover, safe));
       const w = frameConfig.width * scale, h = frameConfig.height * scale;
-      geometry = { x: (width - w) / 2, y: (height - h) / 2, width: w, height: h, scale, pan: portrait };
+      // Within [edge-aligned, edge-aligned]: the frame covers that axis if it can, else sits inside it.
+      const within = (value: number, size: number, frame: number) => Math.min(Math.max(value, Math.min(0, size - frame)), Math.max(0, size - frame));
+      const squareness = clamp((16 / 9 - width / height) / (16 / 9 - frameFit.squareAspect));
+      const anchor = frameFit.anchorX[0] + (frameFit.anchorX[1] - frameFit.anchorX[0]) * squareness;
+      const x = portrait ? (width - w) / 2 : within(width * anchor - frameFit.subjectX * scale, width, w);
+      const y = portrait ? (height - h) / 2 : within(height / 2 - (frameFit.safeTop + frameFit.safeBottom) / 2 * h, height, h);
+      geometry = { x, y, width: w, height: h, scale, pan: portrait };
       if (enabled) {
         // Remap the same normalized target to the new physical track. Never
         // replace currentProgress with scrollY/newMax during a viewport change.
