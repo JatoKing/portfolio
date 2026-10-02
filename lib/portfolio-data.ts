@@ -4,7 +4,7 @@ export const socialLinks = { github: "https://github.com/izzatimran", linkedin: 
 // The original LinkedIn link is generic; no personal profile or resume was supplied.
 export const experience = [
   {
-    "role": "Web & Frontend Developer",
+    "role": "PERSONEL MySTEP",
     "company": "Unit PADU, Kementerian Ekonomi",
     "loc": "Putrajaya",
     "period": "2025 – Present",
