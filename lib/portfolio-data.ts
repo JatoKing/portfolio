@@ -86,6 +86,35 @@ export const projects = [
     "preview": "/homeportalawam.png"
   },
   {
+    "title": "Sistem Dalaman Unit PADU",
+    "org": "Unit PADU, Kementerian Ekonomi",
+    "category": "Internal System",
+    "period": "2025 – Present",
+    "role": "Full-Stack Developer",
+    "desc": "Developed an internal Unit PADU system using Next.js, PostgreSQL, and Prisma ORM, integrating responsive interfaces with structured database models to support internal workflow management.",
+    "highlights": [
+      "Next.js + Prisma ORM stack",
+      "PostgreSQL structured data models",
+      "Internal workflow management",
+      "Operational efficiency tooling",
+      "Responsive internal dashboard UI",
+      "Role-based internal access"
+    ],
+    "tags": [
+      "Next.js",
+      "PostgreSQL",
+      "Prisma ORM"
+    ],
+    "icon": "🗂️",
+    "accent": "#4f46e5",
+    "accentRaw": "79,70,229",
+    "status": "Live",
+    "statusColor": "#16a34a",
+    "internal": true,
+    "href": "/projects/padu",
+    "preview": "/sistem-dalaman.png"
+  },
+  {
     "title": "MyINFO & PADU Chatbot",
     "org": "Unit PADU, Kementerian Ekonomi",
     "period": "2025 – Present",
@@ -115,7 +144,8 @@ export const projects = [
     "statusColor": "#16a34a",
     "internal": true,
     "href": "/projects/padu",
-    "preview": "/chatbotmyinfo.jpeg"
+    "preview": "/chatbotmyinfo.jpeg",
+    "previewFit": "contain"
   },
   {
     "title": "Portal Analitik",
@@ -174,35 +204,6 @@ export const projects = [
     "internal": true,
     "href": "/projects/padu",
     "preview": "/homepanduan.png"
-  },
-  {
-    "title": "Unit PADU Internal System",
-    "org": "Unit PADU, Kementerian Ekonomi",
-    "period": "2025 – Present",
-    "role": "Full-Stack Developer",
-    "desc": "Internal workflow management system for Unit PADU, integrating a responsive Next.js front-end with structured PostgreSQL data models via Prisma ORM to support daily operational efficiency.",
-    "highlights": [
-      "Next.js + Prisma ORM stack",
-      "PostgreSQL structured data models",
-      "Internal workflow management",
-      "Operational efficiency tooling",
-      "Responsive internal dashboard UI",
-      "Role-based internal access"
-    ],
-    "tags": [
-      "Next.js",
-      "PostgreSQL",
-      "Prisma ORM",
-      "Tailwind CSS"
-    ],
-    "icon": "🗂️",
-    "accent": "#4f46e5",
-    "accentRaw": "79,70,229",
-    "status": "Live",
-    "statusColor": "#16a34a",
-    "internal": true,
-    "href": "/projects/padu",
-    "preview": null
   },
   {
     "title": "Agency Data Integration API",
@@ -289,7 +290,7 @@ export const projects = [
     "status": "Hackathon",
     "statusColor": "#0d9488",
     "href": "/projects/jejak",
-    "preview": "/herosectiontrails.jpg"
+    "preview": "/jejak-background/hero.png"
   }
 ];
 

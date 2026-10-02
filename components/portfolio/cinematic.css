@@ -112,6 +112,20 @@ body:has(.cinematic)::-webkit-scrollbar { display: none; }
 @keyframes item-in { from { opacity:0; transform:translate3d(0, calc(var(--item-dir, 1) * 14px), 0); filter:blur(4px); } }
 @keyframes item-out { to { opacity:0; transform:translate3d(0, calc(var(--item-dir, 1) * -10px), 0); filter:blur(3px); } }
 @keyframes tag-in { from { opacity:0; transform:translate3d(-6px, 0, 0); } }
+/* A framed screenshot above each project. Its height follows the screen, so on short laptops
+   it narrows into a banner rather than pushing the description out of the panel. */
+.project-preview { position:relative; display:block; width:100%; aspect-ratio:16/9; max-height:clamp(84px, 20vh - 36px, 190px); margin-bottom:14px; overflow:hidden; border-radius:4px; background:#c9c4bb; border:1px solid var(--rule); box-shadow:0 18px 32px -26px rgba(37,39,33,.5); }
+.project-preview img { transition:transform .6s var(--item-ease); }
+@media (hover:hover) { .project-preview:hover img { transform:scale(1.03); } }
+.project-category { color:var(--accent-text); }
+/* Short or portrait screens: the preview becomes a thumbnail beside the date, title and org,
+   so it costs almost no height and the description and links stay in view. */
+@media (max-height:800px), (max-aspect-ratio:5/4) {
+  .project-entry:has(> .project-preview) { display:grid; grid-template-columns:clamp(88px, 8vw, 116px) minmax(0, 1fr); column-gap:14px; align-items:start; }
+  .project-entry:has(> .project-preview) > * { grid-column:1 / -1; }
+  .project-entry > .project-preview { grid-column:1; grid-row:1 / span 3; aspect-ratio:16/10; max-height:none; margin:3px 0 0; }
+  .project-entry:has(> .project-preview) > :is(.entry-overline, .project-title, .project-org) { grid-column:2; }
+}
 .project-title { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .project-title > svg { flex-shrink:0; }
 .project-org { font-size:var(--fs-label); color:var(--muted); margin:7px 0 11px; }
@@ -250,6 +264,7 @@ body:has(.cinematic)::-webkit-scrollbar { display: none; }
   .hero-role { font-size:19px; margin-bottom:10px; }
   .hero-location { display:none; }
   .scene-footer { bottom:16px; }
+  .project-preview { display:none; }
 }
 @media (prefers-reduced-motion:reduce) {
   .cinematic *, .sequence-loader { scroll-behavior:auto !important; transition:none !important; }

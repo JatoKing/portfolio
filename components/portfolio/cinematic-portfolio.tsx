@@ -2,6 +2,7 @@
 
 import { type MouseEvent, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
 import { chapters, type ChapterId, frameConfig, getChapterDestination, itemProgress } from "@/lib/portfolio-timeline";
 import { email, experience, projects, skillGroups, socialLinks } from "@/lib/portfolio-data";
@@ -109,9 +110,13 @@ export default function CinematicPortfolio() {
             <div className="project-selector" aria-label="Choose a project">{projects.map((project, index) => <button key={project.title} data-projects-button aria-label={`View ${project.title}`} aria-pressed={index === 0} onClick={() => goTo(itemProgress("projects", index, projects.length))}>{String(index + 1).padStart(2, "0")}</button>)}</div>
             <div className="panel-scroll item-stack">
               {projects.map((project, index) => <article className="project-entry" key={project.title} data-projects-item hidden={index !== 0}>
+                {/* Same link as the title, kept out of the tab order and the reading order. */}
+                {project.preview && <Link className="project-preview" href={project.href} tabIndex={-1} aria-hidden="true">
+                  <Image src={project.preview} alt="" fill loading="eager" sizes="(max-aspect-ratio: 5/4) 84vw, 31vw" style={{ objectFit: project.previewFit === "contain" ? "contain" : "cover" }} />
+                </Link>}
                 <p className="entry-overline">{project.period} / {project.role}</p>
                 <Link className="project-title" href={project.href}><h3>{project.title}</h3><ArrowUpRight size={22} /></Link>
-                <p className="project-org">{project.org}</p>
+                <p className="project-org">{project.org}{project.category && <span className="project-category"> · {project.category}</span>}</p>
                 <p className="body-copy project-description">{project.desc}</p>
                 <div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
                 <details className="more-details"><summary>Behind the build <span>+</span></summary><ul className="accomplishments">{project.highlights.map(point => <li key={point}>{point}</li>)}</ul></details>

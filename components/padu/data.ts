@@ -4,10 +4,10 @@ export interface FileNode { name: string; type: "file"|"folder"; children?: File
 
 export interface TechItem { n: string; img: string; }
 
-/* Original accent colours, kept so each project retains its identity. */
+/* Accent colours, tuned for the light theme; each project keeps its identity. */
 const T = {
   ind:"#4f46e5", vio:"#7c3aed", cyn:"#0891b2",
-  grn:"#16a34a", amb:"#d97706",
+  grn:"#16a34a", amb:"#d97706", blu:"#2f6bff",
 };
 
 export interface PaduProject {
@@ -58,7 +58,24 @@ export const PROJECTS: PaduProject[] = [
     ] as FileNode[],
   },
   {
-    id:"panduan", idx:"02", icon:"📖", title:"User Guide Portal",
+    id:"dalaman", idx:"02", icon:"🗂️", title:"Sistem Dalaman Unit PADU",
+    imgs:["/sistem-dalaman.png"],
+    imgFit:"contain",
+    sub:"Internal System · Next.js & PostgreSQL",
+    internal:true,
+    color:T.blu, colorRaw:"47,107,255",
+    desc:"Developed an internal Unit PADU system using Next.js, PostgreSQL, and Prisma ORM, integrating responsive interfaces with structured database models to support internal workflow management.",
+    stats:[],
+    features:["Next.js + Prisma ORM stack","PostgreSQL structured data models","Internal workflow management","Operational efficiency tooling","Responsive internal dashboard UI","Role-based internal access"],
+    techs:[
+      {n:"Next.js",img:"https://cdn.simpleicons.org/nextdotjs/111111"},
+      {n:"PostgreSQL",img:"https://cdn.simpleicons.org/postgresql"},
+      {n:"Prisma ORM",img:"https://cdn.simpleicons.org/prisma/111111"},
+    ],
+    tree:[],
+  },
+  {
+    id:"panduan", idx:"03", icon:"📖", title:"User Guide Portal",
     imgs:["/homepanduan.png"],
     sub:"User Guide Portal · Strapi CMS",
     internal:true,
@@ -92,7 +109,7 @@ export const PROJECTS: PaduProject[] = [
     ] as FileNode[],
   },
   {
-    id:"analitik", idx:"03", icon:"📊", title:"Analytics Portal",
+    id:"analitik", idx:"04", icon:"📊", title:"Analytics Portal",
     imgs:["/homeanalitik.jpeg"],
     sub:"Analytics Portal · Ministry of Economy",
     internal:true,
@@ -132,7 +149,7 @@ export const PROJECTS: PaduProject[] = [
     ] as FileNode[],
   },
   {
-    id:"chatbot", idx:"04", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
+    id:"chatbot", idx:"05", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
     imgs:["/chatbotmyinfo.jpeg"],
     imgFit:"contain",
     sub:"Vertex AI · Conversational Agent",
@@ -166,7 +183,7 @@ export const PROJECTS: PaduProject[] = [
     ] as FileNode[],
   },
   {
-    id:"api", idx:"05", icon:"🔌", title:"Agency Data Integration API",
+    id:"api", idx:"06", icon:"🔌", title:"Agency Data Integration API",
     imgs:[],
     sub:"Backend API · NestJS & Prisma ORM",
     internal:true,
@@ -207,5 +224,6 @@ export const STACK_BOT: TechItem[] = [
   {n:"Node.js",img:"https://cdn.simpleicons.org/nodedotjs"},
   {n:"NestJS",img:"https://cdn.simpleicons.org/nestjs"},
   {n:"Prisma",img:"https://cdn.simpleicons.org/prisma/111111"},
+  {n:"PostgreSQL",img:"https://cdn.simpleicons.org/postgresql"},
   {n:"Postman",img:"https://cdn.simpleicons.org/postman"},
 ];
