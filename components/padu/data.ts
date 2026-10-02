@@ -149,7 +149,7 @@ export const PROJECTS: PaduProject[] = [
     ] as FileNode[],
   },
   {
-    id:"chatbot", idx:"05", icon:"🤖", title:"AI Chatbot (MyINFO & PADU)",
+    id:"chatbot", idx:"05", icon:"🤖", title:"AI Chatbot",
     imgs:["/chatbotmyinfo.jpeg"],
     imgFit:"contain",
     sub:"Vertex AI · Conversational Agent",

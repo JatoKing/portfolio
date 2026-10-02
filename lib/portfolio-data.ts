@@ -115,7 +115,7 @@ export const projects = [
     "preview": "/sistem-dalaman.png"
   },
   {
-    "title": "MyINFO & PADU Chatbot",
+    "title": "AI Chatbot",
     "org": "Unit PADU, Kementerian Ekonomi",
     "period": "2025 – Present",
     "role": "AI Integration Developer",

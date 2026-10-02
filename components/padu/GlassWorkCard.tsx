@@ -62,7 +62,6 @@ export function GlassWorkCard({
       ref={ref}
       href={href}
       className="pd-glass pd-wcard"
-      data-orbit-card=""
       aria-label={`View ${title}`}
       style={{ "--pd-acc": accent } as CSSProperties}
       onPointerEnter={onEnter}

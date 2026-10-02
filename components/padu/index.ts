@@ -1,5 +1,3 @@
-export { BackgroundEffects } from "./BackgroundEffects";
-export { EcosystemLinks } from "./EcosystemLinks";
 export { FloatingLetters } from "./FloatingLetters";
 export { GlassCard } from "./GlassCard";
 export { GlassWorkCard } from "./GlassWorkCard";

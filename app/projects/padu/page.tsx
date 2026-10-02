@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
-  BackgroundEffects, HeroSection, ProjectShowcase, Reveal, ScrollProgress, TechMarquee,
+  HeroSection, ProjectShowcase, Reveal, ScrollProgress, TechMarquee,
   PROJECTS, STACK_TOP, STACK_BOT,
 } from "@/components/padu";
 import "@/components/padu/padu.css";
@@ -20,7 +20,6 @@ export default function PaduPage() {
 
   return (
     <div className="pd">
-      <BackgroundEffects />
       <ScrollProgress />
 
       {/* Next case study (wide screens) */}

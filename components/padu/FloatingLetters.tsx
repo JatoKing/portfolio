@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, type CSSProperties, type RefObject, type SVGProps } from "react";
+import { useEffect, useRef, type RefObject, type SVGProps } from "react";
 import { gsap, useScrollScene } from "@/components/motion/scroll-scene";
 
 /*
@@ -106,24 +106,6 @@ const sideColor = (tone: Tone, t: number) => {
   const [back, front] = SIDES[tone];
   return `rgb(${back.map((b, k) => Math.round(b + (front[k] - b) * t)).join(" ")})`;
 };
-
-/* Fixed star field (deterministic, so server and client markup match). */
-const STARS = [
-  { x: 6, y: 18, s: 2, d: 7, delay: 0 },     { x: 18, y: 88, s: 1.5, d: 9, delay: -3 },
-  { x: 31, y: 4, s: 1.5, d: 8, delay: -5 },  { x: 47, y: 38, s: 2, d: 10, delay: -2 },
-  { x: 52, y: 94, s: 1.5, d: 7.5, delay: -6 }, { x: 64, y: 12, s: 2.5, d: 11, delay: -1 },
-  { x: 94, y: 30, s: 1.5, d: 8.5, delay: -4 }, { x: 88, y: 92, s: 2, d: 9.5, delay: -7 },
-  { x: 2, y: 62, s: 1.5, d: 10.5, delay: -8 }, { x: 40, y: 72, s: 1.5, d: 12, delay: -2.5 },
-  { x: 74, y: 48, s: 2, d: 9, delay: -5.5 },  { x: 98, y: 66, s: 1.5, d: 8, delay: -3.5 },
-];
-
-/* Light specks drifting up off the stage. */
-const MOTES = [
-  { x: 18, s: 2, d: 9, delay: -1 },   { x: 30, s: 1.5, d: 11, delay: -6 },
-  { x: 44, s: 2.5, d: 8, delay: -3 }, { x: 57, s: 1.5, d: 12, delay: -9 },
-  { x: 68, s: 2, d: 10, delay: -4.5 }, { x: 82, s: 1.5, d: 9.5, delay: -7.5 },
-  { x: 50, s: 1.5, d: 13, delay: -11 },
-];
 
 /**
  * Writes the pointer position (-1…1 from the viewport centre, eased) into --mx / --my.
@@ -436,9 +418,8 @@ function Letter({ k }: { k: LetterDef["key"] }) {
 }
 
 /**
- * The glass stage under the cluster: a soft bloom, a thin luminous disc with engraved rings,
- * a column of light rising off it and a few specks drifting up. The disc is one static SVG,
- * so only the light and specks animate.
+ * The glass stage under the row: a thin luminous disc with engraved rings and its own
+ * soft underglow, drawn as one static SVG.
  */
 function Stage() {
   return (
@@ -501,14 +482,6 @@ function Stage() {
         <ellipse cx="200" cy="85.5" rx="64" ry="1.6" fill="#ffffff" opacity="0.9" filter="url(#pd-stage-blur-sm)" />
       </svg>
 
-      <div className="pd-stage-beam" />
-      <div className="pd-stage-motes">
-        {MOTES.map((m, i) => (
-          <span key={i} className="pd-mote" style={{
-            left: `${m.x}%`, "--s": `${m.s}px`, "--d": `${m.d}s`, "--delay": `${m.delay}s`,
-          } as CSSProperties} />
-        ))}
-      </div>
     </div>
   );
 }
@@ -520,17 +493,8 @@ export function FloatingLetters() {
   useAssembly(ref);
 
   return (
-    <div ref={ref} className="pd-letters" data-orbit-core="" role="img" aria-label="PADU">
+    <div ref={ref} className="pd-letters" role="img" aria-label="PADU">
       <Defs />
-      <div className="pd-letters-glow" aria-hidden="true" />
-      <div className="pd-letters-stars" aria-hidden="true">
-        {STARS.map((s, i) => (
-          <span key={i} className="pd-star" style={{
-            left: `${s.x}%`, top: `${s.y}%`,
-            "--s": `${s.s}px`, "--d": `${s.d}s`, "--delay": `${s.delay}s`,
-          } as CSSProperties} />
-        ))}
-      </div>
       <Stage />
       {/* Light the letters throw on the stage; stays put while the row descends */}
       <div className="pd-pools" aria-hidden="true">

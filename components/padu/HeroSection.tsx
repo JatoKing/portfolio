@@ -5,7 +5,6 @@ import type { PaduProject } from "./data";
 import { Reveal } from "./Reveal";
 import { FloatingLetters } from "./FloatingLetters";
 import { GlassWorkCard } from "./GlassWorkCard";
-import { EcosystemLinks } from "./EcosystemLinks";
 
 /**
  * Writes the scroll offset (px, clamped to the hero height) into --pd-sy.
@@ -32,13 +31,10 @@ export function HeroSection({
   projects, onNav,
 }: { projects: PaduProject[]; onNav: (id: string) => void }) {
   const heroRef = useRef<HTMLElement>(null);
-  const orbitRef = useRef<HTMLDivElement>(null);
   useHeroScrollVar(heroRef);
 
   return (
     <section ref={heroRef} className="pd-hero">
-      <div className="pd-hero-flare" aria-hidden="true" />
-
       <div className="pd-container">
         <div className="pd-hero-head">
           <Reveal>
@@ -64,8 +60,7 @@ export function HeroSection({
           </Reveal>
         </div>
 
-        <div ref={orbitRef} className="pd-orbit">
-          <EcosystemLinks rootRef={orbitRef} />
+        <div className="pd-orbit">
 
           <Reveal className="pd-orbit-core" delay={0.3}>
             <div className="pd-core-par">

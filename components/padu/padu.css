@@ -4,7 +4,7 @@
 ════════════════════════════════════════════════════════════ */
 
 .pd {
-  --pd-ink: #f3f6fd;      /* page base */
+  --pd-ink: #ffffff;      /* page base: plain white */
   --pd-blue: #2f6bff;
   --pd-blue-soft: #5b8dff;
   --pd-sky: #3a63e6;      /* accent text, focus rings */
@@ -35,11 +35,11 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Overscroll areas match the page's cool white. */
-html:has(.pd), body:has(.pd) { background: #f3f6fd; }
+/* Plain white everywhere, overscroll included. */
+html:has(.pd), body:has(.pd) { background: #ffffff; }
 html:has(.pd) { scroll-behavior: smooth; }
 body:has(.pd)::-webkit-scrollbar { width: 4px; }
-body:has(.pd)::-webkit-scrollbar-track { background: #f3f6fd; }
+body:has(.pd)::-webkit-scrollbar-track { background: #ffffff; }
 body:has(.pd)::-webkit-scrollbar-thumb { background: rgba(58, 99, 230, 0.45); border-radius: 2px; }
 
 .pd ::selection { background: rgba(58, 99, 230, 0.2); color: #0b1736; }
@@ -76,64 +76,6 @@ body:has(.pd)::-webkit-scrollbar-thumb { background: rgba(58, 99, 230, 0.45); bo
   background: linear-gradient(90deg, rgba(58, 99, 230, 0.45), #3a63e6);
   transform-origin: left center;
   transition: transform 0.08s linear;
-}
-
-/* ─── Background atmosphere ───────────────────────────────── */
-.pd-bg {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-  background:
-    radial-gradient(90% 60% at 50% -12%, #d6e3ff 0%, rgba(226, 235, 255, 0.85) 38%, transparent 72%),
-    radial-gradient(60% 40% at 50% 46%, rgba(255, 255, 255, 0.9), transparent 70%),
-    linear-gradient(180deg, #eaf1ff 0%, #f5f8ff 42%, #f2f5fc 100%);
-}
-.pd-bg-blob {
-  position: absolute; border-radius: 50%;
-  filter: blur(90px);
-  will-change: transform;
-}
-.pd-bg-blob--a {
-  width: 56vw; height: 56vw; max-width: 820px; max-height: 820px;
-  top: -18%; left: 50%; margin-left: -28vw;
-  background: radial-gradient(circle, rgba(96, 140, 255, 0.24), transparent 65%);
-  animation: pd-drift-a 38s ease-in-out infinite;
-}
-.pd-bg-blob--b {
-  width: 38vw; height: 38vw; max-width: 560px; max-height: 560px;
-  top: 30%; left: -12%;
-  background: radial-gradient(circle, rgba(150, 128, 255, 0.16), transparent 65%);
-  animation: pd-drift-b 46s ease-in-out infinite;
-}
-.pd-bg-blob--c {
-  width: 34vw; height: 34vw; max-width: 520px; max-height: 520px;
-  bottom: -10%; right: -8%;
-  background: radial-gradient(circle, rgba(92, 196, 255, 0.14), transparent 65%);
-  animation: pd-drift-a 52s ease-in-out infinite reverse;
-}
-.pd-bg-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(44, 72, 150, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(44, 72, 150, 0.045) 1px, transparent 1px);
-  background-size: 72px 72px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 22%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(ellipse 70% 55% at 50% 22%, #000 0%, transparent 75%);
-}
-.pd-bg-noise {
-  position: absolute; inset: 0; opacity: 0.05; mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-.pd-bg-vignette {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 60%, rgba(196, 210, 242, 0.45) 100%);
-}
-
-@keyframes pd-drift-a {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(4%, 6%, 0) scale(1.06); }
-}
-@keyframes pd-drift-b {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(8%, -5%, 0); }
 }
 
 /* ─── Glass surface ───────────────────────────────────────── */
@@ -224,23 +166,14 @@ button.pd-pill:hover, a.pd-pill:hover {
    HERO — title on top, floating P·A·D·U letters at the centre,
    project cards floating around them.
 
-   Depth layers (back → front):
-     0  page gradient (.pd-bg)
-     1  links to the cards      .pd-orbit-links
-     2  floating project cards  .pd-slot
-     3  glow, stars, letters    .pd-orbit-core (.pd-letters)
-     4  foreground light        .pd-hero-flare
+   Depth layers (back → front), all on plain white:
+     1  floating project cards  .pd-slot
+     2  stage and letters       .pd-orbit-core (.pd-letters)
 ════════════════════════════════════════════════════════════ */
 .pd-hero {
   --pd-sy: 0; /* scroll offset in px, written by HeroSection */
   position: relative; z-index: 2;
   padding: 88px 0 56px;
-}
-.pd-hero-flare {
-  position: absolute; left: 50%; top: 0; z-index: 5;
-  width: min(1100px, 100%); height: 420px; transform: translateX(-50%);
-  background: radial-gradient(50% 60% at 50% 0%, rgba(255, 255, 255, 0.75), transparent 70%);
-  pointer-events: none;
 }
 
 /* Title block drifts slower than the page and fades as you leave. */
@@ -354,16 +287,6 @@ button.pd-pill:hover, a.pd-pill:hover {
 .pd-slot--5 { grid-area: c5; --slot-x: 0.3;  --slot-y: 0.6;  --slot-speed: 0.07;  --float-dur: 7.2s; --float-delay: -3.3s; --float-rot: 0.2deg;   --rest-ry: 3deg;  --rest-rx: -1deg; }
 .pd-slot--6 { grid-area: c6; --slot-x: -0.4; --slot-y: 0.4;  --slot-speed: 0.06;  --float-dur: 6.4s; --float-delay: -5s;   --float-rot: -0.2deg;  --rest-ry: -3deg; --rest-rx: -1deg; }
 
-/* Links from the PADU core to each card */
-.pd-orbit-links {
-  position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%;
-  overflow: visible; pointer-events: none;
-  opacity: calc(1 - var(--pd-sy) / 320);
-}
-.pd-orbit-links path { fill: none; stroke-width: 1; }
-.pd-orbit-links circle { fill: #5b80e8; animation: pd-dot 5s ease-in-out infinite; animation-delay: var(--d, 0s); }
-@keyframes pd-dot { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.8; } }
-
 /* ─── Glass work card ─────────────────────────────────────── */
 .pd-wcard {
   --tilt-x: 0deg; --tilt-y: 0deg; --lift: 0px; --scale: 1;
@@ -463,7 +386,6 @@ button.pd-pill:hover, a.pd-pill:hover {
   /* The stage sits a layer deeper than the letters: it drifts against the pointer. */
   --stage-dx: calc(var(--mx) * -6px);
   --stage-dy: calc(var(--my) * -3px);
-  --rise: 120px;         /* how far the light specks drift */
   position: relative;
   width: 100%; max-width: 560px;
   aspect-ratio: 1 / var(--ratio);
@@ -472,29 +394,6 @@ button.pd-pill:hover, a.pd-pill:hover {
    scrolls. The letters stay fully visible throughout. */
 .pd-letters-rise { position: absolute; inset: 0; will-change: transform; }
 .pd-letters-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
-
-.pd-letters-glow {
-  position: absolute; inset: -14% -20%; pointer-events: none;
-  background:
-    radial-gradient(34% 32% at 50% 54%, rgba(90, 135, 255, 0.2) 0%, rgba(90, 135, 255, 0.06) 55%, transparent 75%),
-    radial-gradient(24% 20% at 60% 76%, rgba(110, 140, 255, 0.12), transparent 72%),
-    radial-gradient(20% 18% at 30% 30%, rgba(110, 190, 255, 0.12), transparent 72%);
-  animation: pd-glow 11s ease-in-out infinite;
-}
-@keyframes pd-glow {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
-}
-
-.pd-letters-stars { position: absolute; inset: 0; pointer-events: none; }
-.pd-star {
-  position: absolute; width: var(--s); height: var(--s); border-radius: 50%;
-  background: #7d9cff; box-shadow: 0 0 6px rgba(91, 141, 255, 0.7);
-  opacity: 0.12;
-  animation: pd-twinkle var(--d) ease-in-out infinite;
-  animation-delay: var(--delay);
-}
-@keyframes pd-twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.55; } }
 
 .pd-l, .pd-pool {
   position: absolute; aspect-ratio: 1;
@@ -564,35 +463,6 @@ button.pd-pill:hover, a.pd-pill:hover {
   width: calc(var(--stage-w) * 1%); height: auto; overflow: visible;
   translate: -50% -34.67%; /* top-surface centre (y 52 of 150) onto --stage-y */
 }
-/* Soft column of light rising off the stage. */
-.pd-stage-beam {
-  position: absolute; left: calc(var(--stage-x) * 1%); bottom: calc((100 - var(--stage-y)) * 1%);
-  width: calc(var(--stage-w) * 0.62%); height: 50%;
-  translate: -50% 0;
-  background: linear-gradient(0deg, rgba(110, 150, 255, 0.16) 0%, rgba(150, 180, 255, 0.06) 42%, transparent 88%);
-  clip-path: polygon(16% 0, 84% 0, 100% 100%, 0 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 28%, #000 72%, transparent);
-  animation: pd-beam 9s ease-in-out infinite;
-}
-@keyframes pd-beam { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
-.pd-stage-motes {
-  position: absolute; left: calc(var(--stage-x) * 1%); bottom: calc((98 - var(--stage-y)) * 1%);
-  width: calc(var(--stage-w) * 0.6%); height: 4%;
-  translate: -50% 0;
-}
-.pd-mote {
-  position: absolute; bottom: 0; width: var(--s); height: var(--s); border-radius: 50%;
-  background: #6d8fff; box-shadow: 0 0 6px rgba(91, 141, 255, 0.8);
-  opacity: 0;
-  animation: pd-mote var(--d) linear var(--delay) infinite;
-}
-@keyframes pd-mote {
-  0% { transform: translate3d(0, 0, 0); opacity: 0; }
-  18% { opacity: 0.7; }
-  100% { transform: translate3d(0, calc(var(--rise) * -1), 0); opacity: 0; }
-}
-
 /* One gently staggered row over the stage, reading P · A · D · U: P a touch high,
    A low, D near the line, U low. Each lights the glass beneath it; the end letters'
    pools sit a little inboard so they stay on the disc. */
@@ -634,7 +504,7 @@ button.pd-pill:hover, a.pd-pill:hover {
 }
 
 /* Nothing to animate while the cluster is off screen. */
-.pd-letters.is-idle :is(.pd-l-bob, .pd-l-sway, .pd-l-pool, .pd-star, .pd-letters-glow, .pd-stage-beam, .pd-mote) {
+.pd-letters.is-idle :is(.pd-l-bob, .pd-l-sway, .pd-l-pool) {
   animation-play-state: paused;
 }
 
@@ -904,11 +774,10 @@ button.pd-pill:hover, a.pd-pill:hover {
     row-gap: 16px; column-gap: 16px;
     margin-top: 28px;
   }
-  .pd-orbit-links { display: none; }
   /* The PADU letters sit right under the title block here: drift it more gently so the
      fading description never slides into them. */
   .pd-hero-head { transform: translate3d(0, calc(var(--pd-sy) * 0.12px), 0); }
-  .pd-letters { --rise: 110px; max-width: 540px; }
+  .pd-letters { max-width: 540px; }
   .pd-slot { --slot-x: 0 !important; --slot-y: 0 !important; --rest-rx: 0deg !important; --rest-ry: 0deg !important; }
   .pd-slot--2, .pd-slot--4, .pd-slot--6 { top: 28px; }
   .pd-hero-caption { margin-top: 40px; }
@@ -926,10 +795,8 @@ button.pd-pill:hover, a.pd-pill:hover {
   .pd-title { margin-top: 20px; }
   .pd-lede { margin-top: 18px; }
   .pd-orbit { display: block; margin-top: 20px; }
-  /* Same row, scaled down: gentler float, smaller glow. */
-  .pd-letters { --motion: 0.7; --rise: 80px; --ratio: 0.66; max-width: 360px; }
-  .pd-letters-glow { inset: -6% -4%; opacity: 0.85; }
-  .pd-star:nth-child(n + 8), .pd-mote:nth-child(n + 5) { display: none; }
+  /* Same row, scaled down, with a gentler float. */
+  .pd-letters { --motion: 0.7; --ratio: 0.66; max-width: 360px; }
   .pd-orbit-cards {
     display: flex; gap: 12px;
     margin: 8px -16px 0; padding: 8px 16px 18px;
