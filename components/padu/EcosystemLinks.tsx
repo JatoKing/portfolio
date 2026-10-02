@@ -20,7 +20,7 @@ function cubic(t: number, a: number, b: number, c: number, d: number) {
 }
 
 /**
- * Faint curves from the PADU core to each floating card. Measured from
+ * Faint curves from the PADU letters to each floating card. Measured from
  * resting layout (only on resize), so animation never triggers work here.
  * Lines fade out before reaching the cards, hiding any drift from parallax.
  */
@@ -43,17 +43,12 @@ export function EcosystemLinks({ rootRef }: { rootRef: RefObject<HTMLElement | n
         const cy = c.y + core.offsetHeight / 2;
         const radius = core.offsetWidth * 0.3;
 
-        const plat = root.querySelector<HTMLElement>("[data-orbit-platform]");
-        const pl = plat ? offsetWithin(plat, root) : null;
-        // The platform is a square tilted flat; its rim sits at 44% of its width.
-        const rim = plat && pl ? { y: pl.y + plat.offsetHeight / 2, r: plat.offsetWidth * 0.44 } : null;
-
         const next: Link[] = [];
         root.querySelectorAll<HTMLElement>("[data-orbit-card]").forEach((card) => {
           const b = offsetWithin(card, root);
           const w = card.offsetWidth, h = card.offsetHeight;
           const mid = b.x + w / 2;
-          // The centred card rests on the platform itself; it needs no line.
+          // A card centred under the letters needs no line.
           if (Math.abs(mid - cx) < 60) return;
           const left = mid < cx;
 
@@ -61,16 +56,10 @@ export function EcosystemLinks({ rootRef }: { rootRef: RefObject<HTMLElement | n
           const ex = left ? b.x + w + 14 : b.x - 14;
           const ey = b.y + h / 2;
 
-          // Upper cards connect to the object; lower cards to the platform rim.
-          let sx: number, sy: number;
-          if (rim && ey > cy + core.offsetHeight * 0.25) {
-            sx = cx + (left ? -rim.r : rim.r) * 0.86;
-            sy = rim.y;
-          } else {
-            const ang = Math.atan2(ey - cy, ex - cx);
-            sx = cx + Math.cos(ang) * radius;
-            sy = cy + Math.sin(ang) * radius;
-          }
+          // Start on a ring around the middle of the letter cluster, aimed at the card.
+          const ang = Math.atan2(ey - cy, ex - cx);
+          const sx = cx + Math.cos(ang) * radius;
+          const sy = cy + Math.sin(ang) * radius;
           const c1x = sx + (ex - sx) * 0.5, c1y = sy, c2x = c1x, c2y = ey;
 
           next.push({
@@ -98,9 +87,9 @@ export function EcosystemLinks({ rootRef }: { rootRef: RefObject<HTMLElement | n
       <defs>
         {links.map((l, i) => (
           <linearGradient key={i} id={`pd-link-${i}`} gradientUnits="userSpaceOnUse" x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}>
-            <stop offset="0" stopColor="#8fb6ff" stopOpacity="0.45" />
-            <stop offset="0.65" stopColor="#8fb6ff" stopOpacity="0.14" />
-            <stop offset="1" stopColor="#8fb6ff" stopOpacity="0" />
+            <stop offset="0" stopColor="#5b80e8" stopOpacity="0.4" />
+            <stop offset="0.65" stopColor="#5b80e8" stopOpacity="0.12" />
+            <stop offset="1" stopColor="#5b80e8" stopOpacity="0" />
           </linearGradient>
         ))}
       </defs>

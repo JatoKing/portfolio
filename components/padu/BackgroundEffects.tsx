@@ -1,4 +1,4 @@
-/** Fixed atmospheric backdrop: navy depth gradient, drifting light, grid, grain. */
+/** Fixed atmospheric backdrop: cool light gradient, drifting colour, grid, grain. */
 export function BackgroundEffects() {
   return (
     <div className="pd-bg" aria-hidden="true">

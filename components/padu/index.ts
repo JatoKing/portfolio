@@ -1,9 +1,9 @@
 export { BackgroundEffects } from "./BackgroundEffects";
 export { EcosystemLinks } from "./EcosystemLinks";
+export { FloatingLetters } from "./FloatingLetters";
 export { GlassCard } from "./GlassCard";
 export { GlassWorkCard } from "./GlassWorkCard";
 export { HeroSection } from "./HeroSection";
-export { HeroVisualPlaceholder } from "./HeroVisualPlaceholder";
 export { ProjectDetailBody } from "./ProjectDetail";
 export { ProjectShowcase } from "./ProjectShowcase";
 export { Reveal } from "./Reveal";

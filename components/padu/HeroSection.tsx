@@ -3,10 +3,9 @@ import { useEffect, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import type { PaduProject } from "./data";
 import { Reveal } from "./Reveal";
-import { HeroVisualPlaceholder } from "./HeroVisualPlaceholder";
+import { FloatingLetters } from "./FloatingLetters";
 import { GlassWorkCard } from "./GlassWorkCard";
 import { EcosystemLinks } from "./EcosystemLinks";
-import { softAccent } from "./utils";
 
 /**
  * Writes the scroll offset (px, clamped to the hero height) into --pd-sy.
@@ -54,13 +53,13 @@ export function HeroSection({
             </div>
           </Reveal>
           <Reveal delay={0.16}>
-            <h1 className="pd-title">PADU <span className="pd-accent">Projects</span></h1>
+            <h1 className="pd-title"><span className="sr-only">PADU </span><span className="pd-accent">Projects</span></h1>
           </Reveal>
           <Reveal delay={0.24}>
             <p className="pd-lede">
-              Five gov-tech digital products I built at{" "}
-              <strong>PADU Unit, Ministry of Economy Malaysia</strong>{" "}
-              — Public Portal, User Guide Portal, Analytics Portal, AI Chatbot, and Agency Data Integration API.
+              Six gov-tech digital products I built at{" "}
+              <strong>PADU Unit, Ministry of Economy Malaysia</strong>, from the public-facing
+              PADU experience to the internal systems behind it.
             </p>
           </Reveal>
         </div>
@@ -70,13 +69,13 @@ export function HeroSection({
 
           <Reveal className="pd-orbit-core" delay={0.3}>
             <div className="pd-core-par">
-              <HeroVisualPlaceholder />
+              <FloatingLetters />
             </div>
           </Reveal>
 
           <nav className="pd-orbit-cards" aria-label="PADU projects">
             {projects.map((p, i) => (
-              <Reveal key={p.id} className={`pd-slot pd-slot--${i + 1}`} delay={0.45 + i * 0.09}>
+              <Reveal key={p.id} className={`pd-slot pd-slot--${i + 1}`} delay={0.45 + i * 0.08}>
                 <div className="pd-slot-par">
                   <div className="pd-float">
                     <GlassWorkCard
@@ -85,7 +84,7 @@ export function HeroSection({
                       title={p.title}
                       description={p.sub}
                       href={`#${p.id}`}
-                      accent={softAccent(p.colorRaw)}
+                      accent={p.colorRaw}
                       internal={p.internal}
                       onSelect={onNav}
                     />
@@ -96,7 +95,7 @@ export function HeroSection({
           </nav>
         </div>
 
-        <Reveal delay={0.9}>
+        <Reveal delay={0.95}>
           <p className="pd-hero-caption">
             <span className="pd-eyebrow">{projects.length} Projects · 2025</span>
             Select any project to view full details and screenshots.

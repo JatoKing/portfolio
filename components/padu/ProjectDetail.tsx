@@ -3,7 +3,6 @@ import { useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { PaduProject } from "./data";
 import { GlassCard } from "./GlassCard";
-import { softAccent } from "./utils";
 
 function ScreenshotMockup({
   src, title, icon, compact = false, imgFit = "cover",
@@ -43,7 +42,7 @@ export function ProjectDetailBody({ proj }: { proj: PaduProject }) {
     <GlassCard
       as="article"
       className="pd-panel"
-      style={{ "--pd-acc": softAccent(proj.colorRaw) } as CSSProperties}
+      style={{ "--pd-acc": proj.colorRaw } as CSSProperties}
     >
       {/* Header */}
       <div className="pd-detail-head">
