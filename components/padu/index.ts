@@ -1,3 +1,4 @@
+export { DataEcosystem } from "./DataEcosystem";
 export { FloatingLetters } from "./FloatingLetters";
 export { GlassCard } from "./GlassCard";
 export { GlassWorkCard } from "./GlassWorkCard";

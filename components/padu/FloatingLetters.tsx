@@ -22,12 +22,12 @@ import { gsap, useScrollScene } from "@/components/motion/scroll-scene";
  */
 
 /* PADU logo palette, each a gentle ramp across the face from its lit side. */
-const TONES = {
+export const TONES = {
   navy: ["#2c4c9f", "#183379", "#122a68", "#0c2154"],
   gold: ["#ffe17a", "#ffd23f", "#ffc928", "#efb11a"],
   red: ["#ff5e55", "#ee2f31", "#e52329", "#c91d24"],
 } as const;
-type Tone = keyof typeof TONES;
+export type Tone = keyof typeof TONES;
 const TONE_STOPS = [0, 0.3, 0.62, 1];
 /** Restrained light each colour throws around itself. */
 const GLOW: Record<Tone, string> = { navy: "#3a64e0", gold: "#ffc928", red: "#e52329" };
@@ -40,7 +40,7 @@ const SIDES: Record<Tone, readonly [readonly number[], readonly number[]]> = {
 /** Faint rim along the far edge of the extrusion. */
 const BACK_RIM: Record<Tone, string> = { navy: "#5f82dc", gold: "#ffd76a", red: "#ff8278" };
 
-interface LetterDef {
+export interface LetterDef {
   key: "p" | "a" | "d" | "u";
   /** Filled outline in a 0–100 box (even-odd, so counters are holes). */
   glyph: string;
@@ -53,7 +53,7 @@ interface LetterDef {
   depth: readonly [number, number];
 }
 
-const LETTERS: LetterDef[] = [
+export const LETTERS: LetterDef[] = [
   {
     key: "p",
     glyph: "M17 7 Q17 4 20 4 H52 A31 31 0 0 1 52 66 H39 V95 Q39 98 36 98 H20 Q17 98 17 95 Z M39 26 V44 H52 A9 9 0 0 0 52 26 Z",
@@ -96,7 +96,7 @@ const sectionsOf = (l: LetterDef): Section[] =>
 const tonesOf = (l: LetterDef) => [...new Set(sectionsOf(l).map(s => s.tone))];
 
 /** Reading order; stacking between neighbours is set per letter in padu.css. */
-const ORDER: LetterDef["key"][] = ["p", "a", "d", "u"];
+export const ORDER: LetterDef["key"][] = ["p", "a", "d", "u"];
 
 const VIEWBOX = "-18 -18 136 136";
 

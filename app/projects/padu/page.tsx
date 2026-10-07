@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
-  HeroSection, ProjectShowcase, Reveal, ScrollProgress, TechMarquee,
+  DataEcosystem, HeroSection, ProjectShowcase, Reveal, ScrollProgress, TechMarquee,
   PROJECTS, STACK_TOP, STACK_BOT,
 } from "@/components/padu";
 import "@/components/padu/padu.css";
@@ -46,15 +46,18 @@ export default function PaduPage() {
         </div>
       </section>
 
-      {/* End of the page: back out, or on to the next case study */}
-      <nav className="pd-footnav" aria-label="More projects">
-        <Link href="/" className="pd-pill">
-          <ArrowLeft size={15} /> Back to Portfolio
-        </Link>
-        <Link href="/projects/jejak" className="pd-pill">
-          JEJAK <ArrowRight size={15} />
-        </Link>
-      </nav>
+      {/* ══ FOOTER: the PADU data ecosystem, then back out or on to the next case study ══ */}
+      <footer className="pd-footer">
+        <DataEcosystem />
+        <nav className="pd-footnav" aria-label="More projects">
+          <Link href="/" className="pd-pill">
+            <ArrowLeft size={15} /> Back to Portfolio
+          </Link>
+          <Link href="/projects/jejak" className="pd-pill">
+            JEJAK <ArrowRight size={15} />
+          </Link>
+        </nav>
+      </footer>
     </div>
   );
 }
