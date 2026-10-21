@@ -9,6 +9,8 @@ import { email, experience, projects, skillGroups, socialLinks } from "@/lib/por
 import { useFrameSequence } from "./use-frame-sequence";
 import "./cinematic.css";
 
+const certificatePath = "/MY-339_Muhammad Izzat Imran Bin Mohammad Zamri_";
+
 export default function CinematicPortfolio() {
   const { root, canvas, meter, chapterCounter, debug, loading, ready, retry, continueLoading, goTo } = useFrameSequence();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -124,10 +126,29 @@ export default function CinematicPortfolio() {
               </article>)}
             </div>
           </section>
-          <section id="skills" className="story-panel" data-chapter="skills" aria-labelledby="skills-heading" inert aria-hidden="true">
+          <section id="skills" className="story-panel skills-panel" data-chapter="skills" aria-labelledby="skills-heading" inert aria-hidden="true">
             <p className="eyebrow">04 / TOOLS OF THE TRADE</p>
             <h2 id="skills-heading">The right tools.<br /><span>Real outcomes.</span></h2>
-            <div className="panel-scroll skill-groups">{skillGroups.map((group, index) => <div className="skill-group" key={group.label}><h3><span>0{index + 1}</span>{group.label}</h3><ul>{group.items.map(skill => <li key={skill}>{skill}</li>)}</ul></div>)}</div>
+            <div className="skills-body">
+              <div className="panel-scroll skill-groups">
+                {skillGroups.map((group, index) => <div className="skill-group" key={group.label}><h3><span>0{index + 1}</span>{group.label}</h3><ul>{group.items.map(skill => <li key={skill}>{skill}</li>)}</ul></div>)}
+              </div>
+              <div className="panel-scroll skill-group certifications" role="group" aria-labelledby="certifications-heading">
+                <h3 id="certifications-heading"><span>04</span>Certifications &amp; Training</h3>
+                <a className="certificate-featured" href={encodeURI(`${certificatePath}GAIex.pdf`)} target="_blank" rel="noopener noreferrer" aria-label="View GeoAI Explorer certificate (PDF, opens in a new tab)">
+                  <span className="certificate-title">GeoAI Explorer <ArrowUpRight size={17} aria-hidden="true" /></span>
+                  <span className="small-note">ASEAN GeoAI Fusion 2026 · September 2026</span>
+                  <span className="certificate-action">View certificate</span>
+                </a>
+                <div className="certificate-bootcamps">
+                  <p className="small-note">GeoAI Bootcamps · July 2026</p>
+                  <div className="certificate-links">
+                    <a href={encodeURI(`${certificatePath}BC1.pdf`)} target="_blank" rel="noopener noreferrer" aria-label="View Bootcamp 1 Foundation Track participation certificate (PDF, opens in a new tab)">Foundation Track <ArrowUpRight size={14} aria-hidden="true" /></a>
+                    <a href={encodeURI(`${certificatePath}BC2.pdf`)} target="_blank" rel="noopener noreferrer" aria-label="View Bootcamp 2 Advance Track participation certificate (PDF, opens in a new tab)">Advance Track <ArrowUpRight size={14} aria-hidden="true" /></a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
           <section id="contact" className="story-panel contact-panel" data-chapter="contact" aria-labelledby="contact-heading" inert aria-hidden="true">
             <p className="eyebrow">05 / THE NEXT CHAPTER</p>
