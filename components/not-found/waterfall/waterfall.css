@@ -1,0 +1,34 @@
+.waterfall-page {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100svh;
+  overflow: hidden; overscroll-behavior: none;
+  background: #164b61 url('/video/waterfall-poster.webp') center / cover no-repeat;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+.waterfall-video, .waterfall-render, .waterfall-lettering-poster {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.waterfall-video { object-fit: cover; object-position: 50% 50%; }
+.waterfall-render { pointer-events: none; opacity: 0; transition: opacity .5s ease; }
+.waterfall-render canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
+.waterfall-lettering-poster { background: url('/video/waterfall-lettering.webp') center / cover no-repeat; pointer-events: none; }
+.waterfall-page.is-ready .waterfall-render { opacity: 1; }
+.waterfall-page.is-ready .waterfall-lettering-poster { visibility: hidden; }
+.waterfall-home {
+  position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); left: max(28px, env(safe-area-inset-left));
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  min-height: 44px; padding: 9px 17px;
+  border: 1px solid #dbf5ef3d; border-radius: 6px;
+  background: #12394570; backdrop-filter: blur(8px);
+  color: #f1f5ed; font-size: 13px; font-weight: 500;
+  letter-spacing: .01em; white-space: nowrap;
+  box-shadow: inset 0 1px 0 #ffffff10;
+  transition: background .2s, border-color .2s;
+}
+.waterfall-home:hover { background: #173f50a8; border-color: #e0f5ee75; }
+.waterfall-home:focus-visible { outline: 2px solid #f1f5ed; outline-offset: 5px; }
+@media (max-aspect-ratio: 3/4) {
+  .waterfall-lettering-poster { background-image: url('/video/waterfall-lettering-portrait.webp'); }
+  .waterfall-home { bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .waterfall-page * { transition: none !important; } }

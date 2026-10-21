@@ -1,0 +1,34 @@
+.construction-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  container-type: size;
+  color: #435c66;
+  background: #ddd3c2;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+.construction-canvas, .construction-plate { position: absolute; inset: 0; }
+.construction-plate { background: url('/404-construction.webp') center / auto 100% no-repeat; }
+.construction-canvas { opacity: 0; transition: opacity .4s ease; }
+.construction-canvas canvas { display: block; width: 100%; height: 100%; }
+.is-ready .construction-canvas { opacity: 1; }
+.is-ready .construction-plate { visibility: hidden; }
+.construction-pool-link {
+  position: absolute;
+  left: calc(50% - 6.4cqh); top: 74.16%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 33cqh; height: max(44px, 11cqh);
+  min-height: 44px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.construction-pool-link:focus-visible { outline: 2px solid #728d96; outline-offset: 5px; }
+@media (max-aspect-ratio: 13/15) {
+  .construction-plate { background-image: url('/404-construction-portrait.webp'); background-size: 100% auto; }
+  .construction-pool-link { left: 42.62%; top: calc(50% + 27.86cqw); width: 37cqw; height: max(44px, 13cqw); }
+}
+@media (prefers-reduced-motion: reduce) { .construction-page * { transition: none !important; } }
