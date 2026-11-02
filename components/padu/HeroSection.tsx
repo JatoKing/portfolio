@@ -7,23 +7,29 @@ import { FloatingLetters } from "./FloatingLetters";
 import { GlassWorkCard } from "./GlassWorkCard";
 
 /**
- * Writes the scroll offset (px, clamped to the hero height) into --pd-sy.
- * CSS turns it into per-layer parallax, so React never re-renders on scroll.
+ * Writes the scroll offset (px, clamped to the hero height) into --pd-sy on each parallax
+ * layer. CSS turns it into per-layer parallax, so React never re-renders on scroll.
  */
 function useHeroScrollVar(ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const el = ref.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Only the layers that read it: written on the hero, it would restyle every element inside.
+    const layers = Array.from(el.querySelectorAll<HTMLElement>(".pd-hero-head, .pd-core-par, .pd-slot-par"));
     let raf = 0, last = -1;
     const update = () => {
       raf = 0;
       const y = Math.round(Math.min(Math.max(window.scrollY, 0), el.offsetHeight));
-      if (y !== last) { last = y; el.style.setProperty("--pd-sy", String(y)); }
+      if (y !== last) { last = y; layers.forEach(l => l.style.setProperty("--pd-sy", String(y))); }
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      layers.forEach(l => l.style.removeProperty("--pd-sy"));
+    };
   }, [ref]);
 }
 

@@ -170,8 +170,15 @@ button.pd-pill:hover, a.pd-pill:hover {
      1  floating project cards  .pd-slot
      2  stage and letters       .pd-orbit-core (.pd-letters)
 ════════════════════════════════════════════════════════════ */
+/* Scroll-driven values, rewritten every frame while the hero scrolls: --pd-sy (scroll offset
+   in px, from HeroSection), --pd-spread and --pd-land (from FloatingLetters). They are set
+   on the few elements that read them and never inherited, so a change restyles just those
+   elements rather than the whole hero beneath them. */
+@property --pd-sy { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --pd-spread { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --pd-land { syntax: "<number>"; inherits: false; initial-value: 1; }
+
 .pd-hero {
-  --pd-sy: 0; /* scroll offset in px, written by HeroSection */
   position: relative; z-index: 2;
   padding: 88px 0 56px;
 }
@@ -1299,7 +1306,7 @@ button.pd-pill:hover, a.pd-pill:hover {
     transition-duration: 0.001ms !important;
   }
   .pd-reveal { opacity: 1; transform: none; filter: none; }
-  .pd-hero { --pd-sy: 0 !important; }
+  .pd-hero-head, .pd-core-par, .pd-slot-par { --pd-sy: 0 !important; }
   .pd-reveal .pd-showcase-item { opacity: 1; transform: none; }
   /* Keep simple fades for the project image. */
   .pd .pd-showcase-cursor-card { transform: none !important; transition: opacity .2s ease !important; }

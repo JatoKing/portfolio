@@ -25,7 +25,7 @@ export function ScreenshotModal({ index, onClose }: { index: number; onClose: ()
   }, [shot.src]);
 
   return (
-    <div className="jk-modal" onClick={onClose}>
+    <div className="jk-modal" onClick={onClose} data-lenis-prevent>
       <div
         className="jk-modal__panel"
         role="dialog"

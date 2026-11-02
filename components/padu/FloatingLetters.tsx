@@ -196,6 +196,9 @@ function useAssembly(ref: RefObject<HTMLDivElement | null>) {
     if (!rise || !letters.length || !hero || !lede) return;
     const slots = Array.from(hero.querySelectorAll<HTMLElement>(".pd-slot"));
     const tab = document.querySelector<HTMLElement>(".pd-sidenav");
+    // The scrubbed values go straight onto the elements that read them (see padu.css).
+    const pools = el.querySelector<HTMLElement>(".pd-pools");
+    const spread = Array.from(hero.querySelectorAll<HTMLElement>(".pd-slot-par, .pd-l-move"));
 
     let travel = 0, end = 1;
     const measure = () => {
@@ -238,8 +241,9 @@ function useAssembly(ref: RefObject<HTMLDivElement | null>) {
     const state = { p: 0 };
     const apply = () => {
       rise.style.transform = `translate3d(0, ${(travel * (1 - state.p)).toFixed(1)}px, 0)`;
-      el.style.setProperty("--pd-land", travel ? state.p.toFixed(3) : "1");
-      hero.style.setProperty("--pd-spread", (1 - state.p).toFixed(3));
+      pools?.style.setProperty("--pd-land", travel ? state.p.toFixed(3) : "1");
+      const s = (1 - state.p).toFixed(3);
+      spread.forEach(n => n.style.setProperty("--pd-spread", s));
     };
 
     measure();
@@ -259,9 +263,9 @@ function useAssembly(ref: RefObject<HTMLDivElement | null>) {
 
     return () => {
       rise.style.removeProperty("transform");
-      el.style.removeProperty("--pd-land");
+      pools?.style.removeProperty("--pd-land");
       el.style.removeProperty("--fan-k");
-      hero.style.removeProperty("--pd-spread");
+      spread.forEach(n => n.style.removeProperty("--pd-spread"));
       hero.style.removeProperty("--pd-out");
     };
   });

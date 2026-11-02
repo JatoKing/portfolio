@@ -25,7 +25,7 @@ export function ScreenshotModal({ index, onClose }: { index: number; onClose: ()
   }, [shot.src]);
 
   return (
-    <div className="fy-modal" onClick={onClose}>
+    <div className="fy-modal" onClick={onClose} data-lenis-prevent>
       <div
         className="fy-modal__panel"
         role="dialog"
