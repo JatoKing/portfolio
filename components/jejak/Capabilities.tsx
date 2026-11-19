@@ -17,7 +17,7 @@ export function Capabilities() {
     <section
       ref={root}
       className="jk-sec jk-steps jk-cap"
-      data-beat="capabilities"
+      data-beat="river"
       style={{ "--steps": FEATURES.length } as CSSProperties}
       aria-labelledby="jk-cap-title"
     >

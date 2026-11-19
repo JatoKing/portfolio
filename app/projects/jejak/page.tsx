@@ -1,16 +1,17 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import {
-  JourneyStage, TopNav, JourneyIndex, SummitHero, Gap, ChallengeSection, JourneyPhases,
-  Capabilities, Descent, Experience, Outcome, Trailhead, ScreenshotModal, ScrollTrigger,
+  WorldLayer, TopNav, TrailProfile, TrailheadHero, Gap, ChallengeSection, JourneyPhases,
+  Capabilities, Experience, Discovery, Outcome, Summit, Ending, ScreenshotModal, ScrollTrigger,
 } from "@/components/jejak";
 import "@/components/jejak/jejak.css";
 
 /*
- * One continuous hike down the same mountain: each content section sits on its
- * own camera position, and each <Gap> is the stretch of scroll where the
- * camera travels to the next one (clouds, birds, a tree, the river, mist,
- * footsteps, the trail).
+ * One continuous climb, told in a single minimal 3D world (WorldLayer): the
+ * hiker walks a trail that paints itself as you scroll, from the valley floor
+ * to the summit. Each content section is a stage of that trail; each <Gap> is
+ * the stretch where the hiker walks on to the next one and the camera moves
+ * with them. The ending calls back to the opening frame in evening light.
  */
 export default function JejakPage() {
   const [modal, setModal] = useState<number | null>(null);
@@ -25,28 +26,29 @@ export default function JejakPage() {
 
   return (
     <div className="jk">
-      <JourneyStage />
+      <WorldLayer />
       <TopNav />
 
       <main className="jk-main">
-        <SummitHero />
-        <Gap name="clouds" />
+        <TrailheadHero />
+        <Gap name="path" />
         <ChallengeSection />
-        <Gap name="birds" />
+        <Gap name="gate" />
         <JourneyPhases />
-        <Gap name="tree" />
+        <Gap name="canopy" />
         <Capabilities />
-        <Gap name="river" />
-        <Descent />
-        <Gap name="mist" />
+        <Gap name="spray" />
         <Experience onOpen={setModal} />
-        <Gap name="footsteps" />
+        <Gap name="clouds" />
+        <Discovery />
+        <Gap name="mist" />
         <Outcome />
-        <Gap name="trail" />
-        <Trailhead />
+        <Gap name="flock" />
+        <Summit />
+        <Ending />
       </main>
 
-      <JourneyIndex />
+      <TrailProfile />
 
       {/* Outside every sticky/transformed ancestor so position: fixed stays fixed. */}
       {modal !== null && <ScreenshotModal index={modal} onClose={closeModal} />}

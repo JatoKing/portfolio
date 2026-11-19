@@ -16,16 +16,17 @@ export function Rich({ text }: { text: string }) {
   );
 }
 
-/** "02 / Challenge ——— Middle ridge": the journey's editorial metadata row. */
+/** "02 / Gate · Challenge & Mission ——— 560 m": the journey's editorial metadata row. */
 export function SceneLabel({ scene, title }: { scene: number; title?: string }) {
   const s = SCENES[scene];
   return (
     <p className="jk-label" data-reveal>
       <span className="jk-label__num">{pad(scene + 1)}</span>
       <span className="jk-label__slash" aria-hidden>/</span>
-      <span>{title ?? s.label}</span>
+      <span>{s.label}</span>
+      <span className="jk-label__topic">{title ?? s.topic}</span>
       <span className="jk-label__rule" aria-hidden />
-      <span className="jk-label__place">{s.place}</span>
+      <span className="jk-label__place">{s.alt.toLocaleString("en-US")} m</span>
     </p>
   );
 }

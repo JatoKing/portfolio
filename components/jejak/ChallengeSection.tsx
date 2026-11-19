@@ -3,13 +3,13 @@ import { useRef } from "react";
 import { CHALLENGE, MISSION, pad } from "./data";
 import { Lines, Rich, SceneLabel, useReveal } from "./primitives";
 
-/** 02 / Challenge & Mission, over the middle ridge. Reads top to bottom; no pin. */
+/** 02 / Challenge & Mission, at the trail gate. Reads top to bottom; no pin. */
 export function ChallengeSection() {
   const root = useRef<HTMLElement>(null);
   useReveal(root);
 
   return (
-    <section ref={root} className="jk-sec jk-challenge" data-beat="challenge" aria-labelledby="jk-challenge-title">
+    <section ref={root} className="jk-sec jk-challenge" data-beat="gate" aria-labelledby="jk-challenge-title">
       <div className="jk-wrap">
         <div className="jk-panel jk-challenge__lead" data-reveal-group>
           <SceneLabel scene={1} title={CHALLENGE.label} />

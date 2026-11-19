@@ -40,7 +40,7 @@ function ShotCopy({ shot, index }: { shot: Screenshot; index: number }) {
 }
 
 /**
- * 06 / Experience in the lower valley. The eight screens slide in from all sides, take the
+ * 05 / Experience on the rocky climb. The eight screens slide in from all sides, take the
  * focal slot one at a time while the copy beside them follows, then clear away so the trail
  * leads on to the footprints. Poses come from reel.ts; this component only applies them.
  */
@@ -147,13 +147,13 @@ export function Experience({ onOpen }: { onOpen: (index: number) => void }) {
   });
 
   return (
-    <section ref={root} className="jk-sec jk-exp" data-beat="experience" aria-label={SCREENS_COPY.title}>
+    <section ref={root} className="jk-sec jk-exp" data-beat="climb" aria-label={SCREENS_COPY.title}>
       {/* Motion: one pinned stage, scroll drives the reel */}
       <div className="jk-exp__stage">
         <div className="jk-exp__frame">
           <div className="jk-panel jk-exp__copy">
             <header data-reveal-group>
-              <SceneLabel scene={5} title={SCREENS_COPY.label} />
+              <SceneLabel scene={4} title={SCREENS_COPY.label} />
               <p className="jk-kicker jk-sub" data-reveal>{SCREENS_COPY.title}</p>
               <h2 className="jk-h2 jk-exp__heading"><Lines lines={SCREENS_COPY.heading} /></h2>
             </header>
@@ -187,7 +187,7 @@ export function Experience({ onOpen }: { onOpen: (index: number) => void }) {
       <div className="jk-wrap jk-exp__list">
         <div className="jk-panel jk-exp__intro">
           <header data-reveal-group>
-            <SceneLabel scene={5} title={SCREENS_COPY.label} />
+            <SceneLabel scene={4} title={SCREENS_COPY.label} />
             <p className="jk-kicker jk-sub">{SCREENS_COPY.title}</p>
             <h2 className="jk-h2"><Lines lines={SCREENS_COPY.heading} /></h2>
           </header>

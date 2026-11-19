@@ -1,13 +1,3 @@
-import type { StaticImageData } from "next/image";
-import summit from "@/public/jejak-background/hero.png";
-import ridge from "@/public/jejak-background/image2.png";
-import hillside from "@/public/jejak-background/image3.png";
-import forestRiver from "@/public/jejak-background/image4.png";
-import waterfall from "@/public/jejak-background/image5.png";
-import valley from "@/public/jejak-background/image6.png";
-import forestTrail from "@/public/jejak-background/image8.png";
-import trailhead from "@/public/jejak-background/image9.png";
-
 /* Copy uses two inline marks, rendered by <Rich>: **emphasis** and `code_token`. */
 
 export const NAV = {
@@ -17,45 +7,43 @@ export const NAV = {
   tag: "Hackathon · 2026",
 } as const;
 
-/* ── The journey: one mountain, eight camera positions, top to bottom ── */
+/* ── The journey: one mountain, climbed from the valley floor to the summit ── */
 
-export type Scene = { key: string; label: string; place: string; img: StaticImageData };
+export type Scene = {
+  key: string;
+  /** Where on the trail: the stage name in the elevation profile. */
+  label: string;
+  /** What the section covers. */
+  topic: string;
+  place: string;
+  /** Illustrative altitude for the elevation profile, in metres. */
+  alt: number;
+};
 
 export const SCENES: Scene[] = [
-  { key: "summit", label: "Summit", place: "Mountain summit", img: summit },
-  { key: "challenge", label: "Challenge", place: "Middle ridge", img: ridge },
-  { key: "journey", label: "Journey", place: "Forested hillside", img: hillside },
-  { key: "capabilities", label: "Capabilities", place: "Forest river", img: forestRiver },
-  { key: "descent", label: "Descent", place: "Waterfall", img: waterfall },
-  { key: "experience", label: "Experience", place: "Lower valley", img: valley },
-  { key: "outcome", label: "Outcome", place: "Forest trail", img: forestTrail },
-  { key: "trailhead", label: "Trailhead", place: "Trailhead clearing", img: trailhead },
+  { key: "trailhead", label: "Trailhead", topic: "Overview", place: "Valley floor", alt: 420 },
+  { key: "gate", label: "Gate", topic: "Challenge & Mission", place: "Trail entrance", alt: 560 },
+  { key: "forest", label: "Forest", topic: "Journey", place: "Forest trail", alt: 910 },
+  { key: "river", label: "River", topic: "Capabilities", place: "Forest river", alt: 1240 },
+  { key: "climb", label: "Climb", topic: "Experience", place: "Rocky hillside", alt: 1610 },
+  { key: "falls", label: "Falls", topic: "Intelligence", place: "Hidden falls", alt: 1880 },
+  { key: "ascent", label: "Ascent", topic: "Outcome", place: "High ridge", alt: 2240 },
+  { key: "summit", label: "Summit", topic: "Achievement", place: "Mountain summit", alt: 2486 },
 ];
 
 /* The scroll gap between scene i and i + 1, named after what the camera passes through. */
-export const GAPS = ["clouds", "birds", "tree", "river", "mist", "footsteps", "trail"] as const;
+export const GAPS = ["path", "gate", "canopy", "spray", "clouds", "mist", "flock"] as const;
 export type Gap = (typeof GAPS)[number];
 
-/*
- * Boot prints already painted into image8.png, as [x%, y%, w%, h%] of the artwork,
- * nearest first. They light up one by one as the camera walks the trail.
- */
-export const FOOTPRINTS: [number, number, number, number][] = [
-  [52.9, 96.6, 5.4, 5.8], [46.9, 88.6, 4.6, 8.6], [44.1, 79.2, 3.4, 5.4], [46.7, 75.2, 3.0, 4.0],
-  [44.5, 70.6, 2.5, 2.9], [45.8, 67.0, 1.9, 2.0], [44.6, 64.3, 1.7, 1.7], [45.9, 62.9, 1.5, 1.4],
-  [46.0, 59.9, 1.2, 1.0], [47.3, 57.3, 1.0, 0.8], [48.3, 55.6, 0.9, 0.7],
-];
-
-/* ── 01 Summit ──────────────────────────────────────────────── */
+/* ── 01 Trailhead · Overview ────────────────────────────────── */
 
 export const HERO = {
   event: "ASEAN GeoAI Fusion 2026",
   name: "JEJAK",
   tagline: "GeoAI-Powered Hiking Safety App",
-  platform: "React Native & Expo",
   intro:
     "JEJAK is a React Native mobile app that predicts **communication dead zones** along hiking trails, lets hikers download offline trail packs before setting off, and records GPS trajectories in the background so search-and-rescue teams get a real last-known location once coverage returns.",
-  cue: "Scroll to descend",
+  cue: "Scroll to start the climb",
 };
 
 export const STATS = [
@@ -65,7 +53,7 @@ export const STATS = [
   { value: "2026", label: "Event Year" },
 ];
 
-/* ── 02 Challenge & Mission ─────────────────────────────────── */
+/* ── 02 Gate · Challenge & Mission ──────────────────────────── */
 
 export const CHALLENGE = {
   label: "Challenge & Mission",
@@ -83,7 +71,7 @@ export const MISSION = [
   { title: "Assist", desc: "Background GPS + sync the last-known location the moment coverage returns, for real SAR intelligence." },
 ];
 
-/* ── 03 Journey · 5-Phase Agenda ────────────────────────────── */
+/* ── 03 Forest · Journey: 5-Phase Agenda ────────────────────── */
 
 export const PHASES_COPY = {
   label: "Journey",
@@ -99,7 +87,7 @@ export const PHASES = [
   { title: "Testing & Validation", desc: "86 automated tests (Jest + React Native Testing Library) gated by CI on every push." },
 ];
 
-/* ── 04 Capabilities · What JEJAK Delivers ──────────────────── */
+/* ── 04 River · Capabilities ────────────────────────────────── */
 
 export const FEATURES_COPY = {
   label: "Capabilities",
@@ -116,11 +104,7 @@ export const FEATURES = [
   { code: "Data", title: "Honest Data Staging", desc: "Every trail pack is explicitly labelled `route_only`, `fixture`, or `model_backed` — fixture demo data never pretends to be a real prediction." },
 ];
 
-/* ── 05 Descent ─────────────────────────────────────────────── */
-
-export const DESCENT = { label: "Descent", heading: ["Follow", "the current."] };
-
-/* ── 06 Experience · See It In Action ───────────────────────── */
+/* ── 05 Climb · Experience: See It In Action ────────────────── */
 
 export const SCREENS_COPY = {
   label: "Experience",
@@ -143,7 +127,31 @@ export const SCREENSHOTS: Screenshot[] = [
   { label: "Downloads", src: "/jejak/jejak-tab-downloads.png", alt: "JEJAK mobile Downloads tab", caption: "Downloads — pek offline", description: "Tab Downloads senarai semua trail pack yang disimpan di peranti, dengan status model version & bila ia dimuat turun, boleh dipadam terus dari sini." },
 ];
 
-/* ── 07 Outcome ─────────────────────────────────────────────── */
+/* ── 06 Falls · GeoAI Intelligence ──────────────────────────── */
+
+export const DISCOVERY = {
+  label: "Intelligence",
+  title: "What the trail knows",
+  heading: ["Know the trail", "before you lose it."],
+  lead:
+    "Behind every trail pack is a GeoAI pipeline: terrain, vegetation and telecom data fused into a **coverage prediction for each segment** of the route, staged honestly so a hiker always knows what kind of answer they are holding.",
+};
+
+export const COVERAGE = [
+  { code: "likely_covered", tone: "ok", desc: "Signal expected along this segment." },
+  { code: "uncertain", tone: "warn", desc: "Mixed evidence. Plan as if it could drop." },
+  { code: "predicted_gap", tone: "gap", desc: "Dead zone ahead. JEJAK warns before you enter it." },
+] as const;
+
+export const SOURCES = ["OpenStreetMap", "Copernicus DEM", "ESA WorldCover", "FAO mobile coverage", "Ookla", "OpenCellID"];
+
+export const STAGING = [
+  { code: "route_only", desc: "Geometry only, no prediction." },
+  { code: "fixture", desc: "Demo data, labelled as demo." },
+  { code: "model_backed", desc: "A real GeoAI model prediction." },
+];
+
+/* ── 07 Ascent · Outcome ────────────────────────────────────── */
 
 export const OUTCOME = {
   label: "Outcome",
@@ -153,11 +161,20 @@ export const OUTCOME = {
   meta: "Expected Outcome · Consumer Empowerment",
 };
 
-/* ── 08 Trailhead · Tech Stack + Project Info ───────────────── */
+/* ── 08 Summit · Achievement + Tech Stack + Project Info ────── */
 
-export const TRAILHEAD = {
-  label: "Trailhead",
-  heading: ["Journey", "completed."],
+export const SUMMIT = {
+  label: "Achievement",
+  heading: ["The summit,", "with a trace", "left behind."],
+  text:
+    "From the valley floor to the top, JEJAK walks beside the hiker: it warns before the signal drops, keeps working offline, and leaves a GPS trace that brings search and rescue straight to the last-known location.",
+};
+
+/* ── Ending · the hiker looks back over the climb ────────────── */
+
+export const ENDING = {
+  label: "Journey completed",
+  heading: ["Every trail", "leaves a jejak."],
   meaning: { word: "jejak", kind: "n.", senses: ["a trail", "a journey", "a trace"] },
 };
 

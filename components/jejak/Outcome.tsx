@@ -3,13 +3,13 @@ import { useRef } from "react";
 import { OUTCOME } from "./data";
 import { Lines, Rich, SceneLabel, useReveal } from "./primitives";
 
-/** 07 / Outcome on the forest trail. Held in place while the footprints light up behind it. */
+/** 07 / Outcome on the high ridge, held while the wind crosses it. */
 export function Outcome() {
   const root = useRef<HTMLElement>(null);
   useReveal(root);
 
   return (
-    <section ref={root} className="jk-sec jk-hold jk-outcome" data-beat="outcome" aria-labelledby="jk-outcome-title">
+    <section ref={root} className="jk-sec jk-hold jk-outcome" data-beat="ascent" aria-labelledby="jk-outcome-title">
       <div className="jk-sticky">
         <div className="jk-wrap jk-outcome__wrap">
           <div className="jk-panel jk-outcome__panel" data-reveal-group>

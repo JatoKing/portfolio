@@ -4,7 +4,7 @@ import { useScrollScene } from "@/components/motion/scroll-scene";
 import { PHASES, PHASES_COPY, pad } from "./data";
 import { Lines, Rich, SceneLabel, buildStepper, useReveal } from "./primitives";
 
-/** 03 / Journey: the 5-phase agenda as trail markers, one milestone per stretch of scroll. */
+/** 03 / Journey through the forest: the 5-phase agenda as trail markers, one milestone per stretch of scroll. */
 export function JourneyPhases() {
   const root = useRef<HTMLElement>(null);
   useReveal(root);
@@ -17,7 +17,7 @@ export function JourneyPhases() {
     <section
       ref={root}
       className="jk-sec jk-steps jk-phases"
-      data-beat="journey"
+      data-beat="forest"
       style={{ "--steps": PHASES.length } as CSSProperties}
       aria-labelledby="jk-phases-title"
     >
